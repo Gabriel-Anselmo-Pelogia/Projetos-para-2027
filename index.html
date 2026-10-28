@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Performance | Gestão de Ferramental</title>
+    <title>ToolManager Pro | Gestão de Ferramental</title>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -69,20 +69,17 @@
             margin: 0 auto;
         }
 
-        .brand-icon {
-            width: 48px;
-            height: 48px;
-            background-color: #0e4429; /* Tom corporativo sutil ou Azul Petróleo */
-            background: linear-gradient(135deg, #0e7490, #155e75); /* Azul Petróleo */
-            color: #ffffff;
+        /* Estilo para a Logo em Imagem */
+        .brand-logo-container {
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 12px rgba(14, 116, 144, 0.3);
+        }
+
+        .brand-logo {
+            max-height: 52px; /* Altura máxima controlada para o logotipo */
+            width: auto;
+            object-fit: contain;
         }
 
         .form-content h1 {
@@ -315,9 +312,13 @@
             </div>
             
             <div class="form-content">
-                <div class="brand-icon">T</div>
-                <h1>Bem vindo de volta!</h1>
-                <p>Por favor, faça o login para prosseguir</p>
+                <!-- LOGOTIPO PERSONALIZADO -->
+                <div class="brand-logo-container">
+                    <img src="logo.png" alt="Logotipo" class="brand-logo">
+                </div>
+
+                <h1>Welcome Back!</h1>
+                <p>Please sign in to continue to ToolManager</p>
 
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="input-group">
@@ -338,7 +339,7 @@
 
                     <div class="form-actions">
                         <label class="remember-me">
-                            <input type="checkbox"> Lembre-se de mim
+                            <input type="checkbox"> Remember me
                         </label>
                         <a href="#" class="forgot-pass">Forgot Password</a>
                     </div>
@@ -347,7 +348,7 @@
                 </form>
 
                 <div class="form-footer" style="margin-top: 24px;">
-                    Não tem cadastro? <a href="#">Registre-se agora!</a>
+                    Not a member? <a href="#">Register Now</a>
                 </div>
             </div>
 
@@ -357,7 +358,6 @@
         <!-- Lado Direito: Ilustração / Painel Sóbrio -->
         <div class="login-banner-side">
             <div class="banner-content">
-                <!-- Vetor Industrial Sóbrio com Azul Petróleo e Cinza -->
                 <svg class="banner-illustration" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="50" y="80" width="400" height="240" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
                     <rect x="50" y="80" width="400" height="40" rx="12" fill="#0d1117"/>
@@ -365,13 +365,11 @@
                     <circle cx="95" cy="100" r="6" fill="#dbab09"/>
                     <circle cx="115" cy="100" r="6" fill="#2ea043"/>
                     
-                    <!-- Elementos internos do dashboard simulado -->
                     <rect x="80" y="150" width="160" height="70" rx="8" fill="#0d1117" stroke="#30363d"/>
                     <rect x="260" y="150" width="160" height="70" rx="8" fill="#0d1117" stroke="#30363d"/>
                     
                     <rect x="80" y="240" width="340" height="50" rx="8" fill="#0d1117" stroke="#30363d"/>
                     
-                    <!-- Detalhes em Azul Petróleo -->
                     <path d="M100 200 L 140 180 L 180 190 L 220 165" stroke="#0e7490" stroke-width="3" stroke-linecap="round"/>
                     <circle cx="220" cy="165" r="5" fill="#06b6d4"/>
                 </svg>
@@ -383,7 +381,7 @@
     <div id="dashboard-view">
         <div class="dash-header">
             <div class="dash-title">
-                <h2>Controle de Performance | Painel de Gestão</h2>
+                <h2>ToolManager | Painel de Gestão</h2>
                 <p>Ambiente Industrial de Atualização de Dados</p>
             </div>
             <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
@@ -401,7 +399,6 @@
     <script>
         function handleLogin(event) {
             event.preventDefault();
-            // Alterna a visualização entre o Login e o Dashboard
             document.getElementById('login-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
         }
