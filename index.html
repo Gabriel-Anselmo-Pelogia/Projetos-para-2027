@@ -199,7 +199,7 @@
             font-weight: 500;
         }
 
-        /* Lado Direito: Ilustração / Painel Industrial Estilizado */
+        /* Lado Direito: Banner com GIF Animado */
         .login-banner-side {
             flex: 1.2;
             background: linear-gradient(135deg, #090d12 0%, #111927 100%);
@@ -214,13 +214,18 @@
         .banner-content {
             text-align: center;
             padding: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .banner-illustration {
             max-width: 480px;
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         /* Painel do Dashboard (Oculto inicialmente) */
@@ -317,8 +322,8 @@
                     <img src="logo.png" alt="Logotipo" class="brand-logo">
                 </div>
 
-                <h1>Bem vindo de volta!</h1>
-                <p>Por favor, faça o login para prosseguir</p>
+                <h1>Seja Bem Vindo!</h1>
+                <p>Por favor, prossiga com o login para continuar</p>
 
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="input-group">
@@ -339,7 +344,7 @@
 
                     <div class="form-actions">
                         <label class="remember-me">
-                            <input type="checkbox"> Lembrar de mim
+                            <input type="checkbox"> Lembre-se de mim
                         </label>
                         <a href="#" class="forgot-pass">Esqueci minha senha</a>
                     </div>
@@ -348,31 +353,17 @@
                 </form>
 
                 <div class="form-footer" style="margin-top: 24px;">
-                    Não tem cadastro? <a href="#">Registre-se agora!</a>
+                    Não é Cadastrado? <a href="#">Registre-se agora</a>
                 </div>
             </div>
 
             <div></div> <!-- Espaçador flex -->
         </div>
 
-        <!-- Lado Direito: Ilustração / Painel Sóbrio -->
+        <!-- Lado Direito: GIF Animado -->
         <div class="login-banner-side">
             <div class="banner-content">
-                <svg class="banner-illustration" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="50" y="80" width="400" height="240" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
-                    <rect x="50" y="80" width="400" height="40" rx="12" fill="#0d1117"/>
-                    <circle cx="75" cy="100" r="6" fill="#f85149"/>
-                    <circle cx="95" cy="100" r="6" fill="#dbab09"/>
-                    <circle cx="115" cy="100" r="6" fill="#2ea043"/>
-                    
-                    <rect x="80" y="150" width="160" height="70" rx="8" fill="#0d1117" stroke="#30363d"/>
-                    <rect x="260" y="150" width="160" height="70" rx="8" fill="#0d1117" stroke="#30363d"/>
-                    
-                    <rect x="80" y="240" width="340" height="50" rx="8" fill="#0d1117" stroke="#30363d"/>
-                    
-                    <path d="M100 200 L 140 180 L 180 190 L 220 165" stroke="#0e7490" stroke-width="3" stroke-linecap="round"/>
-                    <circle cx="220" cy="165" r="5" fill="#06b6d4"/>
-                </svg>
+                <img src="login.gif" alt="Animação de Login" class="banner-illustration">
             </div>
         </div>
     </div>
