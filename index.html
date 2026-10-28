@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Performance| Gestão de Ferramental</title>
+    <title>ToolManager Pro | Gestão de Ferramental</title>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Supabase JS Client via CDN -->
@@ -417,11 +417,10 @@
     </div>
 
     <script>
-        // Configuração do Supabase
+        // Configuração do Supabase com a chave anon (formato JWT)
         const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_JzZ-6pnFhqwZE1VOWris1w_QGTaKDIe';
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_JWT_AQUI'; // Cole aqui a chave anon que começa com eyJ...
 
-        // Inicialização direta do cliente Supabase
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let isSignUpMode = false;
