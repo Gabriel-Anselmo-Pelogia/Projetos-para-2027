@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Performance | Gestão de Ferramental</title>
+    <title>ToolManager Pro | Gestão de Ferramental</title>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
         }
 
         body {
-            background-color: #0d1117; /* Cinza escuro / Fundo profundo */
+            background-color: #004173; /* Fundo base com o tom mais escuro da paleta */
             color: #c9d1d9;
             min-height: 100vh;
             display: flex;
@@ -28,18 +28,19 @@
             display: flex;
             width: 100vw;
             height: 100vh;
-            background-color: #161b22; /* Cartão corporativo cinza chumbo */
+            background-color: #004173;
         }
 
-        /* Lado Esquerdo: Formulário */
+        /* Lado Esquerdo: Formulário com os tons novos de azul */
         .login-form-side {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 40px 60px;
-            background-color: #161b22;
+            background: linear-gradient(135deg, #004173 0%, #0979b0 100%);
             z-index: 10;
+            color: #ffffff;
         }
 
         .form-header {
@@ -50,7 +51,7 @@
         .back-btn {
             background: none;
             border: none;
-            color: #8b949e;
+            color: #e2e8f0;
             cursor: pointer;
             font-size: 1.2rem;
             display: flex;
@@ -60,7 +61,7 @@
         }
 
         .back-btn:hover {
-            color: #58a6ff;
+            color: #0cb7f2;
         }
 
         .form-content {
@@ -77,20 +78,20 @@
         }
 
         .brand-logo {
-            max-height: 52px; /* Altura máxima controlada para o logotipo */
+            max-height: 52px;
             width: auto;
             object-fit: contain;
         }
 
         .form-content h1 {
             font-size: 1.8rem;
-            color: #f0f6fc;
+            color: #ffffff;
             margin-bottom: 8px;
             font-weight: 600;
         }
 
         .form-content p {
-            color: #8b949e;
+            color: #e2e8f0;
             font-size: 0.9rem;
             margin-bottom: 32px;
         }
@@ -103,7 +104,7 @@
             display: block;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #8b949e;
+            color: #e2e8f0;
             margin-bottom: 8px;
         }
 
@@ -116,24 +117,24 @@
         .input-wrapper span {
             position: absolute;
             left: 14px;
-            color: #8b949e;
+            color: #64748b;
         }
 
         .input-wrapper input {
             width: 100%;
             padding: 12px 14px 12px 42px;
-            background-color: #0d1117;
-            border: 1px solid #30363d;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
             border-radius: 8px;
-            color: #f0f6fc;
+            color: #1e293b;
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
 
         .input-wrapper input:focus {
             outline: none;
-            border-color: #0e7490; /* Azul Petróleo no foco */
-            box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.2);
+            border-color: #0cb7f2;
+            box-shadow: 0 0 0 3px rgba(12, 183, 242, 0.25);
         }
 
         .form-actions {
@@ -148,39 +149,39 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #8b949e;
+            color: #f8fafc;
             cursor: pointer;
         }
 
         .remember-me input {
-            accent-color: #0e7490;
+            accent-color: #0cb7f2;
         }
 
         .forgot-pass {
-            color: #58a6ff;
-            text-decoration: none;
+            color: #ffffff;
+            text-decoration: underline;
         }
 
         .forgot-pass:hover {
-            text-decoration: underline;
+            color: #0cb7f2;
         }
 
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #0e7490, #164e63); /* Azul petróleo industrial */
-            color: #ffffff;
+            background-color: #0cb7f2; /* Tom mais claro da paleta para destaque */
+            color: #004173;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-            box-shadow: 0 4px 12px rgba(14, 116, 144, 0.25);
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .btn-submit:hover {
-            opacity: 0.9;
+            background-color: #38bdf8;
         }
 
         .btn-submit:active {
@@ -190,25 +191,25 @@
         .form-footer {
             text-align: center;
             font-size: 0.85rem;
-            color: #8b949e;
+            color: #e2e8f0;
         }
 
         .form-footer a {
-            color: #58a6ff;
-            text-decoration: none;
+            color: #ffffff;
+            text-decoration: underline;
             font-weight: 500;
         }
 
-        /* Lado Direito: Banner com GIF Animado */
+        /* Lado Direito: Fundo Branco com o GIF Animado */
         .login-banner-side {
             flex: 1.2;
-            background: linear-gradient(135deg, #090d12 0%, #111927 100%);
+            background-color: #ffffff; /* Fundo totalmente branco conforme solicitado */
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-            border-left: 1px solid #30363d;
+            border-left: 1px solid #e2e8f0;
         }
 
         .banner-content {
@@ -225,7 +226,6 @@
             width: 100%;
             height: auto;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         /* Painel do Dashboard (Oculto inicialmente) */
@@ -233,9 +233,10 @@
             display: none;
             width: 100vw;
             height: 100vh;
-            background-color: #0d1117;
+            background-color: #004173;
             padding: 40px;
             overflow-y: auto;
+            color: #ffffff;
         }
 
         .dash-header {
@@ -243,24 +244,24 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            border-bottom: 1px solid #30363d;
+            border-bottom: 1px solid #0979b0;
             padding-bottom: 20px;
         }
 
         .dash-title h2 {
-            color: #f0f6fc;
+            color: #ffffff;
             font-size: 1.5rem;
         }
 
         .dash-title p {
-            color: #8b949e;
+            color: #e2e8f0;
             font-size: 0.85rem;
         }
 
         .btn-logout {
-            background-color: #21262d;
-            border: 1px solid #30363d;
-            color: #f0f6fc;
+            background-color: #0979b0;
+            border: none;
+            color: #ffffff;
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
@@ -269,32 +270,33 @@
         }
 
         .btn-logout:hover {
-            background-color: #30363d;
+            background-color: #0cb7f2;
+            color: #004173;
         }
 
         .upload-card {
-            background-color: #161b22;
-            border: 1px dashed #30363d;
+            background-color: #0979b0;
+            border: 2px dashed #0cb7f2;
             border-radius: 12px;
             padding: 40px;
             text-align: center;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: background 0.2s;
             margin-bottom: 30px;
         }
 
         .upload-card:hover {
-            border-color: #0e7490;
+            background-color: #046591;
         }
 
         .upload-card h3 {
-            color: #f0f6fc;
+            color: #ffffff;
             margin-bottom: 8px;
             font-size: 1.1rem;
         }
 
         .upload-card p {
-            color: #8b949e;
+            color: #e2e8f0;
             font-size: 0.85rem;
         }
 
@@ -310,7 +312,7 @@
 
     <!-- TELA DE LOGIN -->
     <div id="login-view" class="login-container">
-        <!-- Lado Esquerdo: Formulário -->
+        <!-- Lado Esquerdo: Formulário com Tons de Azul -->
         <div class="login-form-side">
             <div class="form-header">
                 <button class="back-btn">← Voltar</button>
@@ -322,8 +324,8 @@
                     <img src="logo.png" alt="Logotipo" class="brand-logo">
                 </div>
 
-                <h1>Seja Bem Vindo!</h1>
-                <p>Por favor, prossiga com o login para continuar</p>
+                <h1>Welcome Back!</h1>
+                <p>Please sign in to continue to ToolManager</p>
 
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="input-group">
@@ -335,7 +337,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label>Senha</label>
+                        <label>Password</label>
                         <div class="input-wrapper">
                             <span>🔒</span>
                             <input type="password" placeholder="••••••••" required value="123456">
@@ -344,23 +346,23 @@
 
                     <div class="form-actions">
                         <label class="remember-me">
-                            <input type="checkbox"> Lembre-se de mim
+                            <input type="checkbox"> Remember me
                         </label>
-                        <a href="#" class="forgot-pass">Esqueci minha senha</a>
+                        <a href="#" class="forgot-pass">Forgot Password</a>
                     </div>
 
                     <button type="submit" class="btn-submit">Login</button>
                 </form>
 
                 <div class="form-footer" style="margin-top: 24px;">
-                    Não é Cadastrado? <a href="#">Registre-se agora</a>
+                    Not a member? <a href="#">Register Now</a>
                 </div>
             </div>
 
             <div></div> <!-- Espaçador flex -->
         </div>
 
-        <!-- Lado Direito: GIF Animado -->
+        <!-- Lado Direito: Fundo Branco com o GIF Animado -->
         <div class="login-banner-side">
             <div class="banner-content">
                 <img src="login.gif" alt="Animação de Login" class="banner-illustration">
@@ -372,7 +374,7 @@
     <div id="dashboard-view">
         <div class="dash-header">
             <div class="dash-title">
-                <h2>Controle de Performance | Painel de Gestão</h2>
+                <h2>ToolManager | Painel de Gestão</h2>
                 <p>Ambiente Industrial de Atualização de Dados</p>
             </div>
             <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
@@ -384,7 +386,7 @@
             <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
         </div>
 
-        <div id="file-status" style="color: #58a6ff; font-size: 0.9rem; text-align: center;"></div>
+        <div id="file-status" style="color: #0cb7f2; font-size: 0.9rem; text-align: center; font-weight: 500;"></div>
     </div>
 
     <script>
@@ -406,5 +408,7 @@
             }
         }
     </script>
+</body>
+</html>
 </body>
 </html>
