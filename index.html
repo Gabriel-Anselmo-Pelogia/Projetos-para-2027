@@ -6,6 +6,8 @@
     <title>ToolManager Pro | Gestão de Ferramental</title>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase JS Client via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -15,7 +17,7 @@
         }
 
         body {
-            background-color: #004173; /* Fundo base com o tom mais escuro da paleta */
+            background-color: #004173;
             color: #c9d1d9;
             min-height: 100vh;
             display: flex;
@@ -46,6 +48,7 @@
         .form-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
 
         .back-btn {
@@ -169,7 +172,7 @@
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background-color: #0cb7f2; /* Tom mais claro da paleta para destaque */
+            background-color: #0cb7f2;
             color: #004173;
             border: none;
             border-radius: 8px;
@@ -198,12 +201,34 @@
             color: #ffffff;
             text-decoration: underline;
             font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Feedback de Mensagem */
+        .message-box {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .message-box.success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #4ade80;
         }
 
         /* Lado Direito: Fundo Branco com o GIF Animado */
         .login-banner-side {
             flex: 1.2;
-            background-color: #ffffff; /* Fundo totalmente branco conforme solicitado */
+            background-color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -228,7 +253,7 @@
             border-radius: 12px;
         }
 
-        /* Painel do Dashboard (Oculto inicialmente) */
+        /* Painel do Dashboard */
         #dashboard-view {
             display: none;
             width: 100vw;
@@ -300,7 +325,6 @@
             font-size: 0.85rem;
         }
 
-        /* Responsividade para telas menores */
         @media(max-width: 900px) {
             .login-banner-side {
                 display: none;
@@ -310,29 +334,31 @@
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
+    <!-- TELA DE LOGIN / REGISTRO -->
     <div id="login-view" class="login-container">
-        <!-- Lado Esquerdo: Formulário com Tons de Azul -->
+        <!-- Lado Esquerdo: Formulário -->
         <div class="login-form-side">
             <div class="form-header">
                 <button class="back-btn">← Voltar</button>
             </div>
             
             <div class="form-content">
-                <!-- LOGOTIPO PERSONALIZADO -->
                 <div class="brand-logo-container">
                     <img src="logo.png" alt="Logotipo" class="brand-logo">
                 </div>
 
-                <h1>Welcome Back!</h1>
-                <p>Please sign in to continue to ToolManager</p>
+                <h1 id="form-title">Welcome Back!</h1>
+                <p id="form-subtitle">Please sign in to continue to ToolManager</p>
 
-                <form id="loginForm" onsubmit="handleLogin(event)">
+                <!-- Caixa de Feedback -->
+                <div id="message-box" class="message-box"></div>
+
+                <form id="authForm" onsubmit="handleAuth(event)">
                     <div class="input-group">
                         <label>Email</label>
                         <div class="input-wrapper">
                             <span>✉</span>
-                            <input type="email" placeholder="exemplo@industrial.com" required value="admin@alcar.com">
+                            <input type="email" id="email" placeholder="exemplo@industrial.com" required>
                         </div>
                     </div>
 
@@ -340,29 +366,30 @@
                         <label>Password</label>
                         <div class="input-wrapper">
                             <span>🔒</span>
-                            <input type="password" placeholder="••••••••" required value="123456">
+                            <input type="password" id="password" placeholder="••••••••" required minlength="6">
                         </div>
                     </div>
 
-                    <div class="form-actions">
+                    <div class="form-actions" id="login-options">
                         <label class="remember-me">
                             <input type="checkbox"> Remember me
                         </label>
                         <a href="#" class="forgot-pass">Forgot Password</a>
                     </div>
 
-                    <button type="submit" class="btn-submit">Login</button>
+                    <button type="submit" id="btn-submit" class="btn-submit">Login</button>
                 </form>
 
                 <div class="form-footer" style="margin-top: 24px;">
-                    Not a member? <a href="#">Register Now</a>
+                    <span id="footer-text">Not a member?</span> 
+                    <a id="toggle-mode-btn" onclick="toggleAuthMode()">Register Now</a>
                 </div>
             </div>
 
-            <div></div> <!-- Espaçador flex -->
+            <div></div>
         </div>
 
-        <!-- Lado Direito: Fundo Branco com o GIF Animado -->
+        <!-- Lado Direito: GIF Animado -->
         <div class="login-banner-side">
             <div class="banner-content">
                 <img src="login.gif" alt="Animação de Login" class="banner-illustration">
@@ -370,12 +397,12 @@
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD (Exibido após o login) -->
+    <!-- PAINEL DASHBOARD -->
     <div id="dashboard-view">
         <div class="dash-header">
             <div class="dash-title">
                 <h2>ToolManager | Painel de Gestão</h2>
-                <p>Ambiente Industrial de Atualização de Dados</p>
+                <p id="user-welcome">Ambiente Industrial de Atualização de Dados</p>
             </div>
             <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
         </div>
@@ -390,13 +417,95 @@
     </div>
 
     <script>
-        function handleLogin(event) {
-            event.preventDefault();
-            document.getElementById('login-view').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'block';
+        // Configuração do Supabase
+        const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
+        
+        // Cole a sua Publishable Key copiada do Supabase na linha abaixo entre as aspas:
+        const SUPABASE_ANON_KEY = 'SUA_PUBLISHABLE_KEY_AQUI';
+
+        let supabaseClient = null;
+        if (SUPABASE_ANON_KEY !== 'SUA_PUBLISHABLE_KEY_AQUI') {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
 
-        function handleLogout() {
+        let isSignUpMode = false;
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            const title = document.getElementById('form-title');
+            const subtitle = document.getElementById('form-subtitle');
+            const submitBtn = document.getElementById('btn-submit');
+            const footerText = document.getElementById('footer-text');
+            const toggleBtn = document.getElementById('toggle-mode-btn');
+            const loginOptions = document.getElementById('login-options');
+            const msgBox = document.getElementById('message-box');
+
+            msgBox.style.display = 'none';
+
+            if (isSignUpMode) {
+                title.innerText = 'Create Account';
+                subtitle.innerText = 'Sign up to manage your tooling database';
+                submitBtn.innerText = 'Register';
+                footerText.innerText = 'Already have an account?';
+                toggleBtn.innerText = 'Sign In';
+                loginOptions.style.display = 'none';
+            } else {
+                title.innerText = 'Welcome Back!';
+                subtitle.innerText = 'Please sign in to continue to ToolManager';
+                submitBtn.innerText = 'Login';
+                footerText.innerText = 'Not a member?';
+                toggleBtn.innerText = 'Register Now';
+                loginOptions.style.display = 'flex';
+            }
+        }
+
+        function showMessage(text, isSuccess) {
+            const msgBox = document.getElementById('message-box');
+            msgBox.innerText = text;
+            msgBox.className = `message-box ${isSuccess ? 'success' : 'error'}`;
+            msgBox.style.display = 'block';
+        }
+
+        async function handleAuth(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!supabaseClient) {
+                if (isSignUpMode) {
+                    showMessage('Insira a sua Publishable Key na variável SUPABASE_ANON_KEY no código.', false);
+                } else {
+                    document.getElementById('login-view').style.display = 'none';
+                    document.getElementById('dashboard-view').style.display = 'block';
+                    document.getElementById('user-welcome').innerText = `Bem-vindo, ${email}!`;
+                }
+                return;
+            }
+
+            try {
+                if (isSignUpMode) {
+                    // Cadastro no Supabase
+                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+                    if (error) throw error;
+                    showMessage('Cadastro realizado com sucesso! Verifique seu e-mail para confirmar.', true);
+                } else {
+                    // Login no Supabase
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                    if (error) throw error;
+                    
+                    document.getElementById('login-view').style.display = 'none';
+                    document.getElementById('dashboard-view').style.display = 'block';
+                    document.getElementById('user-welcome').innerText = `Bem-vindo, ${data.user.email}!`;
+                }
+            } catch (err) {
+                showMessage(err.message || 'Ocorreu um erro na autenticação.', false);
+            }
+        }
+
+        async function handleLogout() {
+            if (supabaseClient) {
+                await supabaseClient.auth.signOut();
+            }
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('login-view').style.display = 'flex';
         }
@@ -408,7 +517,5 @@
             }
         }
     </script>
-</body>
-</html>
 </body>
 </html>
