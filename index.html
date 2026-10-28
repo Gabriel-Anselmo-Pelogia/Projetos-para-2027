@@ -419,14 +419,10 @@
     <script>
         // Configuração do Supabase
         const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
-        
-        // Cole a sua Publishable Key copiada do Supabase na linha abaixo entre as aspas:
-        const SUPABASE_ANON_KEY = 'sb_publishable_JzZ-6pnFhqwZE1VOWris1w_QGTaKDIe';
+        const SUPABASE_ANON_KEY = 'sb_publishable_JzZ-6pnFhqwZE1V0Wris1w_QGTaKDle';
 
-        let supabaseClient = null;
-        if (SUPABASE_ANON_KEY !== 'sb_publishable_JzZ-6pnFhqwZE1VOWris1w_QGTaKDIe') {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
+        // Inicialização direta do cliente Supabase
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let isSignUpMode = false;
 
@@ -470,17 +466,6 @@
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
-            if (!supabaseClient) {
-                if (isSignUpMode) {
-                    showMessage('Insira a sua Publishable Key na variável SUPABASE_ANON_KEY no código.', false);
-                } else {
-                    document.getElementById('login-view').style.display = 'none';
-                    document.getElementById('dashboard-view').style.display = 'block';
-                    document.getElementById('user-welcome').innerText = `Bem-vindo, ${email}!`;
-                }
-                return;
-            }
 
             try {
                 if (isSignUpMode) {
