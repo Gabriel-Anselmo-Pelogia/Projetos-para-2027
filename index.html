@@ -16,10 +16,9 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Fundo Limpo Geral */
         body {
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: #004173;
+            color: #c9d1d9;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -27,13 +26,13 @@
         }
 
         /* =========================================================
-           TELA DE LOGIN / REGISTO
+           TELA DE LOGIN / REGISTO (Visual Original Azul e Branco)
            ========================================================= */
         .login-container {
             display: flex;
             width: 100vw;
             height: 100vh;
-            background-color: #f8fafc;
+            background-color: #004173;
         }
 
         .login-form-side {
@@ -42,10 +41,9 @@
             flex-direction: column;
             justify-content: space-between;
             padding: 40px 60px;
-            background-color: #ffffff;
-            border-right: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #004173 0%, #0979b0 100%);
             z-index: 10;
-            color: #004173;
+            color: #ffffff;
             overflow-y: auto;
         }
 
@@ -58,9 +56,9 @@
         .back-btn {
             background: none;
             border: none;
-            color: #64748b;
+            color: #e2e8f0;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -68,7 +66,7 @@
         }
 
         .back-btn:hover {
-            color: #004173;
+            color: #0cb7f2;
         }
 
         .form-content {
@@ -91,13 +89,13 @@
 
         .form-content h1 {
             font-size: 1.8rem;
-            color: #004173;
+            color: #ffffff;
             margin-bottom: 8px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .form-content p {
-            color: #64748b;
+            color: #e2e8f0;
             font-size: 0.9rem;
             margin-bottom: 32px;
         }
@@ -109,8 +107,8 @@
         .input-group label {
             display: block;
             font-size: 0.85rem;
-            font-weight: 600;
-            color: #004173;
+            font-weight: 500;
+            color: #e2e8f0;
             margin-bottom: 8px;
         }
 
@@ -123,26 +121,24 @@
         .input-wrapper span {
             position: absolute;
             left: 14px;
-            color: #004173;
-            font-size: 0.9rem;
+            color: #64748b;
         }
 
         .input-wrapper input {
             width: 100%;
             padding: 12px 14px 12px 42px;
-            background-color: #f1f5f9;
+            background-color: #ffffff;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            color: #0f172a;
+            color: #1e293b;
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
 
         .input-wrapper input:focus {
             outline: none;
-            background-color: #ffffff;
-            border-color: #004173;
-            box-shadow: 0 0 0 3px rgba(0, 65, 115, 0.15);
+            border-color: #0cb7f2;
+            box-shadow: 0 0 0 3px rgba(12, 183, 242, 0.25);
         }
 
         .form-row {
@@ -162,40 +158,39 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #475569;
+            color: #f8fafc;
             cursor: pointer;
         }
 
         .remember-me input {
-            accent-color: #004173;
+            accent-color: #0cb7f2;
         }
 
         .forgot-pass {
-            color: #004173;
-            text-decoration: none;
-            font-weight: 500;
+            color: #ffffff;
+            text-decoration: underline;
         }
 
         .forgot-pass:hover {
-            text-decoration: underline;
+            color: #0cb7f2;
         }
 
         .btn-submit {
             width: 100%;
             padding: 12px;
-            background-color: #004173;
-            color: #ffffff;
+            background-color: #0cb7f2;
+            color: #004173;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 4px 12px rgba(0, 65, 115, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .btn-submit:hover {
-            background-color: #0979b0;
+            background-color: #38bdf8;
         }
 
         .btn-submit:active {
@@ -205,13 +200,13 @@
         .form-footer {
             text-align: center;
             font-size: 0.85rem;
-            color: #64748b;
+            color: #e2e8f0;
         }
 
         .form-footer a {
-            color: #004173;
+            color: #ffffff;
             text-decoration: underline;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
         }
 
@@ -237,12 +232,13 @@
 
         .login-banner-side {
             flex: 1.2;
-            background-color: #f8fafc;
+            background-color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
+            border-left: 1px solid #e2e8f0;
         }
 
         .banner-content {
@@ -262,7 +258,7 @@
         }
 
         /* =========================================================
-           PAINEL DASHBOARD (COM MENU LATERAL FIXO)
+           PAINEL DASHBOARD (TELA DE INÍCIO COM MENU LATERAL FIXO)
            ========================================================= */
         .dash-layout {
             display: none;
@@ -272,7 +268,6 @@
             overflow: hidden;
         }
 
-        /* Menu Lateral Fixo */
         .sidebar {
             width: 260px;
             min-width: 260px;
@@ -330,7 +325,6 @@
             padding-top: 12px;
         }
 
-        /* Área de Conteúdo Principal */
         .main-content {
             flex: 1;
             height: 100vh;
@@ -492,7 +486,7 @@
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD (COM MENU LATERAL FIXO) -->
+    <!-- PAINEL DASHBOARD (TELA DE INÍCIO) -->
     <div id="dashboard-view" class="dash-layout">
         <!-- Menu Lateral Fixo -->
         <aside class="sidebar">
@@ -500,15 +494,15 @@
                 <h3>ToolManager</h3>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active">Geral</a>
-                <a href="#" class="nav-item">Abrasivos</a>
-                <a href="#" class="nav-item">Químicos</a>
-                <a href="#" class="nav-item">Diamantes</a>
-                <a href="#" class="nav-item">Pastilhas</a>
-                <a href="#" class="nav-item">Impressão 3D</a>
+                <a href="#" class="nav-item active">📊 Geral</a>
+                <a href="#" class="nav-item">⚙️ Abrasivos</a>
+                <a href="#" class="nav-item">🧪 Químicos</a>
+                <a href="#" class="nav-item">💎 Diamantes</a>
+                <a href="#" class="nav-item">🔲 Pastilhas</a>
+                <a href="#" class="nav-item">🖨️ Impressão 3D</a>
             </nav>
             <div class="sidebar-footer">
-                <a href="#" class="nav-item">Configurações</a>
+                <a href="#" class="nav-item">🔧 Configurações</a>
             </div>
         </aside>
 
@@ -534,7 +528,7 @@
 
     <script>
         const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFleW1obmx5eWlwcG5ydmVzYWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTE3MDcsImV4cCI6MjEwODc4NzcwN30.kkWqIkExGCeOF2H_2kA2h4xfGJpcE2uok7BSt--KuN0'; // Lembre-se de colocar a sua chave anon (eyJ...)
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_JWT_AQUI'; // Insira aqui a sua chave anon atual
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -613,7 +607,6 @@
                     const userName = (userMetadata && userMetadata.first_name) ? userMetadata.first_name : data.user.email.split('@')[0];
 
                     document.getElementById('login-view').style.display = 'none';
-                    // Exibe como 'flex' para alinhar o menu lateral com o conteúdo
                     document.getElementById('dashboard-view').style.display = 'flex';
                     document.getElementById('user-welcome').innerText = `Seja bem-vindo, ${userName}!`;
                 }
