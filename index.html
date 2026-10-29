@@ -26,7 +26,7 @@
         }
 
         /* =========================================================
-           TELA DE LOGIN / REGISTO
+           TELA DE LOGIN / REGISTRO
            ========================================================= */
         .login-container {
             display: flex;
@@ -258,7 +258,7 @@
         }
 
         /* =========================================================
-           PAINEL DASHBOARD (COM OCULTAÇÃO TOTAL E SUAVE DO MENU)
+           PAINEL DASHBOARD
            ========================================================= */
         .dash-layout {
             display: none;
@@ -269,7 +269,6 @@
             position: relative;
         }
 
-        /* Sidebar com largura fixa e animação de deslizar para fora */
         .sidebar {
             width: 260px;
             min-width: 260px;
@@ -294,7 +293,6 @@
             margin-bottom: 24px;
         }
 
-        /* BOTÃO HAMBURGUER NA BARRA SUPERIOR */
         .menu-toggle-btn {
             background-color: #ffffff;
             border: 1px solid #cbd5e1;
@@ -352,7 +350,6 @@
             padding-top: 12px;
         }
 
-        /* ESTADO RECOLHIDO TOTALMENTE */
         .sidebar.collapsed {
             transform: translateX(-100%);
             margin-right: -260px;
@@ -403,7 +400,7 @@
             background-color: #0979b0;
         }
 
-        /* Submenu Superior da Categoria (Abrasivos) */
+        /* Submenus Superiores */
         .category-header {
             display: flex;
             align-items: center;
@@ -505,7 +502,7 @@
 </head>
 <body>
 
-    <!-- TELA DE LOGIN / REGISTO -->
+    <!-- TELA DE LOGIN / REGISTRO -->
     <div id="login-view" class="login-container">
         <div class="login-form-side">
             <div class="form-header">
@@ -586,7 +583,7 @@
 
     <!-- PAINEL DASHBOARD -->
     <div id="dashboard-view" class="dash-layout">
-        <!-- Menu Lateral Limpo (Apenas Texto) -->
+        <!-- Menu Lateral Limpo (Sem ícones) -->
         <aside id="app-sidebar" class="sidebar">
             <div class="sidebar-brand">
                 <h3>ToolManager</h3>
@@ -609,6 +606,9 @@
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('pastilhas', this)">
                     <span>Pastilhas</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('incertos', this)">
+                    <span>Incertos</span>
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('impressao3d', this)">
                     <span>Impressão 3D</span>
@@ -650,7 +650,7 @@
                 <div id="file-status" style="color: #004173; font-size: 0.95rem; text-align: center; font-weight: 600;"></div>
             </div>
 
-            <!-- VIEW 2: MONTAGEM DE SETUP (Novo Módulo) -->
+            <!-- VIEW 2: MONTAGEM DE SETUP -->
             <div id="section-montagem-setup" style="display: none;" class="section-placeholder">
                 <h3>🛠️ Montagem de Setup por Válvula</h3>
                 <p>Consulte a configuração de ferramentas, códigos e fotos reais de setup vinculadas a cada tipo de válvula em produção.</p>
@@ -660,38 +660,70 @@
             <div id="section-abrasivos" style="display: none;">
                 <div class="category-header">
                     <div class="top-nav-tabs">
-                        <button class="top-tab active" onclick="switchAbrasivosSubTab('performance', this)">Performance</button>
-                        <button class="top-tab" onclick="switchAbrasivosSubTab('estoque', this)">Estoque</button>
-                        <button class="top-tab" onclick="switchAbrasivosSubTab('materiais', this)">Materiais</button>
-                        <button class="top-tab" onclick="switchAbrasivosSubTab('desenvolvimento', this)">Desenvolvimento</button>
+                        <button class="top-tab active" onclick="switchSubTab('abrasivos', 'performance', this)">Performance</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'estoque', this)">Estoque</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'materiais', this)">Materiais</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'desenvolvimento', this)">Desenvolvimento</button>
                     </div>
                 </div>
 
-                <div id="subtab-performance" class="abrasivos-subtab">
+                <div id="abrasivos-subtab-performance" class="abrasivos-subtab">
                     <div class="section-placeholder">
                         <h3>📊 Performance de Abrasivos</h3>
                         <p>Acompanhamento de consumo por peças produzidas, durabilidade e custo fabril.</p>
                     </div>
                 </div>
 
-                <div id="subtab-estoque" class="abrasivos-subtab" style="display: none;">
+                <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>📦 Gestão de Estoque de Abrasivos</h3>
                         <p>Controle de quantidade disponível, reposições e almoxarifado de rebolos e lixas.</p>
                     </div>
                 </div>
 
-                <div id="subtab-materiais" class="abrasivos-subtab" style="display: none;">
+                <div id="abrasivos-subtab-materiais" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>⚙️ Ficha Técnica dos Materiais</h3>
                         <p>Especificações detalhadas dos itens, ligas, granulometria e catálogo Alcar.</p>
                     </div>
                 </div>
 
-                <div id="subtab-desenvolvimento" class="abrasivos-subtab" style="display: none;">
+                <div id="abrasivos-subtab-desenvolvimento" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>🧪 Testes e Desenvolvimento</h3>
                         <p>Histórico de novos produtos em teste na linha de produção e relatórios de homologação.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 4: INCERTOS (Com Menu Superior) -->
+            <div id="section-incertos" style="display: none;">
+                <div class="category-header">
+                    <div class="top-nav-tabs">
+                        <button class="top-tab active" onclick="switchSubTab('incertos', 'garrafa-vacuo', this)">Garrafa de vácuo</button>
+                        <button class="top-tab" onclick="switchSubTab('incertos', 'ring-gage', this)">Ring-Gage</button>
+                        <button class="top-tab" onclick="switchSubTab('incertos', 'incerto-vedacao', this)">Incerto de Vedação</button>
+                    </div>
+                </div>
+
+                <div id="incertos-subtab-garrafa-vacuo" class="incertos-subtab">
+                    <div class="section-placeholder">
+                        <h3>🧪 Garrafa de vácuo</h3>
+                        <p>Especificações técnicas, controle de uso e inspeção do sistema de garrafa de vácuo.</p>
+                    </div>
+                </div>
+
+                <div id="incertos-subtab-ring-gage" class="incertos-subtab" style="display: none;">
+                    <div class="section-placeholder">
+                        <h3>📏 Ring-Gage</h3>
+                        <p>Aferição, metrologia e calibração dos calibradores tipo anel (Ring-Gage).</p>
+                    </div>
+                </div>
+
+                <div id="incertos-subtab-incerto-vedacao" class="incertos-subtab" style="display: none;">
+                    <div class="section-placeholder">
+                        <h3>🛡️ Incerto de Vedação</h3>
+                        <p>Gestão de insertos para vedação, tolerâncias técnicas e histórico de substituição.</p>
                     </div>
                 </div>
             </div>
@@ -741,7 +773,7 @@
             const toggleBtn = document.getElementById('toggle-mode-btn');
             const loginOptions = document.getElementById('login-options');
             const nameFields = document.getElementById('name-fields');
-            const msgBox = document.php ? null : document.getElementById('message-box'); // safe check
+            const msgBox = document.getElementById('message-box');
 
             if (msgBox) msgBox.style.display = 'none';
 
@@ -768,7 +800,7 @@
 
         function showMessage(text, isSuccess) {
             const msgBox = document.getElementById('message-box');
-            if(msgBox) {
+            if (msgBox) {
                 msgBox.innerText = text;
                 msgBox.className = `message-box ${isSuccess ? 'success' : 'error'}`;
                 msgBox.style.display = 'block';
@@ -830,7 +862,7 @@
             }
         }
 
-        /* FUNÇÃO PARA RECOLHER/EXPANDIR TOTALMENTE O MENU */
+        /* RECOLHER/EXPANDIR O MENU */
         function toggleSidebar() {
             const sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('collapsed');
@@ -838,7 +870,7 @@
 
         /* NAVEGAÇÃO ENTRE CATEGORIAS DO MENU LATERAL */
         function switchSidebarSection(sectionKey, element) {
-            const sections = ['geral', 'montagem-setup', 'abrasivos', 'quimicos', 'diamantes', 'pastilhas', 'impressao3d', 'configuracoes'];
+            const sections = ['geral', 'montagem-setup', 'abrasivos', 'quimicos', 'diamantes', 'pastilhas', 'incertos', 'impressao3d', 'configuracoes'];
             
             sections.forEach(key => {
                 const sec = document.getElementById(`section-${key}`);
@@ -856,19 +888,19 @@
             }
         }
 
-        /* NAVEGAÇÃO DAS SUBABAS DE ABRASIVOS */
-        function switchAbrasivosSubTab(subTabKey, element) {
-            const subTabs = ['performance', 'estoque', 'materiais', 'desenvolvimento'];
+        /* NAVEGAÇÃO GENÉRICA PARA SUBABAS SUPERIORES (Abrasivos, Incertos, etc) */
+        function switchSubTab(moduleKey, subTabKey, element) {
+            const subtabs = document.querySelectorAll(`.${moduleKey}-subtab`);
+            subtabs.forEach(sub => sub.style.display = 'none');
 
-            subTabs.forEach(key => {
-                const sub = document.getElementById(`subtab-${key}`);
-                if (sub) sub.style.display = 'none';
-            });
-
-            const targetSub = document.getElementById(`subtab-${subTabKey}`);
+            const targetSub = document.getElementById(`${moduleKey}-subtab-${subTabKey}`);
             if (targetSub) targetSub.style.display = 'block';
 
-            document.querySelectorAll('.top-tab').forEach(tab => tab.classList.remove('active'));
+            const parentSection = document.getElementById(`section-${moduleKey}`);
+            if (parentSection) {
+                const tabs = parentSection.querySelectorAll('.top-tab');
+                tabs.forEach(tab => tab.classList.remove('active'));
+            }
             if (element) element.classList.add('active');
         }
     </script>
