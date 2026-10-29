@@ -258,7 +258,7 @@
         }
 
         /* =========================================================
-           PAINEL DASHBOARD (COM MENU LATERAL EM FAIXA / RECOLHÍVEL)
+           PAINEL DASHBOARD (COM ANIMAÇÃO DE RECOLHIMENTO/EXPANSÃO)
            ========================================================= */
         .dash-layout {
             display: none;
@@ -269,10 +269,9 @@
             position: relative;
         }
 
+        /* Sidebar com transição suave nos atributos de largura e padding */
         .sidebar {
             width: 260px;
-            min-width: 260px;
-            max-width: 260px;
             height: 100vh;
             background-color: #004173;
             border-right: 1px solid #0979b0;
@@ -281,18 +280,18 @@
             justify-content: space-between;
             padding: 24px 16px;
             flex-shrink: 0;
-            transition: all 0.3s ease;
             z-index: 100;
             overflow: hidden;
+            /* Transição suave para largura e recuos */
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Cabeçalho do Menu com Título e Botão Hambúrguer Integrado */
         .sidebar-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 24px;
-            padding-left: 4px;
+            height: 36px;
         }
 
         .sidebar-brand h3 {
@@ -300,7 +299,10 @@
             font-size: 1.2rem;
             font-weight: 700;
             white-space: nowrap;
-            transition: opacity 0.2s ease;
+            /* Suaviza o desaparecimento do texto */
+            transition: opacity 0.25s ease, visibility 0.25s;
+            opacity: 1;
+            visibility: visible;
         }
 
         .menu-toggle-btn {
@@ -315,7 +317,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.3s ease;
             flex-shrink: 0;
         }
 
@@ -333,16 +335,29 @@
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
+            gap: 14px;
+            padding: 12px 14px;
             color: #e2e8f0;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
             border-radius: 8px;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease, color 0.2s ease, padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             white-space: nowrap;
+        }
+
+        .nav-item i, .nav-item .nav-icon {
+            font-size: 1.1rem;
+            display: inline-block;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .nav-item span {
+            transition: opacity 0.2s ease, visibility 0.2s;
+            opacity: 1;
+            visibility: visible;
         }
 
         .nav-item:hover {
@@ -361,19 +376,17 @@
             padding-top: 12px;
         }
 
-        /* ESTADO RECOLHIDO (Modo Faixazinha Azul) */
+        /* ESTADO RECOLHIDO COM ANIMAÇÃO CONTINUA */
         .sidebar.collapsed {
-            width: 76px;
-            min-width: 76px;
-            max-width: 76px;
-            padding: 24px 12px;
+            width: 72px;
+            padding: 24px 10px;
         }
 
         .sidebar.collapsed .sidebar-brand h3,
         .sidebar.collapsed .nav-item span {
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            display: none;
         }
 
         .sidebar.collapsed .sidebar-header {
@@ -381,8 +394,12 @@
         }
 
         .sidebar.collapsed .nav-item {
-            justify-content: center;
             padding: 12px 0;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .menu-toggle-btn {
+            transform: rotate(180deg); /* O ícone gira 180° no fechamento */
         }
 
         .main-content {
@@ -391,6 +408,7 @@
             overflow-y: auto;
             padding: 40px;
             background-color: #f8fafc;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .dash-header {
@@ -518,14 +536,12 @@
             .login-banner-side {
                 display: none;
             }
-            /* Em mobile começa recolhido (faixazinha) */
             .sidebar {
                 position: absolute;
                 height: 100vh;
             }
             .sidebar:not(.collapsed) {
                 width: 260px;
-                min-width: 260px;
             }
         }
     </style>
@@ -613,22 +629,43 @@
 
     <!-- PAINEL DASHBOARD -->
     <div id="dashboard-view" class="dash-layout">
-        <!-- Menu Lateral com Botão Integrado no Topo -->
+        <!-- Menu Lateral com Botão e Animação Integrada -->
         <aside id="app-sidebar" class="sidebar">
             <div class="sidebar-header">
                 <h3>ToolManager</h3>
                 <button class="menu-toggle-btn" onclick="toggleSidebar()" title="Recolher/Expandir Menu">☰</button>
             </div>
             <nav class="sidebar-nav">
-                <a class="nav-item active" onclick="switchSidebarSection('geral', this)" title="Geral">📊 <span>Geral</span></a>
-                <a class="nav-item" onclick="switchSidebarSection('abrasivos', this)" title="Abrasivos">⚙️ <span>Abrasivos</span></a>
-                <a class="nav-item" onclick="switchSidebarSection('quimicos', this)" title="Químicos">🧪 <span>Químicos</span></a>
-                <a class="nav-item" onclick="switchSidebarSection('diamantes', this)" title="Diamantes">💎 <span>Diamantes</span></a>
-                <a class="nav-item" onclick="switchSidebarSection('pastilhas', this)" title="Pastilhas">🔲 <span>Pastilhas</span></a>
-                <a class="nav-item" onclick="switchSidebarSection('impressao3d', this)" title="Impressão 3D">🖨️ <span>Impressão 3D</span></a>
+                <a class="nav-item active" onclick="switchSidebarSection('geral', this)" title="Geral">
+                    <span class="nav-icon">📊</span>
+                    <span>Geral</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('abrasivos', this)" title="Abrasivos">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Abrasivos</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('quimicos', this)" title="Químicos">
+                    <span class="nav-icon">🧪</span>
+                    <span>Químicos</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('diamantes', this)" title="Diamantes">
+                    <span class="nav-icon">💎</span>
+                    <span>Diamantes</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('pastilhas', this)" title="Pastilhas">
+                    <span class="nav-icon">🔲</span>
+                    <span>Pastilhas</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('impressao3d', this)" title="Impressão 3D">
+                    <span class="nav-icon">🖨️</span>
+                    <span>Impressão 3D</span>
+                </a>
             </nav>
             <div class="sidebar-footer">
-                <a class="nav-item" onclick="switchSidebarSection('configuracoes', this)" title="Configurações">🔧 <span>Configurações</span></a>
+                <a class="nav-item" onclick="switchSidebarSection('configuracoes', this)" title="Configurações">
+                    <span class="nav-icon">🔧</span>
+                    <span>Configurações</span>
+                </a>
             </div>
         </aside>
 
@@ -715,7 +752,7 @@
             </div>
 
             <div id="section-impressao3d" style="display: none;" class="section-placeholder">
-                <h3>🖨️ Módulo Impressão 3D</h3>
+                <h3>𖡎 Módulo Impressão 3D</h3>
                 <p>Em breve: Filamentos, resinas e prototipagem interna.</p>
             </div>
 
@@ -830,7 +867,7 @@
             }
         }
 
-        /* FUNÇÃO PARA RECOLHER/EXPANDIR O MENU LATERAL (MODO FAIXA) */
+        /* FUNÇÃO PARA RECOLHER/EXPANDIR COM ANIMAÇÃO */
         function toggleSidebar() {
             const sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('collapsed');
@@ -851,7 +888,6 @@
             document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
             if (element) element.classList.add('active');
 
-            // Em dispositivos móveis, ao clicar num item, recolhe o menu para a faixa
             if (window.innerWidth <= 900) {
                 document.getElementById('app-sidebar').classList.add('collapsed');
             }
