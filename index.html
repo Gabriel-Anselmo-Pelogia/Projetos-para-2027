@@ -269,7 +269,7 @@
             position: relative;
         }
 
-        /* Sidebar com transição suave nos atributos de largura e padding */
+        /* Sidebar com transição suave */
         .sidebar {
             width: 260px;
             height: 100vh;
@@ -282,7 +282,6 @@
             flex-shrink: 0;
             z-index: 100;
             overflow: hidden;
-            /* Transição suave para largura e recuos */
             transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -299,12 +298,12 @@
             font-size: 1.2rem;
             font-weight: 700;
             white-space: nowrap;
-            /* Suaviza o desaparecimento do texto */
             transition: opacity 0.25s ease, visibility 0.25s;
             opacity: 1;
             visibility: visible;
         }
 
+        /* O BOTÃO HAMBURGUER SEMPRE VISÍVEL */
         .menu-toggle-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -342,19 +341,20 @@
             font-size: 0.9rem;
             font-weight: 500;
             border-radius: 8px;
-            transition: background 0.2s ease, color 0.2s ease, padding 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.2s ease, color 0.2s ease;
             cursor: pointer;
             white-space: nowrap;
         }
 
-        .nav-item i, .nav-item .nav-icon {
+        .nav-icon {
             font-size: 1.1rem;
             display: inline-block;
             min-width: 20px;
             text-align: center;
+            flex-shrink: 0;
         }
 
-        .nav-item span {
+        .nav-text {
             transition: opacity 0.2s ease, visibility 0.2s;
             opacity: 1;
             visibility: visible;
@@ -376,14 +376,14 @@
             padding-top: 12px;
         }
 
-        /* ESTADO RECOLHIDO COM ANIMAÇÃO CONTINUA */
+        /* ESTADO RECOLHIDO (Faixazinha azul com ícones e botão visível) */
         .sidebar.collapsed {
             width: 72px;
             padding: 24px 10px;
         }
 
         .sidebar.collapsed .sidebar-brand h3,
-        .sidebar.collapsed .nav-item span {
+        .sidebar.collapsed .nav-text {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -393,13 +393,19 @@
             justify-content: center;
         }
 
+        /* Quando recolhido, esconde o título e deixa apenas o botão hambúrguer centralizado */
+        .sidebar.collapsed .sidebar-brand {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-header {
+            justify-content: center;
+            width: 100%;
+        }
+
         .sidebar.collapsed .nav-item {
             padding: 12px 0;
             justify-content: center;
-        }
-
-        .sidebar.collapsed .menu-toggle-btn {
-            transform: rotate(180deg); /* O ícone gira 180° no fechamento */
         }
 
         .main-content {
@@ -629,7 +635,7 @@
 
     <!-- PAINEL DASHBOARD -->
     <div id="dashboard-view" class="dash-layout">
-        <!-- Menu Lateral com Botão e Animação Integrada -->
+        <!-- Menu Lateral com Botão Sempre Visível -->
         <aside id="app-sidebar" class="sidebar">
             <div class="sidebar-header">
                 <h3>ToolManager</h3>
@@ -638,33 +644,33 @@
             <nav class="sidebar-nav">
                 <a class="nav-item active" onclick="switchSidebarSection('geral', this)" title="Geral">
                     <span class="nav-icon">📊</span>
-                    <span>Geral</span>
+                    <span class="nav-text">Geral</span>
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('abrasivos', this)" title="Abrasivos">
                     <span class="nav-icon">⚙️</span>
-                    <span>Abrasivos</span>
+                    <span class="nav-text">Abrasivos</span>
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('quimicos', this)" title="Químicos">
                     <span class="nav-icon">🧪</span>
-                    <span>Químicos</span>
+                    <span class="nav-text">Químicos</span>
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('diamantes', this)" title="Diamantes">
                     <span class="nav-icon">💎</span>
-                    <span>Diamantes</span>
+                    <span class="nav-text">Diamantes</span>
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('pastilhas', this)" title="Pastilhas">
                     <span class="nav-icon">🔲</span>
-                    <span>Pastilhas</span>
+                    <span class="nav-text">Pastilhas</span>
                 </a>
                 <a class="nav-item" onclick="switchSidebarSection('impressao3d', this)" title="Impressão 3D">
                     <span class="nav-icon">🖨️</span>
-                    <span>Impressão 3D</span>
+                    <span class="nav-text">Impressão 3D</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
                 <a class="nav-item" onclick="switchSidebarSection('configuracoes', this)" title="Configurações">
                     <span class="nav-icon">🔧</span>
-                    <span>Configurações</span>
+                    <span class="nav-text">Configurações</span>
                 </a>
             </div>
         </aside>
@@ -867,7 +873,7 @@
             }
         }
 
-        /* FUNÇÃO PARA RECOLHER/EXPANDIR COM ANIMAÇÃO */
+        /* FUNÇÃO PARA RECOLHER/EXPANDIR COM ANIMAÇÃO (MANTENDO O BOTÃO SEMPRE ACESSÍVEL) */
         function toggleSidebar() {
             const sidebar = document.getElementById('app-sidebar');
             sidebar.classList.toggle('collapsed');
