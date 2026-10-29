@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Performance | Gestão de Ferramental</title>
+    <title>ToolManager Pro | Gestão de Ferramental</title>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Supabase JS Client via CDN -->
@@ -33,7 +33,7 @@
             background-color: #004173;
         }
 
-        /* Lado Esquerdo: Formulário com os tons novos de azul */
+        /* Lado Esquerdo: Formulário */
         .login-form-side {
             flex: 1;
             display: flex;
@@ -43,6 +43,7 @@
             background: linear-gradient(135deg, #004173 0%, #0979b0 100%);
             z-index: 10;
             color: #ffffff;
+            overflow-y: auto;
         }
 
         .form-header {
@@ -73,7 +74,6 @@
             margin: 0 auto;
         }
 
-        /* Estilo para a Logo em Imagem */
         .brand-logo-container {
             margin-bottom: 24px;
             display: flex;
@@ -138,6 +138,11 @@
             outline: none;
             border-color: #0cb7f2;
             box-shadow: 0 0 0 3px rgba(12, 183, 242, 0.25);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
         }
 
         .form-actions {
@@ -225,7 +230,7 @@
             border: 1px solid #4ade80;
         }
 
-        /* Lado Direito: Fundo Branco com o GIF Animado */
+        /* Lado Direito: Banner */
         .login-banner-side {
             flex: 1.2;
             background-color: #ffffff;
@@ -347,13 +352,33 @@
                     <img src="logo.png" alt="Logotipo" class="brand-logo">
                 </div>
 
-                <h1 id="form-title">Seja Bem Vindo!</h1>
-                <p id="form-subtitle">Por favor, faça o login para prosseguir</p>
+                <h1 id="form-title">Welcome Back!</h1>
+                <p id="form-subtitle">Please sign in to continue to ToolManager</p>
 
                 <!-- Caixa de Feedback -->
                 <div id="message-box" class="message-box"></div>
 
                 <form id="authForm" onsubmit="handleAuth(event)">
+                    <!-- Campos de Nome e Sobrenome (Visíveis apenas no modo Registo) -->
+                    <div id="name-fields" style="display: none;">
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Nome</label>
+                                <div class="input-wrapper">
+                                    <span>👤</span>
+                                    <input type="text" id="first-name" placeholder="Gabriel">
+                                </div>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Sobrenome</label>
+                                <div class="input-wrapper">
+                                    <span>👤</span>
+                                    <input type="text" id="last-name" placeholder="Silva">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="input-group">
                         <label>Email</label>
                         <div class="input-wrapper">
@@ -363,7 +388,7 @@
                     </div>
 
                     <div class="input-group">
-                        <label>Senha</label>
+                        <label>Password</label>
                         <div class="input-wrapper">
                             <span>🔒</span>
                             <input type="password" id="password" placeholder="••••••••" required minlength="6">
@@ -372,17 +397,17 @@
 
                     <div class="form-actions" id="login-options">
                         <label class="remember-me">
-                            <input type="checkbox"> Lembre-se de mim
+                            <input type="checkbox"> Remember me
                         </label>
-                        <a href="#" class="forgot-pass">Esqueci minha senha</a>
+                        <a href="#" class="forgot-pass">Forgot Password</a>
                     </div>
 
                     <button type="submit" id="btn-submit" class="btn-submit">Login</button>
                 </form>
 
                 <div class="form-footer" style="margin-top: 24px;">
-                    <span id="footer-text">Não é um membro?</span> 
-                    <a id="toggle-mode-btn" onclick="toggleAuthMode()">Registe-se agora</a>
+                    <span id="footer-text">Not a member?</span> 
+                    <a id="toggle-mode-btn" onclick="toggleAuthMode()">Register Now</a>
                 </div>
             </div>
 
@@ -401,7 +426,7 @@
     <div id="dashboard-view">
         <div class="dash-header">
             <div class="dash-title">
-                <h2>Controle de Performance | Painel de Gestão</h2>
+                <h2>ToolManager | Painel de Gestão</h2>
                 <p id="user-welcome">Ambiente Industrial de Atualização de Dados</p>
             </div>
             <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
@@ -417,9 +442,9 @@
     </div>
 
     <script>
-        // Configuração do Supabase com a chave anon (formato JWT)
+        // Configuração do Supabase
         const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFleW1obmx5eWlwcG5ydmVzYWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTE3MDcsImV4cCI6MjEwODc4NzcwN30.kkWqIkExGCeOF2H_2kA2h4xfGJpcE2uok7BSt--KuN0'; // Cole aqui a chave anon que começa com eyJ...
+        const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_JWT_AQUI'; // Mantenha aqui a sua chave anon atual (eyJ...)
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -433,6 +458,7 @@
             const footerText = document.getElementById('footer-text');
             const toggleBtn = document.getElementById('toggle-mode-btn');
             const loginOptions = document.getElementById('login-options');
+            const nameFields = document.getElementById('name-fields');
             const msgBox = document.getElementById('message-box');
 
             msgBox.style.display = 'none';
@@ -444,6 +470,8 @@
                 footerText.innerText = 'Already have an account?';
                 toggleBtn.innerText = 'Sign In';
                 loginOptions.style.display = 'none';
+                nameFields.style.display = 'block'; // Mostra os campos de nome ao registrar
+                document.getElementById('first-name').setAttribute('required', 'true');
             } else {
                 title.innerText = 'Welcome Back!';
                 subtitle.innerText = 'Please sign in to continue to ToolManager';
@@ -451,6 +479,8 @@
                 footerText.innerText = 'Not a member?';
                 toggleBtn.innerText = 'Register Now';
                 loginOptions.style.display = 'flex';
+                nameFields.style.display = 'none'; // Esconde no login normal
+                document.getElementById('first-name').removeAttribute('required');
             }
         }
 
@@ -468,18 +498,37 @@
 
             try {
                 if (isSignUpMode) {
-                    // Cadastro no Supabase
-                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+                    const firstName = document.getElementById('first-name').value;
+                    const lastName = document.getElementById('last-name').value;
+
+                    // Guarda o nome e sobrenome nos metadados do utilizador no Supabase
+                    const { data, error } = await supabaseClient.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            data: {
+                                first_name: firstName,
+                                last_name: lastName
+                            }
+                        }
+                    });
                     if (error) throw error;
-                    showMessage('Cadastro realizado com sucesso! Verifique seu e-mail para confirmar.', true);
+                    showMessage('Cadastro realizado com sucesso! Faça login para continuar.', true);
+                    
+                    // Alterna automaticamente para a tela de login após registar com sucesso
+                    setTimeout(() => toggleAuthMode(), 2000);
                 } else {
                     // Login no Supabase
                     const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                     if (error) throw error;
                     
+                    // Recupera o nome cadastrado nos metadados ou usa parte do e-mail como alternativa
+                    const userMetadata = data.user.user_metadata;
+                    const userName = (userMetadata && userMetadata.first_name) ? userMetadata.first_name : data.user.email.split('@')[0];
+
                     document.getElementById('login-view').style.display = 'none';
                     document.getElementById('dashboard-view').style.display = 'block';
-                    document.getElementById('user-welcome').innerText = `Bem-vindo, ${data.user.email}!`;
+                    document.getElementById('user-welcome').innerText = `Seja bem-vindo, ${userName}!`;
                 }
             } catch (err) {
                 showMessage(err.message || 'Ocorreu um erro na autenticação.', false);
