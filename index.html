@@ -26,7 +26,7 @@
         }
 
         /* =========================================================
-           TELA DE LOGIN / REGISTO (Visual Original Azul e Branco)
+           TELA DE LOGIN / REGISTO
            ========================================================= */
         .login-container {
             display: flex;
@@ -258,7 +258,7 @@
         }
 
         /* =========================================================
-           PAINEL DASHBOARD (COM MENU LATERAL AZUL ESCURO E FIXO)
+           PAINEL DASHBOARD (COM MENU LATERAL RESPONSIVO E FIXO)
            ========================================================= */
         .dash-layout {
             display: none;
@@ -266,6 +266,7 @@
             height: 100vh;
             background-color: #f8fafc;
             overflow: hidden;
+            position: relative;
         }
 
         .sidebar {
@@ -280,6 +281,8 @@
             justify-content: space-between;
             padding: 24px 16px;
             flex-shrink: 0;
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
 
         .sidebar-brand h3 {
@@ -335,6 +338,32 @@
             background-color: #f8fafc;
         }
 
+        /* Botão Hamburguer para recolher/expandir o menu */
+        .menu-toggle-btn {
+            background: none;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            color: #004173;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .menu-toggle-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Classe para esconder a sidebar em telas menores ou recolhida */
+        .sidebar.collapsed {
+            margin-left: -260px;
+        }
+
         .dash-header {
             display: flex;
             justify-content: space-between;
@@ -371,9 +400,7 @@
             background-color: #0979b0;
         }
 
-        /* =========================================================
-           SUBMENU SUPERIOR DA CATEGORIA (EX: ABRASIVOS)
-           ========================================================= */
+        /* Submenu Superior da Categoria */
         .category-header {
             display: flex;
             align-items: center;
@@ -389,6 +416,7 @@
         .top-nav-tabs {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .top-tab {
@@ -461,12 +489,20 @@
             .login-banner-side {
                 display: none;
             }
+            /* Em dispositivos móveis, por padrão iniciamos com o menu recolhido */
+            .sidebar {
+                position: absolute;
+                height: 100vh;
+            }
+            .sidebar.collapsed {
+                margin-left: -260px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN / REGISTRO -->
+    <!-- TELA DE LOGIN / REGISTO -->
     <div id="login-view" class="login-container">
         <div class="login-form-side">
             <div class="form-header">
@@ -545,10 +581,10 @@
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD (TELA DE INÍCIO COM MENU LATERAL) -->
+    <!-- PAINEL DASHBOARD (COM MENU LATERAL RECOLHÍVEL) -->
     <div id="dashboard-view" class="dash-layout">
-        <!-- Menu Lateral Fixo -->
-        <aside class="sidebar">
+        <!-- Menu Lateral Fixo / Recolhível -->
+        <aside id="app-sidebar" class="sidebar">
             <div class="sidebar-brand">
                 <h3>ToolManager</h3>
             </div>
@@ -567,9 +603,13 @@
 
         <!-- Área de Conteúdo Principal -->
         <main class="main-content">
-            <!-- BOTÃO LOGOUT / SAUDAÇÃO SUPERIOR -->
+            <!-- TOPO: BOTÃO HAMBURGUER + SAUDAÇÃO + LOGOUT -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <span id="user-welcome" style="color: #64748b; font-size: 0.95rem; font-weight: 500;">Ambiente Industrial de Atualização de Dados</span>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <!-- Botão para Recolher/Expandir o Menu -->
+                    <button class="menu-toggle-btn" onclick="toggleSidebar()" title="Recolher/Expandir Menu">☰</button>
+                    <span id="user-welcome" style="color: #64748b; font-size: 0.95rem; font-weight: 500;">Ambiente Industrial de Atualização de Dados</span>
+                </div>
                 <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
             </div>
 
@@ -593,7 +633,6 @@
 
             <!-- VIEW 2: ABRASIVOS (Com Menu Superior) -->
             <div id="section-abrasivos" style="display: none;">
-                <!-- Menu Superior do Módulo Abrasivos -->
                 <div class="category-header">
                     <div class="top-nav-tabs">
                         <button class="top-tab active" onclick="switchAbrasivosSubTab('performance', this)">Performance</button>
@@ -603,7 +642,6 @@
                     </div>
                 </div>
 
-                <!-- Sub-conteúdo 1: Performance -->
                 <div id="subtab-performance" class="abrasivos-subtab">
                     <div class="section-placeholder">
                         <h3>📊 Performance de Abrasivos</h3>
@@ -611,7 +649,6 @@
                     </div>
                 </div>
 
-                <!-- Sub-conteúdo 2: Estoque -->
                 <div id="subtab-estoque" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>📦 Gestão de Estoque de Abrasivos</h3>
@@ -619,7 +656,6 @@
                     </div>
                 </div>
 
-                <!-- Sub-conteúdo 3: Materiais -->
                 <div id="subtab-materiais" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>⚙️ Ficha Técnica dos Materiais</h3>
@@ -627,7 +663,6 @@
                     </div>
                 </div>
 
-                <!-- Sub-conteúdo 4: Desenvolvimento -->
                 <div id="subtab-desenvolvimento" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>🧪 Testes e Desenvolvimento</h3>
@@ -666,7 +701,7 @@
 
     <script>
         const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFleW1obmx5eWlwcG5ydmVzYWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTE3MDcsImV4cCI6MjEwODc4NzcwN30.kkWqIkExGCeOF2H_2kA2h4xfGJpcE2uok7BSt--KuN0';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFleW1obmx5eWlwcG5ydmVzYWd3Iiwicm9sZSI6InFub24iLCJpYXQiOjE3OTMyMTE3MDcsImV4cCI6MjEwODc4NzcwN30.kkWqIkExGCeOF2H_2kA2h4xfGJpcE2uok7BSt--KuN0';
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -768,6 +803,12 @@
             }
         }
 
+        /* FUNÇÃO PARA RECOLHER/EXPANDIR A SIDEBAR */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('app-sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
         /* NAVEGAÇÃO ENTRE CATEGORIAS DO MENU LATERAL */
         function switchSidebarSection(sectionKey, element) {
             const sections = ['geral', 'abrasivos', 'quimicos', 'diamantes', 'pastilhas', 'impressao3d', 'configuracoes'];
@@ -782,9 +823,14 @@
 
             document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
             if (element) element.classList.add('active');
+
+            // Em dispositivos móveis, ao clicar num item, esconde o menu automaticamente para melhorar a experiência
+            if (window.innerWidth <= 900) {
+                document.getElementById('app-sidebar').classList.add('collapsed');
+            }
         }
 
-        /* NAVEGAÇÃO DAS SUBABAS DE ABRASIVOS (Performance, Estoque, etc) */
+        /* NAVEGAÇÃO DAS SUBABAS DE ABRASIVOS */
         function switchAbrasivosSubTab(subTabKey, element) {
             const subTabs = ['performance', 'estoque', 'materiais', 'desenvolvimento'];
 
@@ -793,7 +839,6 @@
                 if (sub) sub.style.display = 'none';
             });
 
-            const activeSub = document.getElementById(`subtab-${key}`);
             const targetSub = document.getElementById(`subtab-${subTabKey}`);
             if (targetSub) targetSub.style.display = 'block';
 
