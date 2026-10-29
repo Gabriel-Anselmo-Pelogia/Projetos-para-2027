@@ -331,6 +331,77 @@
             color: #64748b;
             font-size: 0.85rem;
         }
+        /* Layout Geral do Dashboard */
+        .dash-layout {
+            display: none; /* Mantém a lógica de exibição via JS */
+            width: 100vw;
+            height: 100vh;
+            background-color: #f8fafc;
+            overflow: hidden;
+            display: flex; /* Substituído o display block por flex para alinhar o menu */
+        }
+        
+        /* Estilo do Menu Lateral */
+        .sidebar {
+            width: 260px;
+            background-color: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 16px;
+        }
+        
+        .sidebar-brand h3 {
+            color: #004173;
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding-left: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-item:hover {
+            background-color: #f1f5f9;
+            color: #004173;
+        }
+        
+        .nav-item.active {
+            background-color: #004173;
+            color: #ffffff;
+        }
+        
+        .sidebar-footer {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+        }
+        
+        /* Área de Conteúdo Principal ao lado do menu */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background-color: #f8fafc;
+        }
 
         @media(max-width: 900px) {
             .login-banner-side {
@@ -424,23 +495,44 @@
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD -->
-    <div id="dashboard-view">
-        <div class="dash-header">
-            <div class="dash-title">
-                <h2>ToolManager | Painel de Gestão</h2>
-                <p id="user-welcome">Ambiente Industrial de Atualização de Dados</p>
+    <!-- PAINEL DASHBOARD (Tela de Início com Menu Lateral) -->
+    <div id="dashboard-view" class="dash-layout">
+        <!-- Menu Lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h3>ToolManager</h3>
             </div>
-            <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
-        </div>
-
-        <div class="upload-card" onclick="document.getElementById('fileInput').click()">
-            <h3>📂 Clique ou arraste os ficheiros de dados aqui</h3>
-            <p>Suporta planilhas de pedidos, relatórios e controle de estoque (.xlsx, .csv)</p>
-            <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
-        </div>
-
-        <div id="file-status" style="color: #0cb7f2; font-size: 0.9rem; text-align: center; font-weight: 500;"></div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">📊 Geral</a>
+                <a href="#" class="nav-item">⚙️ Abrasivos</a>
+                <a href="#" class="nav-item">🧪 Químicos</a>
+                <a href="#" class="nav-item">💎 Diamantes</a>
+                <a href="#" class="nav-item">🔲 Pastilhas</a>
+                <a href="#" class="nav-item">🖨️ Impressão 3D</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">🔧 Configurações</a>
+            </div>
+        </aside>
+    
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <div class="dash-header">
+                <div class="dash-title">
+                    <h2>ToolManager | Painel de Gestão</h2>
+                    <p id="user-welcome">Ambiente Industrial de Atualização de Dados</p>
+                </div>
+                <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
+            </div>
+    
+            <div class="upload-card" onclick="document.getElementById('fileInput').click()">
+                <h3>📂 Clique ou arraste os ficheiros de dados aqui</h3>
+                <p>Suporta planilhas de pedidos, relatórios e controle de estoque (.xlsx, .csv)</p>
+                <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
+            </div>
+    
+            <div id="file-status" style="color: #004173; font-size: 0.95rem; text-align: center; font-weight: 600;"></div>
+        </main>
     </div>
 
     <script>
