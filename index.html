@@ -515,7 +515,7 @@
                     <img src="logo.png" alt="Logotipo" class="brand-logo">
                 </div>
 
-                <h1 id="form-title">Welcome Back!</h1>
+                <h1 id="form-title">WBem vindo de Volta!</h1>
                 <p id="form-subtitle">Please sign in to continue to ToolManager</p>
 
                 <div id="message-box" class="message-box"></div>
@@ -1016,22 +1016,27 @@ function renderizarGestaoOcorrencias() {
 
         async function alterarStatusOcorrencia(idOcorrencia, novoStatus) {
             try {
-                // Tenta enviar a alteração para o Supabase
+                // O .select() obriga o Supabase a devolver a linha que foi modificada
                 const { data, error } = await supabaseClient
                     .from('ocorrencias_abrasivos')
                     .update({ status: novoStatus })
-                    .eq('id', idOcorrencia);
+                    .eq('id', idOcorrencia)
+                    .select();
         
-                // Se o Supabase retornar um erro (ex: violação de política RLS), o erro é disparado
                 if (error) throw error;
         
+                // Se data estiver vazio ([]), significa que o RLS bloqueou a alteração!
+                if (!data || data.length === 0) {
+                    alert('Acesso negado: Seu usuário não tem permissão de gestor para alterar este status.');
+                    return;
+                }
+        
                 alert('Status alterado com sucesso!');
-                location.reload(); // Recarrega a página para atualizar a tabela
+                location.reload(); // Recarrega apenas se realmente alterou no banco
         
             } catch (err) {
-                // Se quem clicou foi o Raphael (ou outro usuário sem permissão), cai aqui!
-                console.error('Acesso negado:', err.message);
-                alert('Acesso negado: Apenas o gestor (ganselmopelogia@gmail.com) pode aprovar ocorrências.');
+                console.error('Erro na operação:', err.message);
+                alert('Acesso negado ou erro ao atualizar: ' + err.message);
             }
         }
 
