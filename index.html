@@ -1014,6 +1014,27 @@ function renderizarGestaoOcorrencias() {
             renderizarGestaoOcorrencias();
         }
 
+        async function alterarStatusOcorrencia(idOcorrencia, novoStatus) {
+            try {
+                // Tenta enviar a alteração para o Supabase
+                const { data, error } = await supabaseClient
+                    .from('ocorrencias_abrasivos')
+                    .update({ status: novoStatus })
+                    .eq('id', idOcorrencia);
+        
+                // Se o Supabase retornar um erro (ex: violação de política RLS), o erro é disparado
+                if (error) throw error;
+        
+                alert('Status alterado com sucesso!');
+                location.reload(); // Recarrega a página para atualizar a tabela
+        
+            } catch (err) {
+                // Se quem clicou foi o Raphael (ou outro usuário sem permissão), cai aqui!
+                console.error('Acesso negado:', err.message);
+                alert('Acesso negado: Apenas o gestor (ganselmopelogia@gmail.com) pode aprovar ocorrências.');
+            }
+        }
+
     </script>
 </body>
 </html>
