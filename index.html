@@ -697,10 +697,37 @@
                     </div>
                 </div>
 
+                <!-- VIEW 3: SUB-ABA OCORRÊNCIAS (PAINEL DE GESTÃO DO GESTOR) -->
                 <div id="abrasivos-subtab-ocorrencias" class="abrasivos-subtab" style="display: none;">
-                    <div class="section-placeholder">
-                        <h3>⚠️ Registo e Histórico de Ocorrências</h3>
-                        <p>Informações, diretrizes e relatórios sobre tudo o que consideramos ocorrência na linha de abrasivos.</p>
+                    <div class="dash-header">
+                        <div class="dash-title">
+                            <h2>Gestão e Validação de Ocorrências</h2>
+                            <p>Acompanhe todas as ocorrências abertas e atualize o status de validação</p>
+                        </div>
+                        <!-- Botão para simular adição rápida de ocorrência externa -->
+                        <button class="btn-submit" onclick="adicionarOcorrenciaExternaMock()" style="width: auto; padding: 10px 16px; font-size: 0.85rem;">+ Simular Nova Abertura</button>
+                    </div>
+                
+                    <!-- Tabela de Ocorrências com Gestão de Status -->
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                        <th style="padding: 12px;">ID / Data</th>
+                                        <th style="padding: 12px;">Máquina</th>
+                                        <th style="padding: 12px;">Tipo</th>
+                                        <th style="padding: 12px;">Item / Código</th>
+                                        <th style="padding: 12px;">Descrição</th>
+                                        <th style="padding: 12px; text-align: center;">Status</th>
+                                        <th style="padding: 12px; text-align: center;">Ações do Gestor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaGestaoOcorrenciasBody">
+                                    <!-- Preenchido via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -912,6 +939,81 @@
             }
             if (element) element.classList.add('active');
         }
+
+        // Lista inicial simulando dados que vieram do formulário externo da fábrica
+let listaGestaoOcorrencias = [
+    { id: 101, dataHora: '30/10/2026 08:15', maquina: 'Retífica 02', tipo: 'Desgaste Prematuro', item: 'RT 609.6 X 17.5', descricao: 'Rebolo apresentou trinca superficial após 4h de usinagem.', status: 'Em Análise' },
+    { id: 102, dataHora: '29/10/2026 14:30', maquina: 'Injetora 05', tipo: 'Problema de Lote', item: 'VED-402-B', descricao: 'Vedação com diâmetro fora da tolerância padrão do projeto.', status: 'Aprovado' }
+];
+
+function renderizarGestaoOcorrencias() {
+    const tbody = document.getElementById('tabelaGestaoOcorrenciasBody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (listaGestaoOcorrencias.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; text-align: center; color: #64748b;">Nenhuma ocorrência registada.</td></tr>`;
+        return;
+    }
+
+    listaGestaoOcorrencias.forEach((oc) => {
+        const isAprovado = oc.status === 'Aprovado';
+        
+        // Estilos visuais para os badges de status
+        const badgeStyle = isAprovado 
+            ? 'background-color: #dcfce7; color: #15803d;' 
+            : 'background-color: #fef3c7; color: #b45309;';
+
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        tr.innerHTML = `
+            <td style="padding: 12px; color: #64748b; white-space: nowrap;">
+                <strong>#${oc.id}</strong><br><span style="font-size: 0.75rem;">${oc.dataHora}</span>
+            </td>
+            <td style="padding: 12px; font-weight: 600; color: #004173;">${oc.maquina}</td>
+            <td style="padding: 12px;"><span style="background-color: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 3px 6px; border-radius: 4px; font-size: 0.78rem; font-weight: 500;">${oc.tipo}</span></td>
+            <td style="padding: 12px; font-weight: 500; color: #334155;">${oc.item}</td>
+            <td style="padding: 12px; color: #475569; max-width: 250px;">${oc.descricao}</td>
+            <td style="padding: 12px; text-align: center;">
+                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.78rem; ${badgeStyle}">
+                    ${oc.status}
+                </span>
+            </td>
+            <td style="padding: 12px; text-align: center; white-space: nowrap;">
+                ${isAprovado 
+                    ? `<button onclick="alterarStatusOcorrencia(${oc.id})" style="background: none; border: 1px solid #cbd5e1; color: #64748b; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem;">Reabrir Análise</button>` 
+                    : `<button onclick="alterarStatusOcorrencia(${oc.id})" style="background-color: #004173; border: none; color: #ffffff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600;">Aprovar</button>`
+                }
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Função para alternar o status ao clicar no botão
+        function alterarStatusOcorrencia(id) {
+            const oc = listaGestaoOcorrencias.find(item => item.id === id);
+            if (oc) {
+                oc.status = oc.status === 'Aprovado' ? 'Em Análise' : 'Aprovado';
+                renderizarGestaoOcorrencias();
+            }
+        }
+        
+        // Função de exemplo para simular a chegada de uma nova ocorrência externa
+        function adicionarOcorrenciaExternaMock() {
+            const novoId = Math.floor(Math.random() * 900) + 103;
+            listaGestaoOcorrencias.unshift({
+                id: novoId,
+                dataHora: new Date().toLocaleString('pt-BR'),
+                maquina: 'Linha de Montagem A',
+                tipo: 'Quebra / Trinca',
+                item: 'ABR-998',
+                descricao: 'Nova ocorrência aberta remotamente via formulário da fábrica.',
+                status: 'Em Análise'
+            });
+            renderizarGestaoOcorrencias();
+        }
+
     </script>
 </body>
 </html>
