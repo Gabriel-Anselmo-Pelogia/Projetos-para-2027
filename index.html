@@ -1016,7 +1016,6 @@ function renderizarGestaoOcorrencias() {
 
         async function alterarStatusOcorrencia(idOcorrencia, novoStatus) {
             try {
-                // O .select() obriga o Supabase a devolver a linha que foi modificada
                 const { data, error } = await supabaseClient
                     .from('ocorrencias_abrasivos')
                     .update({ status: novoStatus })
@@ -1025,18 +1024,18 @@ function renderizarGestaoOcorrencias() {
         
                 if (error) throw error;
         
-                // Se data estiver vazio ([]), significa que o RLS bloqueou a alteração!
+                // Se data estiver vazio, o RLS bloqueou a alteração do Raphael!
                 if (!data || data.length === 0) {
-                    alert('Acesso negado: Seu usuário não tem permissão de gestor para alterar este status.');
+                    alert('Acesso negado: O seu utilizador não tem permissão de gestor.');
                     return;
                 }
         
                 alert('Status alterado com sucesso!');
-                location.reload(); // Recarrega apenas se realmente alterou no banco
+                location.reload();
         
             } catch (err) {
                 console.error('Erro na operação:', err.message);
-                alert('Acesso negado ou erro ao atualizar: ' + err.message);
+                alert('Erro ao atualizar: ' + err.message);
             }
         }
 
