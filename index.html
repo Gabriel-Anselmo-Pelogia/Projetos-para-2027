@@ -667,14 +667,14 @@
                         <button class="top-tab" onclick="switchSubTab('abrasivos', 'ocorrencias', this)">Ocorrências</button>
                     </div>
                 </div>
-                                        <!-- SUB-ABA: PERFORMANCE DE ABRASIVOS -->
-                <!-- SUB-ABA: PERFORMANCE DE ABRASIVOS (COM ÍCONES ESTILO BADGE SUAVE) -->
+                
+             <!-- SUB-ABA: PERFORMANCE DE ABRASIVOS (COM ÍCONES E FAIXAS LATERAIS) -->
             <div id="abrasivos-subtab-performance" class="abrasivos-subtab">
                 <!-- GRID DE 5 CARDS DE INDICADORES (KPIs) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
                     
                     <!-- CARD 1: Máquina com Maior Custo -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                             <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">MAIOR CUSTO (MÁQ.)</span>
                             <!-- Ícone Fábrica / Máquina (Roxo Soft) -->
@@ -687,7 +687,7 @@
                     </div>
             
                     <!-- CARD 2: Linha com Maior Custo -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                             <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">MAIOR CUSTO (LINHA)</span>
                             <!-- Ícone Custo / Moeda (Azul Soft) -->
@@ -700,11 +700,11 @@
                     </div>
             
                     <!-- CARD 3: Custo Total de Ocorrências (Abrasivos) -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                             <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL OCORRÊNCIAS</span>
-                            <!-- Ícone X / Alerta (Azul Pastel / Vermelho) -->
-                            <div style="width: 38px; height: 38px; background-color: #dbeafe; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #2563eb; font-weight: 800; flex-shrink: 0;">
+                            <!-- Ícone X / Alerta -->
+                            <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #dc2626; font-weight: 800; flex-shrink: 0;">
                                 ✖
                             </div>
                         </div>
@@ -713,7 +713,7 @@
                     </div>
             
                     <!-- CARD 4: Produção Total de Válvulas -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                             <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">PRODUÇÃO ACABADA</span>
                             <!-- Ícone Caixa / Produto (Amarelo Soft) -->
@@ -726,7 +726,7 @@
                     </div>
             
                     <!-- CARD 5: Custo Peça Final -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                             <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">MÉDIA CUSTO/PEÇA</span>
                             <!-- Ícone Gráfico (Verde Soft) -->
@@ -739,14 +739,13 @@
                     </div>
             
                 </div>
-                
-                    <!-- ÁREA RESERVADA PARA TABELAS OU GRÁFICOS DE PERFORMANCE -->
-                    <div class="section-placeholder">
-                        <h3>📊 Detalhamento de Performance por Ferramenta</h3>
-                        <p>Aqui entraremos com os gráficos ou tabelas de acompanhamento de consumo por lote.</p>
-                    </div>
+            
+                <!-- ÁREA RESERVADA PARA TABELAS OU GRÁFICOS DE PERFORMANCE -->
+                <div class="section-placeholder">
+                    <h3>📊 Detalhamento de Performance por Ferramenta</h3>
+                    <p>Aqui entraremos com os gráficos ou tabelas de acompanhamento de consumo por lote.</p>
                 </div>
-
+            </div>
                 <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>📦 Gestão de Estoque de Abrasivos</h3>
