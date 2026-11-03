@@ -288,7 +288,7 @@
         .sidebar-brand {
             padding-bottom: 18px;
             margin-bottom: 20px;
-            border-bottom: 1px solid #0979b0; /* Linha divisória igual à do rodapé */
+            border-bottom: 1px solid #0979b0;
             display: flex;
             align-items: center;
             padding-left: 4px;
@@ -401,7 +401,6 @@
             background-color: #0979b0;
         }
 
-        /* Submenus Superiores */
         .category-header {
             display: flex;
             align-items: center;
@@ -704,11 +703,9 @@
                             <h2>Gestão e Validação de Ocorrências</h2>
                             <p>Acompanhe todas as ocorrências abertas e atualize o status de validação</p>
                         </div>
-                        <!-- Botão para simular adição rápida de ocorrência externa -->
                         <button class="btn-submit" onclick="adicionarOcorrenciaExternaMock()" style="width: auto; padding: 10px 16px; font-size: 0.85rem;">+ Simular Nova Abertura</button>
                     </div>
                 
-                    <!-- Tabela de Ocorrências com Gestão de Status -->
                     <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                         <div style="overflow-x: auto;">
                             <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
@@ -796,11 +793,13 @@
         const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFleW1obmx5eWlwcG5ydmVzYWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTE3MDcsImV4cCI6MjEwODc4NzcwN30.kkWqIkExGCeOF2H_2kA2h4xfGJpcE2uok7BSt--KuN0';
 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY), {
+        // Inicialização correta com persistSession ativado
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
             auth: {
                 persistSession: true
-              }
-            });
+            }
+        });
+
         let isSignUpMode = false;
 
         function toggleAuthMode() {
@@ -874,149 +873,53 @@
                     const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                     if (error) throw error;
                     
-                    const userMetadata = data.user.user_metadata;
-                    const userName = (userMetadata && userMetadata.first_name) ? userMetadata.first_name : data.user.email.split('@')[0];
-
+                    // Oculta login e mostra o dashboard adequadamente
                     document.getElementById('login-view').style.display = 'none';
                     document.getElementById('dashboard-view').style.display = 'flex';
-                    document.getElementById('user-welcome').innerText = `Seja bem-vindo, ${userName}!`;
                 }
             } catch (err) {
-                showMessage(err.message || 'Ocorreu um erro na autenticação.', false);
+                showMessage(err.message, false);
+            }
+        }
+
+        // Funções de navegação do Dashboard
+        function toggleSidebar() {
+            document.getElementById('app-sidebar').classList.toggle('collapsed');
+        }
+
+        function switchSidebarSection(sectionId, element) {
+            document.querySelectorAll('.sidebar-nav .nav-item, .sidebar-footer .nav-item').forEach(item => item.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            const views = ['section-geral', 'section-montagem-setup', 'section-abrasivos', 'section-quimicos', 'section-diamantes', 'section-pastilhas', 'section-incertos', 'section-impressao3d', 'section-configuracoes'];
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if(el) el.style.display = 'none';
+            });
+
+            const target = document.getElementById('section-' + sectionId);
+            if(target) target.style.display = 'block';
+        }
+
+        function switchSubTab(category, subTabId, element) {
+            const container = document.getElementById('section-' + category);
+            if(container) {
+                container.querySelectorAll('.top-tab').forEach(tab => tab.classList.remove('active'));
+                if(element) element.classList.add('active');
+
+                container.querySelectorAll('.' + category + '-subtab').forEach(sub => sub.style.display = 'none');
+                const targetSub = document.getElementById(category + '-subtab-' + subTabId);
+                if(targetSub) targetSub.style.display = 'block';
             }
         }
 
         async function handleLogout() {
-            if (supabaseClient) {
-                await supabaseClient.auth.signOut();
-            }
+            await supabaseClient.auth.signOut();
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('login-view').style.display = 'flex';
         }
 
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.getElementById('file-status').innerText = `Ficheiro carregado com sucesso: ${file.name} (Pronto para processamento)`;
-            }
-        }
-
-        /* RECOLHER/EXPANDIR O MENU */
-        function toggleSidebar() {
-            const sidebar = document.getElementById('app-sidebar');
-            sidebar.classList.toggle('collapsed');
-        }
-
-        /* NAVEGAÇÃO ENTRE CATEGORIAS DO MENU LATERAL */
-        function switchSidebarSection(sectionKey, element) {
-            const sections = ['geral', 'montagem-setup', 'abrasivos', 'quimicos', 'diamantes', 'pastilhas', 'incertos', 'impressao3d', 'configuracoes'];
-            
-            sections.forEach(key => {
-                const sec = document.getElementById(`section-${key}`);
-                if (sec) sec.style.display = 'none';
-            });
-
-            const activeSec = document.getElementById(`section-${sectionKey}`);
-            if (activeSec) activeSec.style.display = 'block';
-
-            document.querySelectorAll('.sidebar .nav-item').forEach(item => item.classList.remove('active'));
-            if (element) element.classList.add('active');
-
-            if (window.innerWidth <= 900) {
-                document.getElementById('app-sidebar').classList.add('collapsed');
-            }
-        }
-
-        /* NAVEGAÇÃO GENÉRICA PARA SUBABAS SUPERIORES (Abrasivos, Incertos, etc) */
-        function switchSubTab(moduleKey, subTabKey, element) {
-            const subtabs = document.querySelectorAll(`.${moduleKey}-subtab`);
-            subtabs.forEach(sub => sub.style.display = 'none');
-
-            const targetSub = document.getElementById(`${moduleKey}-subtab-${subTabKey}`);
-            if (targetSub) targetSub.style.display = 'block';
-
-            const parentSection = document.getElementById(`section-${moduleKey}`);
-            if (parentSection) {
-                const tabs = parentSection.querySelectorAll('.top-tab');
-                tabs.forEach(tab => tab.classList.remove('active'));
-            }
-            if (element) element.classList.add('active');
-        }
-
-        // Lista inicial simulando dados que vieram do formulário externo da fábrica
-let listaGestaoOcorrencias = [
-    { id: 101, dataHora: '30/10/2026 08:15', maquina: 'Retífica 02', tipo: 'Desgaste Prematuro', item: 'RT 609.6 X 17.5', descricao: 'Rebolo apresentou trinca superficial após 4h de usinagem.', status: 'Em Análise' },
-    { id: 102, dataHora: '29/10/2026 14:30', maquina: 'Injetora 05', tipo: 'Problema de Lote', item: 'VED-402-B', descricao: 'Vedação com diâmetro fora da tolerância padrão do projeto.', status: 'Aprovado' }
-];
-
-function renderizarGestaoOcorrencias() {
-    const tbody = document.getElementById('tabelaGestaoOcorrenciasBody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-
-    if (listaGestaoOcorrencias.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; text-align: center; color: #64748b;">Nenhuma ocorrência registada.</td></tr>`;
-        return;
-    }
-
-    listaGestaoOcorrencias.forEach((oc) => {
-        const isAprovado = oc.status === 'Aprovado';
-        
-        // Estilos visuais para os badges de status
-        const badgeStyle = isAprovado 
-            ? 'background-color: #dcfce7; color: #15803d;' 
-            : 'background-color: #fef3c7; color: #b45309;';
-
-        const tr = document.createElement('tr');
-        tr.style.borderBottom = '1px solid #f1f5f9';
-        tr.innerHTML = `
-            <td style="padding: 12px; color: #64748b; white-space: nowrap;">
-                <strong>#${oc.id}</strong><br><span style="font-size: 0.75rem;">${oc.dataHora}</span>
-            </td>
-            <td style="padding: 12px; font-weight: 600; color: #004173;">${oc.maquina}</td>
-            <td style="padding: 12px;"><span style="background-color: #f8fafc; border: 1px solid #cbd5e1; color: #334155; padding: 3px 6px; border-radius: 4px; font-size: 0.78rem; font-weight: 500;">${oc.tipo}</span></td>
-            <td style="padding: 12px; font-weight: 500; color: #334155;">${oc.item}</td>
-            <td style="padding: 12px; color: #475569; max-width: 250px;">${oc.descricao}</td>
-            <td style="padding: 12px; text-align: center;">
-                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.78rem; ${badgeStyle}">
-                    ${oc.status}
-                </span>
-            </td>
-            <td style="padding: 12px; text-align: center; white-space: nowrap;">
-                ${isAprovado 
-                    ? `<button onclick="alterarStatusOcorrencia(${oc.id})" style="background: none; border: 1px solid #cbd5e1; color: #64748b; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem;">Reabrir Análise</button>` 
-                    : `<button onclick="alterarStatusOcorrencia(${oc.id})" style="background-color: #004173; border: none; color: #ffffff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600;">Aprovar</button>`
-                }
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-// Função para alternar o status ao clicar no botão
-        function alterarStatusOcorrencia(id) {
-            const oc = listaGestaoOcorrencias.find(item => item.id === id);
-            if (oc) {
-                oc.status = oc.status === 'Aprovado' ? 'Em Análise' : 'Aprovado';
-                renderizarGestaoOcorrencias();
-            }
-        }
-        
-        // Função de exemplo para simular a chegada de uma nova ocorrência externa
-        function adicionarOcorrenciaExternaMock() {
-            const novoId = Math.floor(Math.random() * 900) + 103;
-            listaGestaoOcorrencias.unshift({
-                id: novoId,
-                dataHora: new Date().toLocaleString('pt-BR'),
-                maquina: 'Linha de Montagem A',
-                tipo: 'Quebra / Trinca',
-                item: 'ABR-998',
-                descricao: 'Nova ocorrência aberta remotamente via formulário da fábrica.',
-                status: 'Em Análise'
-            });
-            renderizarGestaoOcorrencias();
-        }
-
+        // Função de alteração de status com validação correta via .select()
         async function alterarStatusOcorrencia(idOcorrencia, novoStatus) {
             try {
                 const { data, error } = await supabaseClient
@@ -1024,24 +927,22 @@ function renderizarGestaoOcorrencias() {
                     .update({ status: novoStatus })
                     .eq('id', idOcorrencia)
                     .select();
-        
+
                 if (error) throw error;
-        
-                // Se data estiver vazio, o RLS bloqueou a alteração do Raphael!
+
                 if (!data || data.length === 0) {
-                    alert('Acesso negado: O seu utilizador não tem permissão de gestor.');
+                    alert('Acesso negado: O seu utilizador não tem permissão de gestor para alterar este status.');
                     return;
                 }
-        
+
                 alert('Status alterado com sucesso!');
                 location.reload();
-        
+
             } catch (err) {
                 console.error('Erro na operação:', err.message);
                 alert('Erro ao atualizar: ' + err.message);
             }
         }
-
     </script>
 </body>
 </html>
