@@ -667,11 +667,52 @@
                         <button class="top-tab" onclick="switchSubTab('abrasivos', 'ocorrencias', this)">Ocorrências</button>
                     </div>
                 </div>
-
+                                        <!-- SUB-ABA: PERFORMANCE DE ABRASIVOS -->
                 <div id="abrasivos-subtab-performance" class="abrasivos-subtab">
+                    <!-- GRID DE 5 CARDS DE INDICADORES (KPIs) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                        
+                        <!-- CARD 1: Máquina com Maior Custo -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 10px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <span style="font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Máquina Maior Custo</span>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">OP25-2 (Linha 05)</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 415.759,25</div>
+                        </div>
+                
+                        <!-- CARD 2: Linha com Maior Custo -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 10px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <span style="font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Linha Maior Custo</span>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">Linha 09</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 1.415.254,39</div>
+                        </div>
+                
+                        <!-- CARD 3: Custo Total de Ocorrências (Abrasivos) -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #ef4444; border-radius: 10px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <span style="font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Custo em Ocorrências</span>
+                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Somente Abrasivos</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">R$ 18.147,98</div>
+                        </div>
+                
+                        <!-- CARD 4: Produção Total de Válvulas -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; border-radius: 10px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <span style="font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Produção Total</span>
+                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Todas as Linhas / Famílias</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #059669;">2.487.254,18 <span style="font-size: 0.8rem; font-weight: 500;">pçs</span></div>
+                        </div>
+                
+                        <!-- CARD 5: Custo Peça Final -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 10px; padding: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <span style="font-size: 0.78rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Custo Peça Final</span>
+                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Custo Total / Produção</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #004173;">R$ 0,57 <span style="font-size: 0.8rem; font-weight: 500;">/ pç</span></div>
+                        </div>
+                
+                    </div>
+                
+                    <!-- ÁREA RESERVADA PARA TABELAS OU GRÁFICOS DE PERFORMANCE -->
                     <div class="section-placeholder">
-                        <h3>📊 Performance de Abrasivos</h3>
-                        <p>Acompanhamento de consumo por peças produzidas, durabilidade e custo fabril.</p>
+                        <h3>📊 Detalhamento de Performance por Ferramenta</h3>
+                        <p>Aqui entraremos com os gráficos ou tabelas de acompanhamento de consumo por lote.</p>
                     </div>
                 </div>
 
