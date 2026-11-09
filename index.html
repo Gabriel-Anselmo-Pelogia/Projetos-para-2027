@@ -1599,12 +1599,10 @@
         });
     });
 
-    // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O PAINEL LATERAL DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
-    function carregarDadosOperacaoSelecionada(linha, operacao) {
+   function carregarDadosOperacaoSelecionada(linha, operacao) {
         const turnos = ['1º Turno', '2º Turno', '3º Turno'];
         const situacoes = ['Consumo', 'Ocorrência'];
         
-        // Base de itens simulados (com imagens e dados técnicos)
         const itensMock = [
             { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar' },
             { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar' },
@@ -1615,19 +1613,19 @@
 
         const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
 
-        // --- 1. ATUALIZA OS CAMPOS DO PAINEL LATERAL COM IMAGEM AMPLIADA ---
+        // Atualiza os textos do painel lateral
         document.getElementById('infoCod').innerText = ultimoItem.cod;
         document.getElementById('infoDesc').innerText = ultimoItem.desc;
         document.getElementById('infoForn').innerText = ultimoItem.fornecedor;
         document.getElementById('infoVal').innerText = 'R$ ' + ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
-        // Atualiza a imagem com fallback de segurança caso não exista
+        // Atualiza a imagem com segurança
         const cardContainer = document.getElementById('cardItemHomologado');
         const imgContainer = cardContainer.querySelector('img');
         imgContainer.src = ultimoItem.img;
         imgContainer.alt = ultimoItem.cod;
 
-        // --- 2. ATUALIZA A TABELA COM AS ÚLTIMAS 15 REQUISIÇÕES ---
+        // Atualiza a tabela das últimas 15 requisições abaixo
         document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
         document.getElementById('subtituloTabelaRequisicoes').innerText = `Histórico recente filtrado por ${linha} e ${operacao}`;
 
