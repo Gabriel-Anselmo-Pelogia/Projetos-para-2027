@@ -739,6 +739,41 @@
             
                 <!-- PAINEL DE GRÁFICOS INTERATIVOS COM AS 16 LINHAS + OUTROS -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 24px;">
+
+                    <!-- FILTROS DE PERÍODO (ANO E MÊS/MÉDIA) -->
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
+                        
+                        <!-- Filtro de Ano -->
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: #004173;">Ano:</label>
+                            <select id="filtroAno" onchange="atualizarDadosGrafico()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer;">
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2027">2027</option>
+                            </select>
+                        </div>
+                    
+                        <!-- Filtro de Mês / Média Geral -->
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: #004173;">Período:</label>
+                            <select id="filtroPeriodo" onchange="atualizarDadosGrafico()" style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer;">
+                                <option value="media">Média (Geral do Ano)</option>
+                                <option value="Jan">Janeiro</option>
+                                <option value="Fev">Fevereiro</option>
+                                <option value="Mar">Março</option>
+                                <option value="Abr">Abril</option>
+                                <option value="Mai">Maio</option>
+                                <option value="Jun">Junho</option>
+                                <option value="Jul">Julho</option>
+                                <option value="Ago">Agosto</option>
+                                <option value="Set">Setembro</option>
+                                <option value="Out">Outubro</option>
+                                <option value="Nov">Novembro</option>
+                                <option value="Dez">Dezembro</option>
+                            </select>
+                        </div>
+                    
+                    </div>
                     
                     <!-- GRÁFICO 1: CUSTO DE ABRASIVOS POR LINHA (16 Linhas + Outros) -->
                     <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
@@ -1128,59 +1163,88 @@
         }
     </script>
 
-    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS (16 LINHAS + "OUTROS") -->
     <!-- LÓGICA DE RENDERIZAÇÃO DO GRÁFICO DE CP (CUSTO X PEÇA) POR LINHA -->
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        
-        const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
-        new Chart(ctxLinha, {
-            type: 'bar',
-            data: {
-                labels: [
-                    'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
-                    'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
-                    'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
-                    'BV - MOD 1', 'BV - MOD 2', 'OUTROS'
-                ],
-                datasets: [{
-                    label: 'CP (Custo x Peça)',
-                    // Valores fictícios de CP por peça (R$/pç) para testes visuais
-                    data: [0.45, 0.52, 0.48, 0.61, 0.75, 0.42, 0.50, 0.55, 0.82, 0.49, 0.46, 0.53, 0.44, 0.41, 0.58, 0.65, 0.68, 0.35],
-                    backgroundColor: '#0cb7f2',
-                    borderRadius: 6,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return ' CP: R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' / pç';
-                            }
+   <script>
+let meuGraficoCP = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+    const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
+    
+    // Dados base (ex: Média do Ano)
+    const dadosIniciais = [0.450, 0.520, 0.480, 0.610, 0.750, 0.420, 0.500, 0.550, 0.820, 0.490, 0.460, 0.530, 0.440, 0.410, 0.580, 0.650, 0.680, 0.350];
+
+    meuGraficoCP = new Chart(ctxLinha, {
+        type: 'bar',
+        data: {
+            labels: [
+                'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
+                'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
+                'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
+                'BV - MOD 1', 'BV - MOD 2', 'OUTROS'
+            ],
+            datasets: [{
+                label: 'CP (Custo x Peça)',
+                data: dadosIniciais,
+                backgroundColor: '#0cb7f2',
+                borderRadius: 6,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            // Formatado rigorosamente com 3 casas decimais
+                            return ' CP: R$ ' + context.parsed.y.toFixed(3) + ' / pç';
                         }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#f1f5f9' },
-                        ticks: {
-                            callback: function(value) { return 'R$ ' + value.toFixed(2); }
-                        }
-                    },
-                    x: { 
-                        grid: { display: false },
-                        ticks: { font: { size: 9 } }
                     }
                 }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f1f5f9' },
+                    ticks: {
+                        callback: function(value) { return 'R$ ' + value.toFixed(3); }
+                    }
+                },
+                x: { 
+                    grid: { display: false },
+                    ticks: { font: { size: 9 } }
+                }
             }
-        });
+        }
     });
-    </script>
+});
+
+// Função acionada ao alterar os selects de filtro
+function atualizarDadosGrafico() {
+    const anoSelecionado = document.getElementById('filtroAno').value;
+    const periodoSelecionado = document.getElementById('filtroPeriodo').value;
+
+    // Aqui no futuro o Python injetará os dados reais filtrados por ano e mês.
+    // Por enquanto, geramos uma variação simulada com base na escolha para ver a interação:
+    let fator = 1.0;
+    if (periodoSelecionado !== 'media') {
+        // Simula variação mensal aleatória controlada para demonstração visual
+        fator = 0.85 + (Math.abs(periodoSelecionado.charCodeAt(0)) % 30) / 100;
+    }
+    if (anoSelecionado === '2025') fator *= 0.92;
+    if (anoSelecionado === '2027') fator *= 1.08;
+
+    const novosDados = [
+        0.450, 0.520, 0.480, 0.610, 0.750, 0.420, 0.500, 0.550, 
+        0.820, 0.490, 0.460, 0.530, 0.440, 0.410, 0.580, 0.650, 0.680, 0.350
+    ].map(val => Number((val * fator).toFixed(3)));
+
+    // Atualiza o gráfico dinamicamente
+    meuGraficoCP.data.datasets[0].data = novosDados;
+    meuGraficoCP.update();
+}
+</script>
 </body>
 </html>
