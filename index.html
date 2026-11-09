@@ -844,7 +844,7 @@
 
                 </div>
 
-                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO -->
+                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES (TOP 5) E ITEM HOMOLOGADO -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
@@ -913,7 +913,7 @@
                     <!-- GRID DOS 3 BLOCOS -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                         
-                        <!-- 1. GRÁFICO DE PIZZA (FAMÍLIAS REAIS) -->
+                        <!-- 1. GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
                             <div style="position: relative; height: 240px; display: flex; align-items: center; justify-content: center;">
@@ -921,9 +921,16 @@
                             </div>
                         </div>
 
-                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (OPERAÇÕES EXATAS + LIXADEIRA) -->
+                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (COM SELETOR TOP 5 / TOP 10 / TODAS) -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Custos por Operação (Ranqueados)</h4>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação</h4>
+                                <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
+                                    <option value="5" selected>Top 5</option>
+                                    <option value="10">Top 10</option>
+                                    <option value="todas">Todas</option>
+                                </select>
+                            </div>
                             <div style="position: relative; height: 240px;">
                                 <canvas id="chartBarrasOperacoes"></canvas>
                             </div>
@@ -1050,6 +1057,7 @@
                         </div>
                         <div class="material-card" onclick="abrirDetalhesCategoria('pontas-montadas')">
                             <div class="material-img-container"><img src="imagens/pontas.png" alt="Pontas Montadas"></div>
+                            <div class="material-title">Pontas Montadas</div>
                             <div class="material-divider"></div>
                             <div class="material-action">Ver Detalhes</div>
                         </div>
@@ -1447,9 +1455,9 @@
         });
 
 
-        // --- 4. CARD 2: BARRAS HORIZONTAIS (OPERAÇÕES DA PLANILHA + LIXADEIRA) ---
+        // --- 4. CARD 2: BARRAS HORIZONTAIS (INICIALMENTE TOP 5) ---
         const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
-        const operacoesPadrao = [
+        const operacoesCompletas = [
             { op: '15G', custo: 145000 },
             { op: '15S', custo: 132000 },
             { op: '15A', custo: 118000 },
@@ -1463,15 +1471,18 @@
             { op: 'HSG/EMB', custo: 32000 },
             { op: 'HSF', custo: 21000 },
             { op: 'Lixadeira', custo: 15000 }
-        ];
+        ].sort((a, b) => b.custo - a.custo);
+
+        const topFiltro = document.getElementById('filtroTopOperacoes').value;
+        const dadosIniciaisOp = topFiltro === 'todas' ? operacoesCompletas : operacoesCompletas.slice(0, parseInt(topFiltro));
 
         chartBarrasOperacoesObj = new Chart(ctxBarrasHoriz, {
             type: 'bar',
             data: {
-                labels: operacoesPadrao.map(i => i.op),
+                labels: dadosIniciaisOp.map(i => i.op),
                 datasets: [{
                     label: 'Custo Total (R$)',
-                    data: operacoesPadrao.map(i => i.custo),
+                    data: dadosIniciaisOp.map(i => i.custo),
                     backgroundColor: '#0979b0',
                     borderRadius: 4
                 }]
@@ -1546,6 +1557,7 @@
         const ano = document.getElementById('filtroAnoCard2').value;
         const periodo = document.getElementById('filtroPeriodoCard2').value;
         const linha = document.getElementById('filtroLinhaCard2').value;
+        const limiteTop = document.getElementById('filtroTopOperacoes').value;
 
         let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
         let mult = 0.8 + (seed / 100);
@@ -1556,7 +1568,7 @@
         ];
         chartPizzaFamiliasObj.update();
 
-        // Recalcula e reordena as operações da planilha + Lixadeira
+        // Recalcula, reordena e aplica o corte Top 5 / Top 10 / Todas
         const listaAtualizada = [
             { op: '15G', custo: Math.round(145000 * mult) },
             { op: '15S', custo: Math.round(132000 * (1.8 - mult)) },
@@ -1573,8 +1585,10 @@
             { op: 'Lixadeira', custo: Math.round(15000 * mult) }
         ].sort((a, b) => b.custo - a.custo);
 
-        chartBarrasOperacoesObj.data.labels = listaAtualizada.map(i => i.op);
-        chartBarrasOperacoesObj.data.datasets[0].data = listaAtualizada.map(i => i.custo);
+        const dadosFiltrados = limiteTop === 'todas' ? listaAtualizada : listaAtualizada.slice(0, parseInt(limiteTop));
+
+        chartBarrasOperacoesObj.data.labels = dadosFiltrados.map(i => i.op);
+        chartBarrasOperacoesObj.data.datasets[0].data = dadosFiltrados.map(i => i.custo);
         chartBarrasOperacoesObj.update();
     }
     </script>
