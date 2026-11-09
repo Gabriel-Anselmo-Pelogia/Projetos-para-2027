@@ -1170,7 +1170,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
         
-        // 17 linhas da fábrica + OUTROS + 1 barra de MÉDIA FÁBRICA (Total: 19 colunas)
         const labelsLinhas = [
             'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
             'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
@@ -1178,12 +1177,11 @@
             'BV - MOD 1', 'BV - MOD 2', 'OUTROS', 'MÉDIA FÁBRICA'
         ];
 
-        // Dados iniciais simulados (com 3 casas decimais)
         const dadosIniciais = [
             0.450, 0.520, 0.480, 0.610, 0.750, 
             0.420, 0.500, 0.550, 0.820, 0.490, 
             0.460, 0.530, 0.440, 0.410, 0.580, 
-            0.650, 0.680, 0.350, 0.539 // Último valor simulando a média geral
+            0.650, 0.680, 0.350, 0.539
         ];
 
         meuGraficoCP = new Chart(ctxLinha, {
@@ -1193,23 +1191,20 @@
                 datasets: [{
                     label: 'CP (Custo x Peça)',
                     data: dadosIniciais,
-                    // Função que pinta dinamicamente: maior valor fica em destaque, média em cor distinta e o resto padrão
                     backgroundColor: function(context) {
                         const index = context.dataIndex;
                         const dataset = context.dataset.data;
                         
-                        // Se for a última barra (Média Fábrica), cor diferenciada (ex: Verde/Cinza escuro)
+                        // Barra da Média em cor distinta (Verde)
                         if (index === dataset.length - 1) return '#059669'; 
                         
-                        // Descobre qual é o maior valor entre as linhas de produção
+                        // Maior Custo x Peça em destaque (Vermelho)
                         const apenasLinhas = dataset.slice(0, dataset.length - 1);
                         const maiorValor = Math.max(...apenasLinhas);
                         
-                        // Se esta barra for a de maior custo, pinta de destaque (ex: Vermelho alinhado ao layout)
                         if (dataset[index] === maiorValor) return '#dc2626'; 
                         
-                        // Cor padrão das linhas normais
-                        return '#0cb7f2';
+                        return '#0cb7f2'; // Azul padrão
                     },
                     borderRadius: 6,
                     borderSkipped: false
@@ -1218,6 +1213,13 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                // --- CONFIGURAÇÃO DA ANIMAÇÃO (Apenas de baixo para cima) ---
+                animation: {
+                    duration: 800,
+                    easing: 'easeOutQuart',
+                    // Mantém a posição X e a largura fixas desde o início
+                    x: false
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -1243,14 +1245,13 @@
                     },
                     x: { 
                         grid: { display: false },
-                        ticks: { font: { size: 8 } } // Fonte menor para caber bem todas as colunas
+                        ticks: { font: { size: 8 } }
                     }
                 }
             }
         });
     });
 
-    // Função de atualização dinâmica dos filtros com recálculo automático da média
     function atualizarDadosGrafico() {
         const anoSelecionado = document.getElementById('filtroAno').value;
         const periodoSelecionado = document.getElementById('filtroPeriodo').value;
@@ -1262,7 +1263,6 @@
         if (anoSelecionado === '2025') fator *= 0.92;
         if (anoSelecionado === '2027') fator *= 1.08;
 
-        // Dados base das 18 colunas (17 linhas + Outros)
         const baseValores = [
             0.450, 0.520, 0.480, 0.610, 0.750, 
             0.420, 0.500, 0.550, 0.820, 0.490, 
@@ -1270,11 +1270,9 @@
             0.650, 0.680, 0.350
         ].map(val => Number((val * fator).toFixed(3)));
 
-        // Calcula automaticamente a média de todas as linhas para a barra final
         const soma = baseValores.reduce((acc, curr) => acc + curr, 0);
         const mediaGeral = Number((soma / baseValores.length).toFixed(3));
 
-        // Junta os dados das linhas com a média geral no final
         const novosDados = [...baseValores, mediaGeral];
 
         meuGraficoCP.data.datasets[0].data = novosDados;
