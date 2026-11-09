@@ -910,19 +910,19 @@
                         </div>
                     </div>
 
-                    <!-- GRID DOS 3 BLOCOS -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <!-- GRID DOS 3 BLOCOS (Proporcionais e Balanceados) -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch;">
                         
-                        <!-- 1. GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) -->
-                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                        <!-- 1. GRÁFICO DE PIZZA (FAMÍLIAS REAIS) -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
-                            <div style="position: relative; height: 240px; display: flex; align-items: center; justify-content: center;">
+                            <div style="position: relative; height: 260px; display: flex; align-items: center; justify-content: center;">
                                 <canvas id="chartPizzaFamilias"></canvas>
                             </div>
                         </div>
 
-                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (COM SELETOR TOP 5 / TOP 10 / TODAS) -->
-                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (COM SELETOR TOP 5 / 10 / TODAS) -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                 <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação</h4>
                                 <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
@@ -931,17 +931,19 @@
                                     <option value="todas">Todas</option>
                                 </select>
                             </div>
-                            <div style="position: relative; height: 240px;">
+                            <div style="position: relative; height: 260px;">
                                 <canvas id="chartBarrasOperacoes"></canvas>
                             </div>
                         </div>
 
-                        <!-- 3. ITEM HOMOLOGADO (RESERVADO) -->
-                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1;">
-                            <div style="font-size: 2.2rem; margin-bottom: 8px; color: #0979b0;">🏷️</div>
+                        <!-- 3. ITEM HOMOLOGADO (FORMATO QUADRADO/PROPORCIONAL PARA FOTO) -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1; min-height: 310px;">
+                            <div style="font-size: 2.5rem; margin-bottom: 10px; color: #0979b0;">🏷️</div>
                             <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Item Homologado</h4>
-                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px;">Espaço reservado para visualização da imagem e especificações do item homologado na linha.</p>
+                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px; line-height: 1.4;">Espaço reservado para visualização da foto e especificações do item.</p>
                         </div>
+
+                    </div>
 
                     </div>
 
