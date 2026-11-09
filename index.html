@@ -737,7 +737,56 @@
             
                 </div>
             
-                <!-- PAINEL DOS 3 GRÁFICOS DE ÁREA LADO A LADO -->
+                <!-- PAINEL DO GRÁFICO PRINCIPAL DE CP COM FILTROS -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                    
+                    <!-- BARRA SUPERIOR DO GRÁFICO (TÍTULO + FILTROS) -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">CP (Custo x Peça) por Linha de Produção</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Eficiência de consumo de abrasivos por unidade produzida (R$/pç)</p>
+                        </div>
+
+                        <!-- FILTROS DE PERÍODO (ANO E MÊS/MÉDIA) -->
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
+                                <select id="filtroAno" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
+                                <select id="filtroPeriodo" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="media">Média (Geral do Ano)</option>
+                                    <option value="Jan">Janeiro</option>
+                                    <option value="Fev">Fevereiro</option>
+                                    <option value="Mar">Março</option>
+                                    <option value="Abr">Abril</option>
+                                    <option value="Mai">Maio</option>
+                                    <option value="Jun">Junho</option>
+                                    <option value="Jul">Julho</option>
+                                    <option value="Ago">Agosto</option>
+                                    <option value="Set">Setembro</option>
+                                    <option value="Out">Outubro</option>
+                                    <option value="Nov">Novembro</option>
+                                    <option value="Dez">Dezembro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CANVAS DO GRÁFICO PRINCIPAL -->
+                    <div style="position: relative; height: 360px;">
+                        <canvas id="chartCustosLinha"></canvas>
+                    </div>
+
+                </div>
+
+                <!-- PAINEL DOS 3 GRÁFICOS DE ÁREA LOGO ABAIXO -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
                     
                     <!-- GRÁFICO 1 -->
@@ -765,6 +814,7 @@
                     </div>
 
                 </div>
+
             </div>
 
                 <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
@@ -1142,9 +1192,89 @@
         }
     </script>
 
-    <!-- LÓGICA DE RENDERIZAÇÃO DOS 3 GRÁFICOS DE ÁREA -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DE TODOS OS GRÁFICOS (PRINCIPAL DE CP + 3 DE ÁREA) -->
     <script>
+    let meuGraficoCP = null;
+
     document.addEventListener("DOMContentLoaded", function () {
+        
+        // --- 1. GRÁFICO PRINCIPAL DE CP (Com as 16 linhas + Outros + Média) ---
+        const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
+        
+        const labelsLinhas = [
+            'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
+            'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
+            'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
+            'BV - MOD 1', 'BV - MOD 2', 'OUTROS', 'MÉDIA FÁBRICA'
+        ];
+
+        const dadosIniciais = [
+            0.450, 0.520, 0.480, 0.610, 0.750, 
+            0.420, 0.500, 0.550, 0.820, 0.490, 
+            0.460, 0.530, 0.440, 0.410, 0.580, 
+            0.650, 0.680, 0.350, 0.539
+        ];
+
+        meuGraficoCP = new Chart(ctxLinha, {
+            type: 'bar',
+            data: {
+                labels: labelsLinhas,
+                datasets: [{
+                    label: 'CP (Custo x Peça)',
+                    data: dadosIniciais,
+                    backgroundColor: function(context) {
+                        const index = context.dataIndex;
+                        const dataset = context.dataset.data;
+                        
+                        if (index === dataset.length - 1) return '#059669'; // Média Fábrica (Verde)
+                        
+                        const apenasLinhas = dataset.slice(0, dataset.length - 1);
+                        const maiorValor = Math.max(...apenasLinhas);
+                        
+                        if (dataset[index] === maiorValor) return '#dc2626'; // Maior CP (Vermelho)
+                        
+                        return '#0cb7f2'; // Padrão (Azul)
+                    },
+                    borderRadius: 6,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.chart.data.labels[context.dataIndex];
+                                const valor = context.parsed.y.toFixed(3);
+                                if (label === 'MÉDIA FÁBRICA') {
+                                    return ' Média Geral da Fábrica: R$ ' + valor + ' / pç';
+                                }
+                                return ' CP (' + label + '): R$ ' + valor + ' / pç';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            callback: function(value) { return 'R$ ' + value.toFixed(3); }
+                        }
+                    },
+                    x: { 
+                        grid: { display: false },
+                        ticks: { font: { size: 8 } }
+                    }
+                }
+            }
+        });
+
+
+        // --- 2. OS 3 GRÁFICOS DE ÁREA (Logo abaixo) ---
         const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'];
 
         const configArea = (labelNome, corBase, dadosValores) => ({
@@ -1184,6 +1314,34 @@
         new Chart(document.getElementById('chartArea2').getContext('2d'), configArea('Consumo', 'rgba(220, 38, 38, 1)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
         new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
     });
+
+    // Função de atualização dinâmica do gráfico principal via filtros
+    function atualizarDadosGrafico() {
+        const anoSelecionado = document.getElementById('filtroAno').value;
+        const periodoSelecionado = document.getElementById('filtroPeriodo').value;
+
+        let fator = 1.0;
+        if (periodoSelecionado !== 'media') {
+            fator = 0.85 + (Math.abs(periodoSelecionado.charCodeAt(0)) % 30) / 100;
+        }
+        if (anoSelecionado === '2025') fator *= 0.92;
+        if (anoSelecionado === '2027') fator *= 1.08;
+
+        const baseValores = [
+            0.450, 0.520, 0.480, 0.610, 0.750, 
+            0.420, 0.500, 0.550, 0.820, 0.490, 
+            0.460, 0.530, 0.440, 0.410, 0.580, 
+            0.650, 0.680, 0.350
+        ].map(val => Number((val * fator).toFixed(3)));
+
+        const soma = baseValores.reduce((acc, curr) => acc + curr, 0);
+        const mediaGeral = Number((soma / baseValores.length).toFixed(3));
+
+        const novosDados = [...baseValores, mediaGeral];
+
+        meuGraficoCP.data.datasets[0].data = novosDados;
+        meuGraficoCP.update();
+    }
     </script>
 </body>
 </html>
