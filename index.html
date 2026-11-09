@@ -846,7 +846,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO DINÂMICO -->
+                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO EM DESTAQUE LATERAL -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
@@ -905,37 +905,70 @@
                         </div>
                     </div>
 
-                    <!-- GRID DOS 3 BLOCOS -->
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; margin-bottom: 24px;">
-                        <!-- 1. GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) -->
-                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
-                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
-                            <div style="position: relative; height: 260px; display: flex; align-items: center; justify-content: center;">
-                                <canvas id="chartPizzaFamilias"></canvas>
+                    <!-- NOVO LAYOUT DE 2 COLUNAS PROPORCIONAIS: ESQUERDA (GRÁFICOS) E DIREITA (IMAGEM GRANDE E CARDS) -->
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: stretch; margin-bottom: 24px;">
+                        
+                        <!-- COLUNA ESQUERDA: GRÁFICO DE PIZZA + GRÁFICO DE BARRAS -->
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <!-- 1. GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) -->
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
+                                <div style="position: relative; height: 160px; display: flex; align-items: center; justify-content: center;">
+                                    <canvas id="chartPizzaFamilias"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS -->
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; flex: 1;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação</h4>
+                                    <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
+                                        <option value="5" selected>Top 5</option>
+                                        <option value="10">Top 10</option>
+                                        <option value="todas">Todas</option>
+                                    </select>
+                                </div>
+                                <div style="position: relative; height: 210px;">
+                                    <canvas id="chartBarrasOperacoes" style="cursor: pointer;"></canvas>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS -->
-                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação (Clique em uma barra)</h4>
-                                <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
-                                    <option value="5" selected>Top 5</option>
-                                    <option value="10">Top 10</option>
-                                    <option value="todas">Todas</option>
-                                </select>
+                        <!-- COLUNA DIREITA: ITEM HOMOLOGADO / ÚLTIMO REQUISITADO COM IMAGEM AMPLIADA -->
+                        <div id="cardItemHomologado" style="background-color: #f8fafc; border: 1px solid #0979b0; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; box-shadow: 0 4px 12px rgba(9, 121, 176, 0.08);">
+                            <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase; background: #dcfce7; padding: 3px 10px; border-radius: 6px;">Último Requisitado</span>
+                                <span style="font-size: 0.75rem; color: #64748b;">Clique numa barra ➔</span>
                             </div>
-                            <div style="position: relative; height: 260px;">
-                                <canvas id="chartBarrasOperacoes" style="cursor: pointer;"></canvas>
+                            
+                            <!-- IMAGEM AMPLIADA E NÍTIDA -->
+                            <div style="width: 100%; height: 210px; display: flex; align-items: center; justify-content: center; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 10px; margin-bottom: 12px;">
+                                <img src="imagens/vitrificados.png" alt="Ferramenta" style="max-width: 100%; max-height: 200px; object-fit: contain;" onerror="this.onerror=null; this.src='logo.png';">
+                            </div>
+
+                            <!-- INFORMAÇÕES DETALHADAS EM CARDS MENORES -->
+                            <div style="width: 100%; text-align: left; display: flex; flex-direction: column; gap: 8px;">
+                                <div>
+                                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Código do Item:</div>
+                                    <div style="font-size: 0.95rem; font-weight: 700; color: #004173;" id="infoCod">RT 609.6 X 17.5 X 203.2</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase;">Descrição:</div>
+                                    <div style="font-size: 0.85rem; color: #334155; font-weight: 500;" id="infoDesc">Rebolo Vitrificado Retífica</div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 4px;">
+                                    <div style="background: #ffffff; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                        <div style="font-size: 0.68rem; color: #64748b; font-weight: 600;">FORNECEDOR</div>
+                                        <div style="font-size: 0.85rem; font-weight: 700; color: #004173;" id="infoForn">Alcar</div>
+                                    </div>
+                                    <div style="background: #ffffff; padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                        <div style="font-size: 0.68rem; color: #64748b; font-weight: 600;">VALOR UNIT.</div>
+                                        <div style="font-size: 0.85rem; font-weight: 700; color: #0979b0;" id="infoVal">R$ 1.250,50</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 3. ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (DINÂMICO COM FALLBACK DE IMAGEM) -->
-                        <div id="cardItemHomologado" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1; min-height: 310px;">
-                            <div style="font-size: 2.5rem; margin-bottom: 10px; color: #0979b0;">🏷️</div>
-                            <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Item Homologado</h4>
-                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px; line-height: 1.4;">Clique em uma operação no gráfico ao lado para carregar o último item requisitado.</p>
-                        </div>
                     </div>
 
                     <!-- TABELA DAS ÚLTIMAS 15 REQUIOSIÇÕES -->
@@ -1477,8 +1510,8 @@
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom',
-                        labels: { boxWidth: 12, font: { size: 11 } }
+                        position: 'right',
+                        labels: { boxWidth: 10, font: { size: 10 } }
                     }
                 }
             }
@@ -1527,7 +1560,7 @@
                         const operacaoSelecionada = chartBarrasOperacoesObj.data.labels[index];
                         const linhaSelecionada = document.getElementById('filtroLinhaCard2').value;
                         
-                        // Atualiza a tabela e o card do último item homologado/requisitado
+                        // Atualiza a tabela e o card lateral do último item requisitado
                         carregarDadosOperacaoSelecionada(linhaSelecionada, operacaoSelecionada);
                     }
                 },
@@ -1559,12 +1592,12 @@
         });
     });
 
-    // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O CARD DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
+    // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O PAINEL LATERAL DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
     function carregarDadosOperacaoSelecionada(linha, operacao) {
         const turnos = ['1º Turno', '2º Turno', '3º Turno'];
         const situacoes = ['Consumo', 'Ocorrência'];
         
-        // Base de itens simulados (com tratamento de fallback de imagem caso não exista)
+        // Base de itens simulados (com imagens e dados técnicos)
         const itensMock = [
             { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar' },
             { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar' },
@@ -1575,24 +1608,17 @@
 
         const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
 
-        // --- 1. ATUALIZA O CARD 3 COM FALLBACK DE SEGURANÇA PARA A FOTO ---
+        // --- 1. ATUALIZA OS CAMPOS DO PAINEL LATERAL COM IMAGEM AMPLIADA ---
+        document.getElementById('infoCod').innerText = ultimoItem.cod;
+        document.getElementById('infoDesc').innerText = ultimoItem.desc;
+        document.getElementById('infoForn').innerText = ultimoItem.fornecedor;
+        document.getElementById('infoVal').innerText = 'R$ ' + ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+        // Atualiza a imagem com fallback de segurança caso não exista
         const cardContainer = document.getElementById('cardItemHomologado');
-        cardContainer.style.border = '1px solid #0979b0';
-        cardContainer.style.backgroundColor = '#ffffff';
-        cardContainer.innerHTML = `
-            <div style="font-size: 0.7rem; font-weight: 700; color: #059669; text-transform: uppercase; margin-bottom: 4px; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">Último Requisitado</div>
-            <div style="width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-                <img src="${ultimoItem.img}" alt="${ultimoItem.cod}" 
-                     style="max-width: 100%; max-height: 100px; object-fit: contain;" 
-                     onerror="this.onerror=null; this.src='logo.png';">
-            </div>
-            <h4 style="margin: 0 0 2px 0; font-size: 0.85rem; color: #004173; font-weight: 700;">${ultimoItem.cod}</h4>
-            <p style="font-size: 0.75rem; color: #334155; margin-bottom: 4px; font-weight: 500;">${ultimoItem.desc}</p>
-            <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.75rem; width: 100%; border-top: 1px solid #f1f5f9; padding-top: 6px;">
-                <span style="color: #64748b;">Forn: <b>${ultimoItem.fornecedor}</b></span>
-                <span style="color: #0979b0; font-weight: 700;">R$ ${ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
-            </div>
-        `;
+        const imgContainer = cardContainer.querySelector('img');
+        imgContainer.src = ultimoItem.img;
+        imgContainer.alt = ultimoItem.cod;
 
         // --- 2. ATUALIZA A TABELA COM AS ÚLTIMAS 15 REQUISIÇÕES ---
         document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
