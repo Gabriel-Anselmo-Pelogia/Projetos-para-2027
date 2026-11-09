@@ -846,7 +846,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO -->
+                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO DINÂMICO -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
@@ -930,11 +930,11 @@
                             </div>
                         </div>
 
-                        <!-- 3. ITEM HOMOLOGADO -->
-                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1; min-height: 310px;">
+                        <!-- 3. ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (DINÂMICO) -->
+                        <div id="cardItemHomologado" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1; min-height: 310px;">
                             <div style="font-size: 2.5rem; margin-bottom: 10px; color: #0979b0;">🏷️</div>
                             <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Item Homologado</h4>
-                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px; line-height: 1.4;">Espaço reservado para foto e especificações técnicas.</p>
+                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px; line-height: 1.4;">Clique em uma operação no gráfico ao lado para carregar o último item requisitado.</p>
                         </div>
                     </div>
 
@@ -1527,8 +1527,8 @@
                         const operacaoSelecionada = chartBarrasOperacoesObj.data.labels[index];
                         const linhaSelecionada = document.getElementById('filtroLinhaCard2').value;
                         
-                        // Atualiza a tabela abaixo com a operação clicada
-                        carregarTabelaRequisicoes(linhaSelecionada, operacaoSelecionada);
+                        // Atualiza a tabela e o card do último item homologado/requisitado
+                        carregarDadosOperacaoSelecionada(linhaSelecionada, operacaoSelecionada);
                     }
                 },
                 plugins: {
@@ -1559,35 +1559,55 @@
         });
     });
 
-    // FUNÇÃO QUE GERA / CARREGA AS 15 REQUISIÇÕES DA OPERAÇÃO CLICADA (COM COLUNA SITUAÇÃO)
-    function carregarTabelaRequisicoes(linha, operacao) {
+    // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O CARD DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
+    function carregarDadosOperacaoSelecionada(linha, operacao) {
+        const turnos = ['1º Turno', '2º Turno', '3º Turno'];
+        const situacoes = ['Consumo', 'Ocorrência'];
+        
+        // Base de itens simulados (com imagem correspondente na pasta imagens/)
+        const itensMock = [
+            { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar' },
+            { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar' },
+            { cod: 'RPM-2507', desc: 'Ponta Montada Industrial', val: 145.20, img: 'imagens/pontas.png', fornecedor: 'Alcar' },
+            { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80, img: 'imagens/lixas.png', fornecedor: 'Alcar' },
+            { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00, img: 'imagens/CBN.png', fornecedor: 'Alcar' }
+        ];
+
+        // O primeiro item do array será considerado o "Último Requisitado" para esta operação
+        const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
+
+        // --- 1. ATUALIZA O CARD 3 (ITEM HOMOLOGADO / ÚLTIMO REQUISITADO) ---
+        const cardContainer = document.getElementById('cardItemHomologado');
+        cardContainer.style.border = '1px solid #0979b0';
+        cardContainer.style.backgroundColor = '#ffffff';
+        cardContainer.innerHTML = `
+            <div style="font-size: 0.7rem; font-weight: 700; color: #059669; text-transform: uppercase; margin-bottom: 4px; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">Último Requisitado</div>
+            <div style="width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                <img src="${ultimoItem.img}" alt="${ultimoItem.cod}" style="max-width: 100%; max-height: 100px; object-fit: contain;">
+            </div>
+            <h4 style="margin: 0 0 2px 0; font-size: 0.85rem; color: #004173; font-weight: 700;">${ultimoItem.cod}</h4>
+            <p style="font-size: 0.75rem; color: #334155; margin-bottom: 4px; font-weight: 500;">${ultimoItem.desc}</p>
+            <div style="display: flex; justify-content: center; gap: 12px; font-size: 0.75rem; width: 100%; border-top: 1px solid #f1f5f9; padding-top: 6px;">
+                <span style="color: #64748b;">Forn: <b>${ultimoItem.fornecedor}</b></span>
+                <span style="color: #0979b0; font-weight: 700;">R$ ${ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+            </div>
+        `;
+
+        // --- 2. ATUALIZA A TABELA COM AS ÚLTIMAS 15 REQUISIÇÕES ---
         document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
         document.getElementById('subtituloTabelaRequisicoes').innerText = `Histórico recente filtrado por ${linha} e ${operacao}`;
 
         const tbody = document.getElementById('tabelaRequisicoesBody');
-        tbody.innerHTML = ''; // Limpa tabela antiga
+        tbody.innerHTML = ''; 
 
-        const turnos = ['1º Turno', '2º Turno', '3º Turno'];
-        const situacoes = ['Consumo', 'Ocorrência'];
-        const itensMock = [
-            { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50 },
-            { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00 },
-            { cod: 'RPM-2507', desc: 'Ponta Montada Industrial', val: 145.20 },
-            { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80 },
-            { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00 }
-        ];
-
-        // Gera 15 requisições fictícias coerentes com a operação
         for (let i = 1; i <= 15; i++) {
-            const item = itensMock[i % itensMock.length];
-            const qtd = Math.floor(Math.random() * 8) + 1;
+            const item = itensMock[(i + operacao.charCodeAt(0)) % itensMock.length];
+            const qtd = Math.floor(Math.random() * 6) + 1;
             const valorTotal = (qtd * item.val).toFixed(2);
             const dia = String(16 - i).padStart(2, '0');
             const dataFmt = `${dia}/10/2026`;
             const turno = turnos[i % 3];
-            const situacao = situacoes[i % situacoes.length]; // Alterna Consumo e Ocorrência
-
-            // Estilização do badge de situação
+            const situacao = situacoes[i % situacoes.length]; 
             const badgeCor = situacao === 'Consumo' ? 'background: #e0f2fe; color: #0369a1;' : 'background: #fee2e2; color: #991b1b;';
 
             const tr = document.createElement('tr');
@@ -1595,7 +1615,7 @@
                 <td>${dataFmt}</td>
                 <td style="font-weight: 600; color: #004173;">${item.cod}</td>
                 <td>${item.desc}</td>
-                <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">Alcar</span></td>
+                <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">${item.fornecedor}</span></td>
                 <td>R$ ${item.val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                 <td style="font-weight: 700;">${qtd}</td>
                 <td style="font-weight: 700; color: #0979b0;">R$ ${Number(valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
@@ -1657,14 +1677,13 @@
         ];
         chartPizzaFamiliasObj.update();
 
-        // Recalcula, reordena e aplica o corte Top 5 / Top 10 / Todas
         const listaAtualizada = [
             { op: '15G', custo: Math.round(145000 * mult) },
             { op: '15S', custo: Math.round(132000 * (1.8 - mult)) },
             { op: '15A', custo: Math.round(118000 * mult) },
             { op: '15PC/OM2', custo: Math.round(105000 * mult) },
             { op: 'OP25', custo: Math.round(98000 * mult) },
-            { op: 'Borazon', custo: Math.round(89000 * mult) },
+            {, op: 'Borazon', custo: Math.round(89000 * mult) },
             { op: '21A', custo: Math.round(76000 * mult) },
             { op: '15G Arraste', custo: Math.round(64000 * mult) },
             { op: '15S Arraste', custo: Math.round(53000 * mult) },
