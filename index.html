@@ -487,6 +487,35 @@
             font-size: 1.3rem;
         }
 
+        /* Estilização para a Tabela de Requisições */
+        .table-req-container {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+        .table-req {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.82rem;
+        }
+        .table-req th {
+            background-color: #f1f5f9;
+            color: #004173;
+            font-weight: 700;
+            padding: 10px 12px;
+            border-bottom: 2px solid #cbd5e1;
+            white-space: nowrap;
+        }
+        .table-req td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            white-space: nowrap;
+        }
+        .table-req tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
         @media(max-width: 900px) {
             .login-banner-side {
                 display: none;
@@ -585,7 +614,7 @@
 
     <!-- PAINEL DASHBOARD -->
     <div id="dashboard-view" class="dash-layout">
-        <!-- Menu Lateral Limpo (Sem ícones) -->
+        <!-- Menu Lateral Limpo -->
         <aside id="app-sidebar" class="sidebar">
             <div class="sidebar-brand">
                 <img src="logo.png" alt="Logotipo" style="max-height: 40px; width: auto; object-fit: contain;">
@@ -675,61 +704,46 @@
                 <!-- GRID DE 5 CARDS DE INDICADORES (KPIs) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
                     
-                    <!-- CARD 1: Máquina com Maior Custo -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">MAIOR CUSTO (MÁQ.)</span>
-                            <div style="width: 38px; height: 38px; background-color: #f3e8ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
-                                🏭
-                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CUSTO (MÁQ.)</span>
+                            <div style="width: 38px; height: 38px; background-color: #f3e8ff; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🏭</div>
                         </div>
                         <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">OP25-2 (Linha 05)</div>
                         <div style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 415.759,25</div>
                     </div>
             
-                    <!-- CARD 2: Linha com Maior Custo -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">MAIOR CUSTO (LINHA)</span>
-                            <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #0284c7; font-weight: 700; flex-shrink: 0;">
-                                $
-                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CUSTO (LINHA)</span>
+                            <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-weight: 700;">$</div>
                         </div>
                         <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">LINE 09</div>
                         <div style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 1.415.254,39</div>
                     </div>
             
-                    <!-- CARD 3: Custo Total de Ocorrências (Abrasivos) -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">TOTAL OCORRÊNCIAS</span>
-                            <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #dc2626; font-weight: 800; flex-shrink: 0;">
-                                ✖
-                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">TOTAL OCORRÊNCIAS</span>
+                            <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-weight: 800;">✖</div>
                         </div>
                         <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Somente Abrasivos</div>
                         <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">R$ 18.147,98</div>
                     </div>
             
-                    <!-- CARD 4: Produção Total de Válvulas -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">PRODUÇÃO ACABADA</span>
-                            <div style="width: 38px; height: 38px; background-color: #fef3c7; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;">
-                                📦
-                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">PRODUÇÃO ACABADA</span>
+                            <div style="width: 38px; height: 38px; background-color: #fef3c7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">📦</div>
                         </div>
                         <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Todas as Linhas / Famílias</div>
                         <div style="font-size: 1.25rem; font-weight: 700; color: #059669;">2.487.254,18 <span style="font-size: 0.8rem; font-weight: 500;">pçs</span></div>
                     </div>
             
-                    <!-- CARD 5: Custo Peça Final -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative;">
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">MÉDIA CUSTO/PEÇA</span>
-                            <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #16a34a; font-weight: 700; flex-shrink: 0;">
-                                📈
-                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MÉDIA CUSTO/PEÇA</span>
+                            <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #16a34a; font-weight: 700;">📈</div>
                         </div>
                         <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Custo Total / Produção</div>
                         <div style="font-size: 1.25rem; font-weight: 700; color: #0cb7f2;">R$ 0,572 <span style="font-size: 0.8rem; font-weight: 500;">/ pç</span></div>
@@ -739,14 +753,11 @@
             
                 <!-- PAINEL DO GRÁFICO PRINCIPAL DE CP COM FILTROS -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
-                    
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">CP (Custo x Peça) por Linha de Produção</h3>
                             <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Eficiência de consumo de abrasivos por unidade produzida (R$/pç)</p>
                         </div>
-
-                        <!-- FILTROS DE PERÍODO -->
                         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
@@ -756,7 +767,6 @@
                                     <option value="2027">2027</option>
                                 </select>
                             </div>
-
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
                                 <select id="filtroPeriodo" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
@@ -777,22 +787,18 @@
                             </div>
                         </div>
                     </div>
-
                     <div style="position: relative; height: 360px;">
                         <canvas id="chartCustosLinha"></canvas>
                     </div>
-
                 </div>
 
                 <!-- CARD 1 CONTENDO OS 3 GRÁFICOS DE ÁREA + FILTRO DE LINHA -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
-                    
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Evolução Detalhada por Linha</h3>
                             <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento mensal de CP, Consumo e Produção</p>
                         </div>
-
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <label style="font-size: 0.85rem; font-weight: 600; color: #004173;">Linha:</label>
                             <select id="filtroLinhaArea" onchange="atualizarGraficosArea()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
@@ -818,7 +824,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Tendência de CP (R$/pç)</h4>
@@ -826,14 +831,12 @@
                                 <canvas id="chartArea1"></canvas>
                             </div>
                         </div>
-
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Consumo de Abrasivos</h4>
                             <div style="position: relative; height: 220px;">
                                 <canvas id="chartArea2"></canvas>
                             </div>
                         </div>
-
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Volume de Produção (pçs)</h4>
                             <div style="position: relative; height: 220px;">
@@ -841,20 +844,16 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES (TOP 5) E ITEM HOMOLOGADO -->
+                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                    
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Análise de Famílias, Operações e Homologação</h3>
                             <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Detalhamento específico da linha selecionada</p>
                         </div>
-
                         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                            <!-- Filtro de Ano -->
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
                                 <select id="filtroAnoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
@@ -863,8 +862,6 @@
                                     <option value="2027">2027</option>
                                 </select>
                             </div>
-
-                            <!-- Filtro de Período (Mês) -->
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
                                 <select id="filtroPeriodoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
@@ -882,13 +879,11 @@
                                     <option value="Dez">Dezembro</option>
                                 </select>
                             </div>
-
-                            <!-- Filtro de Linha Específica -->
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Linha:</label>
                                 <select id="filtroLinhaCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
                                     <option value="LINE 01">LINE 01</option>
-                                    <option value="LINE 02/HV">LINE 02/HV</option>
+                                    <option value="LINE 02/HV" selected>LINE 02/HV</option>
                                     <option value="LINE 03">LINE 03</option>
                                     <option value="LINE 04">LINE 04</option>
                                     <option value="LINE 05">LINE 05</option>
@@ -910,10 +905,9 @@
                         </div>
                     </div>
 
-                    <!-- GRID DOS 3 BLOCOS (Proporcionais e Balanceados) -->
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch;">
-                        
-                        <!-- 1. GRÁFICO DE PIZZA (FAMÍLIAS REAIS) -->
+                    <!-- GRID DOS 3 BLOCOS -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; margin-bottom: 24px;">
+                        <!-- 1. GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
                             <div style="position: relative; height: 260px; display: flex; align-items: center; justify-content: center;">
@@ -921,10 +915,10 @@
                             </div>
                         </div>
 
-                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (COM SELETOR TOP 5 / 10 / TODAS) -->
+                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação</h4>
+                                <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação (Clique em uma barra)</h4>
                                 <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
                                     <option value="5" selected>Top 5</option>
                                     <option value="10">Top 10</option>
@@ -932,19 +926,52 @@
                                 </select>
                             </div>
                             <div style="position: relative; height: 260px;">
-                                <canvas id="chartBarrasOperacoes"></canvas>
+                                <canvas id="chartBarrasOperacoes" style="cursor: pointer;"></canvas>
                             </div>
                         </div>
 
-                        <!-- 3. ITEM HOMOLOGADO (FORMATO QUADRADO/PROPORCIONAL PARA FOTO) -->
+                        <!-- 3. ITEM HOMOLOGADO -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1; min-height: 310px;">
                             <div style="font-size: 2.5rem; margin-bottom: 10px; color: #0979b0;">🏷️</div>
                             <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Item Homologado</h4>
-                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px; line-height: 1.4;">Espaço reservado para visualização da foto e especificações do item.</p>
+                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px; line-height: 1.4;">Espaço reservado para foto e especificações técnicas.</p>
                         </div>
-
                     </div>
 
+                    <!-- TABELA DAS ÚLTIMAS 15 REQUIOSIÇÕES -->
+                    <div style="border-top: 2px dashed #e2e8f0; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div>
+                                <h4 style="margin: 0; font-size: 1rem; color: #004173; font-weight: 700;" id="tituloTabelaRequisicoes">Últimas 15 Requisições de Material (Selecione uma operação no gráfico)</h4>
+                                <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #64748b;" id="subtituloTabelaRequisicoes">Exibindo histórico filtrado</p>
+                            </div>
+                        </div>
+
+                        <div class="table-req-container">
+                            <table class="table-req">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Código</th>
+                                        <th>Descrição</th>
+                                        <th>Fornecedor</th>
+                                        <th>Valor Unit. (R$)</th>
+                                        <th>Qtd</th>
+                                        <th>Valor Total (R$)</th>
+                                        <th>Linha</th>
+                                        <th>Operação</th>
+                                        <th>Turno</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaRequisicoesBody">
+                                    <tr>
+                                        <td colspan="10" style="text-align: center; color: #94a3b8; padding: 20px;">
+                                            Clique em uma das barras de operação acima (ex: OP25, 15G) para carregar as requisições.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
@@ -1326,7 +1353,7 @@
         }
     </script>
 
-    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS E FILTROS -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS, FILTROS E TABELA DE REQUIOSIÇÕES -->
     <script>
     let meuGraficoCP = null;
     let chartArea1Obj = null;
@@ -1457,7 +1484,7 @@
         });
 
 
-        // --- 4. CARD 2: BARRAS HORIZONTAIS (INICIALMENTE TOP 5) ---
+        // --- 4. CARD 2: BARRAS HORIZONTAIS COM EVENTO DE CLIQUE ---
         const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
         const operacoesCompletas = [
             { op: '15G', custo: 145000 },
@@ -1493,6 +1520,16 @@
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
+                onClick: (evt, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        const operacaoSelecionada = chartBarrasOperacoesObj.data.labels[index];
+                        const linhaSelecionada = document.getElementById('filtroLinhaCard2').value;
+                        
+                        // Atualiza a tabela abaixo com a operação clicada
+                        carregarTabelaRequisicoes(linhaSelecionada, operacaoSelecionada);
+                    }
+                },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
@@ -1521,7 +1558,50 @@
         });
     });
 
-    // Funções de atualização dinâmica
+    // FUNÇÃO QUE GERA / CARREGA AS 15 REQUISIÇÕES DA OPERAÇÃO CLICADA
+    function carregarTabelaRequisicoes(linha, operacao) {
+        document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
+        document.getElementById('subtituloTabelaRequisicoes').innerText = `Histórico recente filtrado por ${linha} e ${operacao}`;
+
+        const tbody = document.getElementById('tabelaRequisicoesBody');
+        tbody.innerHTML = ''; // Limpa tabela antiga
+
+        const turnos = ['1º Turno', '2º Turno', '3º Turno'];
+        const itensMock = [
+            { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50 },
+            { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00 },
+            { cod: 'RPM-2507', desc: 'Ponta Montada Industrial', val: 145.20 },
+            { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80 },
+            { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00 }
+        ];
+
+        // Gera 15 requisições fictícias coerentes com a operação
+        for (let i = 1; i <= 15; i++) {
+            const item = itensMock[i % itensMock.length];
+            const qtd = Math.floor(Math.random() * 8) + 1;
+            const valorTotal = (qtd * item.val).toFixed(2);
+            const dia = String(16 - i).padStart(2, '0');
+            const dataFmt = `${dia}/10/2026`;
+            const turno = turnos[i % 3];
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${dataFmt}</td>
+                <td style="font-weight: 600; color: #004173;">${item.cod}</td>
+                <td>${item.desc}</td>
+                <td><span style="background-color: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">Alcar</span></td>
+                <td>R$ ${item.val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                <td style="font-weight: 700;">${qtd}</td>
+                <td style="font-weight: 700; color: #0979b0;">R$ ${Number(valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                <td><span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 500;">${linha}</span></td>
+                <td><span style="background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${operacao}</span></td>
+                <td>${turno}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+    }
+
+    // Funções de atualização dinâmica dos filtros
     function atualizarDadosGrafico() {
         const ano = document.getElementById('filtroAno').value;
         const periodo = document.getElementById('filtroPeriodo').value;
