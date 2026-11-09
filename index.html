@@ -921,7 +921,7 @@
                             </div>
                         </div>
 
-                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (13 OPERAÇÕES PADRÃO) -->
+                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (OPERAÇÕES EXATAS + LIXADEIRA) -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Custos por Operação (Ranqueados)</h4>
                             <div style="position: relative; height: 240px;">
@@ -1050,7 +1050,6 @@
                         </div>
                         <div class="material-card" onclick="abrirDetalhesCategoria('pontas-montadas')">
                             <div class="material-img-container"><img src="imagens/pontas.png" alt="Pontas Montadas"></div>
-                            <div class="material-title">Pontas Montadas</div>
                             <div class="material-divider"></div>
                             <div class="material-action">Ver Detalhes</div>
                         </div>
@@ -1422,7 +1421,7 @@
         chartArea3Obj = new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
 
 
-        // --- 3. CARD 2: GRÁFICO DE PIZZA (FAMÍLIAS REAIS) ---
+        // --- 3. CARD 2: GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) ---
         const ctxPizza = document.getElementById('chartPizzaFamilias').getContext('2d');
         chartPizzaFamiliasObj = new Chart(ctxPizza, {
             type: 'doughnut',
@@ -1448,22 +1447,22 @@
         });
 
 
-        // --- 4. CARD 2: BARRAS HORIZONTAIS (AS 13 OPERAÇÕES PADRÃO RANQUEADAS) ---
+        // --- 4. CARD 2: BARRAS HORIZONTAIS (OPERAÇÕES DA PLANILHA + LIXADEIRA) ---
         const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
         const operacoesPadrao = [
-            { op: 'Retífica Haste', custo: 145000 },
-            { op: 'Retífica Assento', custo: 112000 },
-            { op: 'Lixadeira', custo: 98000 },
-            { op: 'Corte Haste', custo: 85000 },
-            { op: 'Retífica Topo', custo: 74000 },
-            { op: 'Usinagem Canal', custo: 62000 },
-            { op: 'Solda Assento', custo: 53000 },
-            { op: 'Polimento Haste', custo: 45000 },
-            { op: 'Endireitamento', custo: 38000 },
-            { op: 'Acabamento Topo', custo: 29000 },
-            { op: 'Biselamento', custo: 22000 },
-            { op: 'Chanfro Haste', custo: 18000 },
-            { op: 'Inspeção Final', custo: 11000 }
+            { op: '15G', custo: 145000 },
+            { op: '15S', custo: 132000 },
+            { op: '15A', custo: 118000 },
+            { op: '15PC/OM2', custo: 105000 },
+            { op: 'OP25', custo: 98000 },
+            { op: 'Borazon', custo: 89000 },
+            { op: '21A', custo: 76000 },
+            { op: '15G Arraste', custo: 64000 },
+            { op: '15S Arraste', custo: 53000 },
+            { op: '15A Arraste', custo: 45000 },
+            { op: 'HSG/EMB', custo: 32000 },
+            { op: 'HSF', custo: 21000 },
+            { op: 'Lixadeira', custo: 15000 }
         ];
 
         chartBarrasOperacoesObj = new Chart(ctxBarrasHoriz, {
@@ -1557,21 +1556,21 @@
         ];
         chartPizzaFamiliasObj.update();
 
-        // Recalcula e reordena as 13 operações
+        // Recalcula e reordena as operações da planilha + Lixadeira
         const listaAtualizada = [
-            { op: 'Retífica Haste', custo: Math.round(145000 * mult) },
-            { op: 'Retífica Assento', custo: Math.round(112000 * (1.8 - mult)) },
-            { op: 'Lixadeira', custo: Math.round(98000 * mult) },
-            { op: 'Corte Haste', custo: Math.round(85000 * mult) },
-            { op: 'Retífica Topo', custo: Math.round(74000 * mult) },
-            { op: 'Usinagem Canal', custo: Math.round(62000 * mult) },
-            { op: 'Solda Assento', custo: Math.round(53000 * mult) },
-            { op: 'Polimento Haste', custo: Math.round(45000 * mult) },
-            { op: 'Endireitamento', custo: Math.round(38000 * mult) },
-            { op: 'Acabamento Topo', custo: Math.round(29000 * mult) },
-            { op: 'Biselamento', custo: Math.round(22000 * mult) },
-            { op: 'Chanfro Haste', custo: Math.round(18000 * mult) },
-            { op: 'Inspeção Final', custo: Math.round(11000 * mult) }
+            { op: '15G', custo: Math.round(145000 * mult) },
+            { op: '15S', custo: Math.round(132000 * (1.8 - mult)) },
+            { op: '15A', custo: Math.round(118000 * mult) },
+            { op: '15PC/OM2', custo: Math.round(105000 * mult) },
+            { op: 'OP25', custo: Math.round(98000 * mult) },
+            { op: 'Borazon', custo: Math.round(89000 * mult) },
+            { op: '21A', custo: Math.round(76000 * mult) },
+            { op: '15G Arraste', custo: Math.round(64000 * mult) },
+            { op: '15S Arraste', custo: Math.round(53000 * mult) },
+            { op: '15A Arraste', custo: Math.round(45000 * mult) },
+            { op: 'HSG/EMB', custo: Math.round(32000 * mult) },
+            { op: 'HSF', custo: Math.round(21000 * mult) },
+            { op: 'Lixadeira', custo: Math.round(15000 * mult) }
         ].sort((a, b) => b.custo - a.custo);
 
         chartBarrasOperacoesObj.data.labels = listaAtualizada.map(i => i.op);
