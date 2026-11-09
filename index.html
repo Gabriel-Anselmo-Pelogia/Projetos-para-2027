@@ -930,7 +930,7 @@
                             </div>
                         </div>
 
-                        <!-- 3. ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (DINÂMICO) -->
+                        <!-- 3. ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (DINÂMICO COM FALLBACK DE IMAGEM) -->
                         <div id="cardItemHomologado" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1; min-height: 310px;">
                             <div style="font-size: 2.5rem; margin-bottom: 10px; color: #0979b0;">🏷️</div>
                             <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Item Homologado</h4>
@@ -1354,7 +1354,7 @@
         }
     </script>
 
-    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS, FILTROS E TABELA DE REQUIOSIÇÕES -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS, FILTROS E TABELA DE REQUISIÇÕES -->
     <script>
     let meuGraficoCP = null;
     let chartArea1Obj = null;
@@ -1564,7 +1564,7 @@
         const turnos = ['1º Turno', '2º Turno', '3º Turno'];
         const situacoes = ['Consumo', 'Ocorrência'];
         
-        // Base de itens simulados (com imagem correspondente na pasta imagens/)
+        // Base de itens simulados (com tratamento de fallback de imagem caso não exista)
         const itensMock = [
             { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar' },
             { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar' },
@@ -1573,17 +1573,18 @@
             { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00, img: 'imagens/CBN.png', fornecedor: 'Alcar' }
         ];
 
-        // O primeiro item do array será considerado o "Último Requisitado" para esta operação
         const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
 
-        // --- 1. ATUALIZA O CARD 3 (ITEM HOMOLOGADO / ÚLTIMO REQUISITADO) ---
+        // --- 1. ATUALIZA O CARD 3 COM FALLBACK DE SEGURANÇA PARA A FOTO ---
         const cardContainer = document.getElementById('cardItemHomologado');
         cardContainer.style.border = '1px solid #0979b0';
         cardContainer.style.backgroundColor = '#ffffff';
         cardContainer.innerHTML = `
             <div style="font-size: 0.7rem; font-weight: 700; color: #059669; text-transform: uppercase; margin-bottom: 4px; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">Último Requisitado</div>
             <div style="width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-                <img src="${ultimoItem.img}" alt="${ultimoItem.cod}" style="max-width: 100%; max-height: 100px; object-fit: contain;">
+                <img src="${ultimoItem.img}" alt="${ultimoItem.cod}" 
+                     style="max-width: 100%; max-height: 100px; object-fit: contain;" 
+                     onerror="this.onerror=null; this.src='logo.png';">
             </div>
             <h4 style="margin: 0 0 2px 0; font-size: 0.85rem; color: #004173; font-weight: 700;">${ultimoItem.cod}</h4>
             <p style="font-size: 0.75rem; color: #334155; margin-bottom: 4px; font-weight: 500;">${ultimoItem.desc}</p>
@@ -1683,7 +1684,7 @@
             { op: '15A', custo: Math.round(118000 * mult) },
             { op: '15PC/OM2', custo: Math.round(105000 * mult) },
             { op: 'OP25', custo: Math.round(98000 * mult) },
-            {, op: 'Borazon', custo: Math.round(89000 * mult) },
+            { op: 'Borazon', custo: Math.round(89000 * mult) },
             { op: '21A', custo: Math.round(76000 * mult) },
             { op: '15G Arraste', custo: Math.round(64000 * mult) },
             { op: '15S Arraste', custo: Math.round(53000 * mult) },
