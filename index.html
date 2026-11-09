@@ -846,7 +846,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 2: FAMÍLIAS, OPERAÇÕES E ITEM HOMOLOGADO EM DESTAQUE LATERAL -->
+                <!-- CARD 2: FAMÍLIAS (GRÁFICO DE BARRA VERTICAL + 4 CARDS) E OPERAÇÕES -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
@@ -905,36 +905,62 @@
                         </div>
                     </div>
 
-                    <!-- NOVO LAYOUT DE 2 COLUNAS PROPORCIONAIS: ESQUERDA (GRÁFICOS) E DIREITA (IMAGEM GRANDE E CARDS) -->
+                    <!-- LINHA 1: FAMÍLIAS (GRÁFICO DE BARRA VERTICAL À ESQUERDA + 4 CARDS À DIREITA) -->
                     <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: stretch; margin-bottom: 24px;">
                         
-                        <!-- COLUNA ESQUERDA: GRÁFICO DE PIZZA + GRÁFICO DE BARRAS -->
-                        <div style="display: flex; flex-direction: column; gap: 20px;">
-                            <!-- 1. GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) -->
-                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
-                                <div style="position: relative; height: 160px; display: flex; align-items: center; justify-content: center;">
-                                    <canvas id="chartPizzaFamilias"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS -->
-                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; flex: 1;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <h4 style="margin: 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Custos por Operação</h4>
-                                    <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
-                                        <option value="5" selected>Top 5</option>
-                                        <option value="10">Top 10</option>
-                                        <option value="todas">Todas</option>
-                                    </select>
-                                </div>
-                                <div style="position: relative; height: 210px;">
-                                    <canvas id="chartBarrasOperacoes" style="cursor: pointer;"></canvas>
-                                </div>
+                        <!-- ESQUERDA: GRÁFICO DE BARRAS VERTICAIS DAS FAMÍLIAS -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Famílias de Válvulas Produzidas</h4>
+                            <div style="position: relative; height: 210px;">
+                                <canvas id="chartBarraFamilias"></canvas>
                             </div>
                         </div>
 
-                      <!-- 3. ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (PERFEITAMENTE CENTRALIZADO) -->
+                        <!-- DIREITA: 4 CARDS PEQUENOS COM QUANTIDADE E PORCENTAGEM -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-content: center;">
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 10px; padding: 14px;">
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Martensítico</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam1">42 pçs</div>
+                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam1">42.0% do total</div>
+                            </div>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 10px; padding: 14px;">
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Austenítico</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam2">35 pçs</div>
+                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam2">35.0% do total</div>
+                            </div>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 10px; padding: 14px;">
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Super Liga</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam3">15 pçs</div>
+                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam3">15.0% do total</div>
+                            </div>
+                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 10px; padding: 14px;">
+                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Intermediária</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam4">8 pçs</div>
+                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam4">8.0% do total</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- LINHA 2: CUSTOS POR OPERAÇÃO E ITEM HOMOLOGADO (PERFEITAMENTE CENTRALIZADO) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 20px; align-items: stretch; margin-bottom: 24px;">
+                        
+                        <!-- ESQUERDA: GRÁFICO DE BARRAS HORIZONTAIS DE OPERAÇÕES -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h4 style="margin: 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Custos por Operação</h4>
+                                <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
+                                    <option value="5" selected>Top 5</option>
+                                    <option value="10">Top 10</option>
+                                    <option value="todas">Todas</option>
+                                </select>
+                            </div>
+                            <div style="position: relative; height: 260px;">
+                                <canvas id="chartBarrasOperacoes" style="cursor: pointer;"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- DIREITA: ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (CENTRALIZADO) -->
                         <div id="cardItemHomologado" style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: center; height: 100%;">
                             
                             <!-- TOPO DO CARD -->
@@ -942,46 +968,46 @@
                                 <span style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase; background: #dcfce7; padding: 4px 12px; border-radius: 6px;">ÚLTIMO REQUISITADO</span>
                                 <span style="font-size: 0.75rem; color: #64748b;">Clique numa barra →</span>
                             </div>
-                        
-                            <!-- CONTEÚDO CENTRAL EM DUAS COLUNAS: CENTRALIZADO VERTICALMENTE -->
-                            <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: center;">
+
+                            <!-- CONTEÚDO CENTRAL EM DUAS COLUNAS -->
+                            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: center;">
                                 
                                 <!-- COLUNA ESQUERDA: CAIXA BRANCA PARA A FOTO -->
-                                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
-                                    <img src="imagens/CBN.png" alt="Ferramenta" style="max-width: 100%; max-height: 280px; object-fit: contain;" onerror="this.onerror=null; this.src='logo.png';">
+                                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                    <img src="imagens/CBN.png" alt="Ferramenta" style="max-width: 100%; max-height: 210px; object-fit: contain;" onerror="this.onerror=null; this.src='logo.png';">
                                 </div>
-                        
+
                                 <!-- COLUNA DIREITA: TEXTOS E CARDS EMPILHADOS -->
-                                <div style="display: flex; flex-direction: column; gap: 14px;">
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
                                     <div>
-                                        <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">CÓDIGO DO ITEM:</div>
-                                        <div style="font-size: 1.15rem; font-weight: 700; color: #004173;" id="infoCod">CBN-IMP-80</div>
+                                        <div style="font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">CÓDIGO DO ITEM:</div>
+                                        <div style="font-size: 1.05rem; font-weight: 700; color: #004173;" id="infoCod">CBN-IMP-80</div>
                                     </div>
                                     
-                                    <div style="margin-bottom: 4px;">
-                                        <div style="font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">DESCRIÇÃO:</div>
-                                        <div style="font-size: 0.9rem; color: #334155; font-weight: 500; line-height: 1.3;" id="infoDesc">Rebolo CBN Importado</div>
+                                    <div style="margin-bottom: 2px;">
+                                        <div style="font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">DESCRIÇÃO:</div>
+                                        <div style="font-size: 0.85rem; color: #334155; font-weight: 500; line-height: 1.3;" id="infoDesc">Rebolo CBN Importado</div>
                                     </div>
-                        
+
                                     <!-- CARD FORNECEDOR -->
-                                    <div style="background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
-                                        <div style="font-size: 0.68rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">FORNECEDOR</div>
-                                        <div style="font-size: 0.95rem; font-weight: 700; color: #004173;" id="infoForn">Alcar</div>
+                                    <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">FORNECEDOR</div>
+                                        <div style="font-size: 0.9rem; font-weight: 700; color: #004173;" id="infoForn">Alcar</div>
                                     </div>
-                        
+
                                     <!-- CARD VALOR UNITÁRIO -->
-                                    <div style="background: #ffffff; padding: 12px 16px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
-                                        <div style="font-size: 0.68rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">VALOR UNIT.</div>
-                                        <div style="font-size: 1.05rem; font-weight: 700; color: #0979b0;" id="infoVal">R$ 3.450,00</div>
+                                    <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">VALOR UNIT.</div>
+                                        <div style="font-size: 0.95rem; font-weight: 700; color: #0979b0;" id="infoVal">R$ 3.450,00</div>
                                     </div>
                                 </div>
-                        
+
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- TABELA DAS ÚLTIMAS 15 REQUIOSIÇÕES -->
+                    <!-- TABELA DAS ÚLTIMAS 15 REQUISIÇÕES -->
                     <div style="border-top: 2px dashed #e2e8f0; padding-top: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                             <div>
@@ -1403,7 +1429,7 @@
     let chartArea1Obj = null;
     let chartArea2Obj = null;
     let chartArea3Obj = null;
-    let chartPizzaFamiliasObj = null;
+    let chartBarraFamiliasObj = null;
     let chartBarrasOperacoesObj = null;
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -1502,33 +1528,41 @@
         chartArea3Obj = new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
 
 
-        // --- 3. CARD 2: GRÁFICO DE PIZZA (AS 4 FAMÍLIAS) ---
-        const ctxPizza = document.getElementById('chartPizzaFamilias').getContext('2d');
-        chartPizzaFamiliasObj = new Chart(ctxPizza, {
-            type: 'doughnut',
+        // --- 3. GRÁFICO DE BARRAS VERTICAIS PARA AS FAMÍLIAS ---
+        const ctxBarraFamilias = document.getElementById('chartBarraFamilias').getContext('2d');
+        chartBarraFamiliasObj = new Chart(ctxBarraFamilias, {
+            type: 'bar',
             data: {
                 labels: ['Martensítico', 'Austenítico', 'Super Liga', 'Intermediária'],
                 datasets: [{
+                    label: 'Quantidade',
                     data: [42, 35, 15, 8],
                     backgroundColor: ['#004173', '#0979b0', '#0cb7f2', '#64748b'],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
+                    borderRadius: 6
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: { boxWidth: 10, font: { size: 10 } }
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10, weight: '600' } }
                     }
                 }
             }
         });
 
 
-        // --- 4. CARD 2: BARRAS HORIZONTAIS COM EVENTO DE CLIQUE ---
+        // --- 4. GRÁFICO DE BARRAS HORIZONTAIS DE OPERAÇÕES ---
         const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
         const operacoesCompletas = [
             { op: '15G', custo: 145000 },
@@ -1570,7 +1604,6 @@
                         const operacaoSelecionada = chartBarrasOperacoesObj.data.labels[index];
                         const linhaSelecionada = document.getElementById('filtroLinhaCard2').value;
                         
-                        // Atualiza a tabela e o card lateral do último item requisitado
                         carregarDadosOperacaoSelecionada(linhaSelecionada, operacaoSelecionada);
                     }
                 },
@@ -1602,7 +1635,8 @@
         });
     });
 
-   function carregarDadosOperacaoSelecionada(linha, operacao) {
+    // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O PAINEL LATERAL DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
+    function carregarDadosOperacaoSelecionada(linha, operacao) {
         const turnos = ['1º Turno', '2º Turno', '3º Turno'];
         const situacoes = ['Consumo', 'Ocorrência'];
         
@@ -1616,19 +1650,16 @@
 
         const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
 
-        // Atualiza os textos do painel lateral
         document.getElementById('infoCod').innerText = ultimoItem.cod;
         document.getElementById('infoDesc').innerText = ultimoItem.desc;
         document.getElementById('infoForn').innerText = ultimoItem.fornecedor;
         document.getElementById('infoVal').innerText = 'R$ ' + ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
-        // Atualiza a imagem com segurança
         const cardContainer = document.getElementById('cardItemHomologado');
         const imgContainer = cardContainer.querySelector('img');
         imgContainer.src = ultimoItem.img;
         imgContainer.alt = ultimoItem.cod;
 
-        // Atualiza a tabela das últimas 15 requisições abaixo
         document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
         document.getElementById('subtituloTabelaRequisicoes').innerText = `Histórico recente filtrado por ${linha} e ${operacao}`;
 
@@ -1706,11 +1737,27 @@
         let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
         let mult = 0.8 + (seed / 100);
 
-        // Atualiza Pizza com as 4 famílias
-        chartPizzaFamiliasObj.data.datasets[0].data = [
-            Math.round(42 * mult), Math.round(35 * (2 - mult)), Math.round(15 * mult), Math.round(8 * mult)
-        ];
-        chartPizzaFamiliasObj.update();
+        // Atualiza os dados das 4 famílias e seus cards de quantidade/porcentagem
+        const val1 = Math.round(42 * mult);
+        const val2 = Math.round(35 * (2 - mult));
+        const val3 = Math.round(15 * mult);
+        const val4 = Math.round(8 * mult);
+        const totalFam = val1 + val2 + val3 + val4;
+
+        chartBarraFamiliasObj.data.datasets[0].data = [val1, val2, val3, val4];
+        chartBarraFamiliasObj.update();
+
+        document.getElementById('qtdFam1').innerText = val1 + ' pçs';
+        document.getElementById('pctFam1').innerText = ((val1 / totalFam) * 100).toFixed(1) + '% do total';
+
+        document.getElementById('qtdFam2').innerText = val2 + ' pçs';
+        document.getElementById('pctFam2').innerText = ((val2 / totalFam) * 100).toFixed(1) + '% do total';
+
+        document.getElementById('qtdFam3').innerText = val3 + ' pçs';
+        document.getElementById('pctFam3').innerText = ((val3 / totalFam) * 100).toFixed(1) + '% do total';
+
+        document.getElementById('qtdFam4').innerText = val4 + ' pçs';
+        document.getElementById('pctFam4').innerText = ((val4 / totalFam) * 100).toFixed(1) + '% do total';
 
         const listaAtualizada = [
             { op: '15G', custo: Math.round(145000 * mult) },
