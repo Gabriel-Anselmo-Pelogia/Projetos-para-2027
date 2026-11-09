@@ -1195,5 +1195,191 @@
             alert('Abrindo catálogo técnico: ' + categoriaKey);
         }
     </script>
+
+    <!-- DEPENDÊNCIA DO CHART.JS (Carregamento rápido via CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- SEÇÃO DE PERFORMANCE DE ABRASIVOS -->
+    <div style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+        <!-- GRID DOS 05 CARDS DE INDICADORES (KPIs) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
+            
+            <!-- CARD 1: Máquina -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CUSTO (MÁQ.)</span>
+                    <div style="width: 38px; height: 38px; background-color: #f3e8ff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">🏭</div>
+                </div>
+                <div id="kpi-maior-maquina" style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">OP25-2 (Linha 05)</div>
+                <div id="kpi-custo-maquina" style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 415.759,25</div>
+            </div>
+    
+            <!-- CARD 2: Linha -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CUSTO (LINHA)</span>
+                    <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #0284c7; font-weight: 700;">$</div>
+                </div>
+                <div id="kpi-maior-linha" style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">Linha 09</div>
+                <div id="kpi-custo-linha" style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 1.415.254,39</div>
+            </div>
+    
+            <!-- CARD 3: Ocorrências -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">TOTAL OCORRÊNCIAS</span>
+                    <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #dc2626; font-weight: 800;">✖</div>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Somente Abrasivos</div>
+                <div id="kpi-total-ocorrencias" style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">R$ 18.147,98</div>
+            </div>
+    
+            <!-- CARD 4: Produção -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">PRODUÇÃO ACABADA</span>
+                    <div style="width: 38px; height: 38px; background-color: #fef3c7; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">📦</div>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Todas as Linhas / Famílias</div>
+                <div id="kpi-producao-total" style="font-size: 1.25rem; font-weight: 700; color: #059669;">2.487.254 <span style="font-size: 0.8rem; font-weight: 500;">pçs</span></div>
+            </div>
+    
+            <!-- CARD 5: Custo Peça -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MÉDIA CUSTO/PEÇA</span>
+                    <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #16a34a; font-weight: 700;">📈</div>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Custo Total / Produção</div>
+                <div id="kpi-custo-peca" style="font-size: 1.25rem; font-weight: 700; color: #004173;">R$ 0,57 <span style="font-size: 0.8rem; font-weight: 500;">/ pç</span></div>
+            </div>
+    
+        </div>
+    
+        <!-- PAINEL DE GRÁFICOS INTERATIVOS -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 24px;">
+            
+            <!-- GRÁFICO 1: CUSTO DE ABRASIVOS POR LINHA -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 1rem; color: #004173; font-weight: 700;">Custo Total por Linha (Abrasivos)</h3>
+                    <span style="font-size: 0.75rem; background: #e0f2fe; color: #0284c7; padding: 4px 8px; border-radius: 6px; font-weight: 600;">Acumulado</span>
+                </div>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="chartCustosLinha"></canvas>
+                </div>
+            </div>
+    
+            <!-- GRÁFICO 2: EVOLUÇÃO MENSAL DE CUSTO X PRODUÇÃO -->
+            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; font-size: 1rem; color: #004173; font-weight: 700;">Histórico Mensal: Custo vs Produção</h3>
+                    <span style="font-size: 0.75rem; background: #f0fdf4; color: #16a34a; padding: 4px 8px; border-radius: 6px; font-weight: 600;">2026</span>
+                </div>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="chartEvolucaoMensal"></canvas>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+    
+    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS COM DADOS FICTÍCIOS -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        
+        // --- GRÁFICO 1: BARRAS (Custo por Linha) ---
+        const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
+        new Chart(ctxLinha, {
+            type: 'bar',
+            data: {
+                labels: ['Linha 01', 'Linha 02', 'Linha 03', 'Linha 05', 'Linha 09'],
+                datasets: [{
+                    label: 'Custo Total (R$)',
+                    data: [320000, 480000, 210000, 890000, 1415254],
+                    backgroundColor: ['#0cb7f2', '#0979b0', '#004173', '#6366f1', '#004173'],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' Custo: R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            callback: function(value) { return 'R$ ' + (value/1000) + 'k'; }
+                        }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    
+        // --- GRÁFICO 2: LINHA (Evolução Mensal) ---
+        const ctxEvolucao = document.getElementById('chartEvolucaoMensal').getContext('2d');
+        new Chart(ctxEvolucao, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
+                datasets: [
+                    {
+                        label: 'Custo Abrasivos (R$)',
+                        data: [180000, 195000, 210000, 175000, 220000, 240000, 215000, 230000, 250000, 210000],
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Produção (Peças)',
+                        data: [220000, 235000, 250000, 210000, 260000, 280000, 270000, 290000, 300000, 280000],
+                        borderColor: '#059669',
+                        backgroundColor: 'transparent',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#f1f5f9' },
+                        ticks: { callback: function(value) { return 'R$ ' + (value/1000) + 'k'; } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { callback: function(value) { return (value/1000) + 'k pçs'; } }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    });
+    </script>
 </body>
 </html>
