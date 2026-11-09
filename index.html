@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Supabase JS Client via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- DEPENDÊNCIA DO CHART.JS (Carregamento rápido via CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -740,10 +742,31 @@
             
                 </div>
             
-                <!-- ÁREA RESERVADA PARA TABELAS OU GRÁFICOS DE PERFORMANCE -->
-                <div class="section-placeholder">
-                    <h3>📊 Detalhamento de Performance por Ferramenta</h3>
-                    <p>Aqui entraremos com os gráficos ou tabelas de acompanhamento de consumo por lote.</p>
+                <!-- PAINEL DE GRÁFICOS INTERATIVOS -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 24px;">
+                    
+                    <!-- GRÁFICO 1: CUSTO DE ABRASIVOS POR LINHA -->
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; font-size: 1rem; color: #004173; font-weight: 700;">Custo Total por Linha (Abrasivos)</h3>
+                            <span style="font-size: 0.75rem; background: #e0f2fe; color: #0284c7; padding: 4px 8px; border-radius: 6px; font-weight: 600;">Acumulado</span>
+                        </div>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="chartCustosLinha"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- GRÁFICO 2: EVOLUÇÃO MENSAL DE CUSTO X PRODUÇÃO -->
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; font-size: 1rem; color: #004173; font-weight: 700;">Histórico Mensal: Custo vs Produção</h3>
+                            <span style="font-size: 0.75rem; background: #f0fdf4; color: #16a34a; padding: 4px 8px; border-radius: 6px; font-weight: 600;">2026</span>
+                        </div>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="chartEvolucaoMensal"></canvas>
+                        </div>
+                    </div>
+
                 </div>
             </div>
                 <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
@@ -1191,11 +1214,105 @@
 
         function abrirDetalhesCategoria(categoriaKey) {
             console.log('Categoria selecionada:', categoriaKey);
-            // Aqui no futuro abriremos a lista técnica ou modal dos itens específicos daquela categoria
             alert('Abrindo catálogo técnico: ' + categoriaKey);
         }
     </script>
 
-    <!-- DEPENDÊNCIA DO CHART.JS (Carregamento rápido via CDN) -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS COM DADOS FICTÍCIOS -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        
+        // --- GRÁFICO 1: BARRAS (Custo por Linha) ---
+        const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
+        new Chart(ctxLinha, {
+            type: 'bar',
+            data: {
+                labels: ['Linha 01', 'Linha 02', 'Linha 03', 'Linha 05', 'Linha 09'],
+                datasets: [{
+                    label: 'Custo Total (R$)',
+                    data: [320000, 480000, 210000, 890000, 1415254],
+                    backgroundColor: ['#0cb7f2', '#0979b0', '#004173', '#6366f1', '#004173'],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ' Custo: R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            callback: function(value) { return 'R$ ' + (value/1000) + 'k'; }
+                        }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // --- GRÁFICO 2: LINHA (Evolução Mensal) ---
+        const ctxEvolucao = document.getElementById('chartEvolucaoMensal').getContext('2d');
+        new Chart(ctxEvolucao, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
+                datasets: [
+                    {
+                        label: 'Custo Abrasivos (R$)',
+                        data: [180000, 195000, 210000, 175000, 220000, 240000, 215000, 230000, 250000, 210000],
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Produção (Peças)',
+                        data: [220000, 235000, 250000, 210000, 260000, 280000, 270000, 290000, 300000, 280000],
+                        borderColor: '#059669',
+                        backgroundColor: 'transparent',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#f1f5f9' },
+                        ticks: { callback: function(value) { return 'R$ ' + (value/1000) + 'k'; } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { callback: function(value) { return (value/1000) + 'k pçs'; } }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    });
+    </script>
 </body>
 </html>
