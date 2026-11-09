@@ -784,17 +784,15 @@
 
                 </div>
 
-                <!-- CARD ÚNICO CONTENDO OS 3 GRÁFICOS DE ÁREA + FILTRO DE LINHA -->
-                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                <!-- CARD 1 CONTENDO OS 3 GRÁFICOS DE ÁREA + FILTRO DE LINHA -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
                     
-                    <!-- CABEÇALHO DO CARD COM O FILTRO DE LINHA -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Evolução Detalhada por Linha</h3>
                             <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento mensal de CP, Consumo e Produção</p>
                         </div>
 
-                        <!-- Filtro de Linha para os Gráficos de Área -->
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <label style="font-size: 0.85rem; font-weight: 600; color: #004173;">Linha:</label>
                             <select id="filtroLinhaArea" onchange="atualizarGraficosArea()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
@@ -821,10 +819,7 @@
                         </div>
                     </div>
 
-                    <!-- GRID DOS 3 GRÁFICOS DENTRO DO CARD -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                        
-                        <!-- GRÁFICO 1 -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Tendência de CP (R$/pç)</h4>
                             <div style="position: relative; height: 220px;">
@@ -832,7 +827,6 @@
                             </div>
                         </div>
 
-                        <!-- GRÁFICO 2 -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Consumo de Abrasivos</h4>
                             <div style="position: relative; height: 220px;">
@@ -840,12 +834,107 @@
                             </div>
                         </div>
 
-                        <!-- GRÁFICO 3 -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Volume de Produção (pçs)</h4>
                             <div style="position: relative; height: 220px;">
                                 <canvas id="chartArea3"></canvas>
                             </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CARD 2: DADOS DE FAMÍLIA, MAIORES CUSTOS E ITEM HOMOLOGADO -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                    
+                    <!-- CABEÇALHO COM FILTROS ESPECÍFICOS (ANO, MÊS E LINHA ESPECÍFICA) -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Análise de Famílias, Operações e Homologação</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Detalhamento específico da linha selecionada</p>
+                        </div>
+
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <!-- Filtro de Ano -->
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
+                                <select id="filtroAnoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro de Período -->
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
+                                <select id="filtroPeriodoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="Jan">Janeiro</option>
+                                    <option value="Fev">Fevereiro</option>
+                                    <option value="Mar">Março</option>
+                                    <option value="Abr">Abril</option>
+                                    <option value="Mai">Maio</option>
+                                    <option value="Jun">Junho</option>
+                                    <option value="Jul">Julho</option>
+                                    <option value="Ago">Agosto</option>
+                                    <option value="Set">Setembro</option>
+                                    <option value="Out">Outubro</option>
+                                    <option value="Nov">Novembro</option>
+                                    <option value="Dez">Dezembro</option>
+                                </select>
+                            </div>
+
+                            <!-- Filtro de Linha (Apenas Linhas Específicas) -->
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Linha:</label>
+                                <select id="filtroLinhaCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="LINE 01">LINE 01</option>
+                                    <option value="LINE 02/HV">LINE 02/HV</option>
+                                    <option value="LINE 03">LINE 03</option>
+                                    <option value="LINE 04">LINE 04</option>
+                                    <option value="LINE 05">LINE 05</option>
+                                    <option value="LINE 06">LINE 06</option>
+                                    <option value="LINE 07">LINE 07</option>
+                                    <option value="LINE 08">LINE 08</option>
+                                    <option value="LINE 09">LINE 09</option>
+                                    <option value="LINE 10">LINE 10</option>
+                                    <option value="LINE 11">LINE 11</option>
+                                    <option value="LINE 12">LINE 12</option>
+                                    <option value="LINE 13">LINE 13</option>
+                                    <option value="LINE 14">LINE 14</option>
+                                    <option value="AFTM">AFTM</option>
+                                    <option value="BV - MOD 1">BV - MOD 1</option>
+                                    <option value="BV - MOD 2">BV - MOD 2</option>
+                                    <option value="OUTROS">OUTROS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GRID DOS 3 PAINÉIS -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        
+                        <!-- 1. GRÁFICO DE PIZZA (FAMÍLIAS DE VÁLVULAS) -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Famílias de Válvulas Produzidas</h4>
+                            <div style="position: relative; height: 240px; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="chartPizzaFamilias"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- 2. GRÁFICO DE BARRAS HORIZONTAIS (MAIORES CUSTOS POR OPERAÇÃO) -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600; text-align: center;">Top Custos por Operação (R$)</h4>
+                            <div style="position: relative; height: 240px;">
+                                <canvas id="chartBarrasOperacoes"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- 3. CONTAINER DE RESERVA: ITEM HOMOLOGADO -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 2px dashed #cbd5e1;">
+                            <div style="font-size: 2.2rem; margin-bottom: 8px; color: #0979b0;">🏷️</div>
+                            <h4 style="margin: 0 0 6px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Item Homologado</h4>
+                            <p style="font-size: 0.8rem; color: #64748b; max-width: 220px;">Espaço reservado para visualização da imagem e especificações do item homologado na linha.</p>
                         </div>
 
                     </div>
@@ -1229,25 +1318,25 @@
         }
     </script>
 
-    <!-- LÓGICA DE RENDERIZAÇÃO DE TODOS OS GRÁFICOS E FILTROS -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DE TODOS OS GRÁFICOS DO PAINEL -->
     <script>
     let meuGraficoCP = null;
     let chartArea1Obj = null;
     let chartArea2Obj = null;
     let chartArea3Obj = null;
+    let chartPizzaFamiliasObj = null;
+    let chartBarrasOperacoesObj = null;
 
     document.addEventListener("DOMContentLoaded", function () {
         
         // --- 1. GRÁFICO PRINCIPAL DE CP ---
         const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
-        
         const labelsLinhas = [
             'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
             'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
             'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
             'BV - MOD 1', 'BV - MOD 2', 'OUTROS', 'MÉDIA FÁBRICA'
         ];
-
         const dadosIniciais = [
             0.450, 0.520, 0.480, 0.610, 0.750, 
             0.420, 0.500, 0.550, 0.820, 0.490, 
@@ -1265,11 +1354,11 @@
                     backgroundColor: function(context) {
                         const index = context.dataIndex;
                         const dataset = context.dataset.data;
-                        if (index === dataset.length - 1) return '#059669'; // Média Fábrica
+                        if (index === dataset.length - 1) return '#059669'; 
                         const apenasLinhas = dataset.slice(0, dataset.length - 1);
                         const maiorValor = Math.max(...apenasLinhas);
-                        if (dataset[index] === maiorValor) return '#dc2626'; // Maior CP
-                        return '#0cb7f2'; // Padrão
+                        if (dataset[index] === maiorValor) return '#dc2626'; 
+                        return '#0cb7f2'; 
                     },
                     borderRadius: 6,
                     borderSkipped: false
@@ -1285,9 +1374,7 @@
                             label: function(context) {
                                 const label = context.chart.data.labels[context.dataIndex];
                                 const valor = context.parsed.y.toFixed(3);
-                                if (label === 'MÉDIA FÁBRICA') {
-                                    return ' Média Geral da Fábrica: R$ ' + valor + ' / pç';
-                                }
+                                if (label === 'MÉDIA FÁBRICA') return ' Média Geral da Fábrica: R$ ' + valor + ' / pç';
                                 return ' CP (' + label + '): R$ ' + valor + ' / pç';
                             }
                         }
@@ -1297,22 +1384,16 @@
                     y: {
                         beginAtZero: true,
                         grid: { color: '#f1f5f9' },
-                        ticks: {
-                            callback: function(value) { return 'R$ ' + value.toFixed(3); }
-                        }
+                        ticks: { callback: function(value) { return 'R$ ' + value.toFixed(3); } }
                     },
-                    x: { 
-                        grid: { display: false },
-                        ticks: { font: { size: 8 } }
-                    }
+                    x: { grid: { display: false }, ticks: { font: { size: 8 } } }
                 }
             }
         });
 
 
-        // --- 2. OS 3 GRÁFICOS DE ÁREA DENTRO DO CARD ---
+        // --- 2. OS 3 GRÁFICOS DE ÁREA (CARD 1) ---
         const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'];
-
         const configArea = (labelNome, corBase, dadosValores) => ({
             type: 'line',
             data: {
@@ -1329,19 +1410,10 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#f1f5f9' },
-                        ticks: { font: { size: 10 } }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 10 } }
-                    }
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
                 }
             }
         });
@@ -1349,9 +1421,79 @@
         chartArea1Obj = new Chart(document.getElementById('chartArea1').getContext('2d'), configArea('CP Médio', 'rgba(12, 183, 242, 1)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
         chartArea2Obj = new Chart(document.getElementById('chartArea2').getContext('2d'), configArea('Consumo', 'rgba(220, 38, 38, 1)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
         chartArea3Obj = new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
+
+
+        // --- 3. NOVOS GRÁFICOS DO CARD 2 (PIZZA + BARRAS HORIZONTAIS) ---
+        
+        // A) Gráfico de Doughnut/Pizza: Famílias de Válvulas
+        const ctxPizza = document.getElementById('chartPizzaFamilias').getContext('2d');
+        chartPizzaFamiliasObj = new Chart(ctxPizza, {
+            type: 'doughnut',
+            data: {
+                labels: ['Família HVT', 'Família Gen-3', 'Família Micro', 'Outras'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#004173', '#0979b0', '#0cb7f2', '#cbd5e1'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, font: { size: 11 } }
+                    }
+                }
+            }
+        });
+
+        // B) Gráfico de Barras Horizontais: Top Custos por Operação (Ranqueados)
+        const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
+        chartBarrasOperacoesObj = new Chart(ctxBarrasHoriz, {
+            type: 'bar',
+            data: {
+                labels: ['OP 25-2', 'OP 10', 'OP 30', 'OP 15-1', 'OP 40'],
+                datasets: [{
+                    label: 'Custo Total (R$)',
+                    data: [145000, 98000, 64000, 42000, 28000],
+                    backgroundColor: '#0979b0',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Define o gráfico como horizontal
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) { return ' Custo: R$ ' + context.parsed.x.toLocaleString('pt-BR'); }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            font: { size: 10 },
+                            callback: function(v) { return 'R$ ' + (v/1000) + 'k'; }
+                        }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10, weight: '600' } }
+                    }
+                }
+            }
+        });
     });
 
-    // Função de atualização dinâmica do gráfico principal via filtros de período/ano
+    // Função de atualização do Gráfico 1 (CP Geral)
     function atualizarDadosGrafico() {
         const anoSelecionado = document.getElementById('filtroAno').value;
         const periodoSelecionado = document.getElementById('filtroPeriodo').value;
@@ -1373,34 +1515,50 @@
         const soma = baseValores.reduce((acc, curr) => acc + curr, 0);
         const mediaGeral = Number((soma / baseValores.length).toFixed(3));
 
-        const novosDados = [...baseValores, mediaGeral];
-
-        meuGraficoCP.data.datasets[0].data = novosDados;
+        meuGraficoCP.data.datasets[0].data = [...baseValores, mediaGeral];
         meuGraficoCP.update();
     }
 
-    // Função de atualização dinâmica dos 3 gráficos de área com base no Filtro de Linha
+    // Função de atualização dos 3 gráficos de área (Card 1)
     function atualizarGraficosArea() {
         const linhaSelecionada = document.getElementById('filtroLinhaArea').value;
-
-        // Simulação de variação de dados baseada na linha escolhida para fins visuais
         let multiplicador = 1.0;
         if (linhaSelecionada !== 'todas') {
             multiplicador = 0.7 + (Math.abs(linhaSelecionada.charCodeAt(0)) % 60) / 100;
         }
 
-        const novosCp = [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440].map(v => Number((v * multiplicador).toFixed(3)));
-        const novoConsumo = [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190].map(v => Math.round(v * multiplicador));
-        const novaProducao = [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000].map(v => Math.round(v * multiplicador));
-
-        chartArea1Obj.data.datasets[0].data = novosCp;
+        chartArea1Obj.data.datasets[0].data = [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440].map(v => Number((v * multiplicador).toFixed(3)));
         chartArea1Obj.update();
 
-        chartArea2Obj.data.datasets[0].data = novoConsumo;
+        chartArea2Obj.data.datasets[0].data = [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190].map(v => Math.round(v * multiplicador));
         chartArea2Obj.update();
 
-        chartArea3Obj.data.datasets[0].data = novaProducao;
+        chartArea3Obj.data.datasets[0].data = [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000].map(v => Math.round(v * multiplicador));
         chartArea3Obj.update();
+    }
+
+    // Função de atualização dinâmica dos elementos do Card 2
+    function atualizarCard2() {
+        const ano = document.getElementById('filtroAnoCard2').value;
+        const periodo = document.getElementById('filtroPeriodoCard2').value;
+        const linha = document.getElementById('filtroLinhaCard2').value;
+
+        // Fator de ajuste dinâmico para simular mudança de dados
+        let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
+        let mult = 0.8 + (seed / 100);
+
+        // Atualiza Pizza (Famílias)
+        chartPizzaFamiliasObj.data.datasets[0].data = [
+            Math.round(45 * mult), Math.round(30 * (2 - mult)), Math.round(15 * mult), Math.round(10 * mult)
+        ];
+        chartPizzaFamiliasObj.update();
+
+        // Atualiza Barras Horizontais (Custos de OP Ranqueados)
+        const novosCustos = [
+            Math.round(145000 * mult), Math.round(98000 * mult), Math.round(64000 * mult), Math.round(42000 * mult), Math.round(28000 * mult)
+        ];
+        chartBarrasOperacoesObj.data.datasets[0].data = novosCustos;
+        chartBarrasOperacoesObj.update();
     }
     </script>
 </body>
