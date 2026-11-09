@@ -740,14 +740,13 @@
                 <!-- PAINEL DO GRÁFICO PRINCIPAL DE CP COM FILTROS -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
                     
-                    <!-- BARRA SUPERIOR DO GRÁFICO (TÍTULO + FILTROS) -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
                         <div>
                             <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">CP (Custo x Peça) por Linha de Produção</h3>
                             <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Eficiência de consumo de abrasivos por unidade produzida (R$/pç)</p>
                         </div>
 
-                        <!-- FILTROS DE PERÍODO (ANO E MÊS/MÉDIA) -->
+                        <!-- FILTROS DE PERÍODO -->
                         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
@@ -779,38 +778,76 @@
                         </div>
                     </div>
 
-                    <!-- CANVAS DO GRÁFICO PRINCIPAL -->
                     <div style="position: relative; height: 360px;">
                         <canvas id="chartCustosLinha"></canvas>
                     </div>
 
                 </div>
 
-                <!-- PAINEL DOS 3 GRÁFICOS DE ÁREA LOGO ABAIXO -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+                <!-- CARD ÚNICO CONTENDO OS 3 GRÁFICOS DE ÁREA + FILTRO DE LINHA -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     
-                    <!-- GRÁFICO 1 -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                        <h3 style="margin: 0 0 12px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Tendência de CP (Geral)</h3>
-                        <div style="position: relative; height: 250px;">
-                            <canvas id="chartArea1"></canvas>
+                    <!-- CABEÇALHO DO CARD COM O FILTRO DE LINHA -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Evolução Detalhada por Linha</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento mensal de CP, Consumo e Produção</p>
+                        </div>
+
+                        <!-- Filtro de Linha para os Gráficos de Área -->
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: #004173;">Linha:</label>
+                            <select id="filtroLinhaArea" onchange="atualizarGraficosArea()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                <option value="todas">Todas as Linhas (Geral)</option>
+                                <option value="LINE 01">LINE 01</option>
+                                <option value="LINE 02/HV">LINE 02/HV</option>
+                                <option value="LINE 03">LINE 03</option>
+                                <option value="LINE 04">LINE 04</option>
+                                <option value="LINE 05">LINE 05</option>
+                                <option value="LINE 06">LINE 06</option>
+                                <option value="LINE 07">LINE 07</option>
+                                <option value="LINE 08">LINE 08</option>
+                                <option value="LINE 09">LINE 09</option>
+                                <option value="LINE 10">LINE 10</option>
+                                <option value="LINE 11">LINE 11</option>
+                                <option value="LINE 12">LINE 12</option>
+                                <option value="LINE 13">LINE 13</option>
+                                <option value="LINE 14">LINE 14</option>
+                                <option value="AFTM">AFTM</option>
+                                <option value="BV - MOD 1">BV - MOD 1</option>
+                                <option value="BV - MOD 2">BV - MOD 2</option>
+                                <option value="OUTROS">OUTROS</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- GRÁFICO 2 -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                        <h3 style="margin: 0 0 12px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Consumo de Abrasivos</h3>
-                        <div style="position: relative; height: 250px;">
-                            <canvas id="chartArea2"></canvas>
+                    <!-- GRID DOS 3 GRÁFICOS DENTRO DO CARD -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        
+                        <!-- GRÁFICO 1 -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Tendência de CP (R$/pç)</h4>
+                            <div style="position: relative; height: 220px;">
+                                <canvas id="chartArea1"></canvas>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- GRÁFICO 3 -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                        <h3 style="margin: 0 0 12px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Volume de Produção</h3>
-                        <div style="position: relative; height: 250px;">
-                            <canvas id="chartArea3"></canvas>
+                        <!-- GRÁFICO 2 -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Consumo de Abrasivos</h4>
+                            <div style="position: relative; height: 220px;">
+                                <canvas id="chartArea2"></canvas>
+                            </div>
                         </div>
+
+                        <!-- GRÁFICO 3 -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Volume de Produção (pçs)</h4>
+                            <div style="position: relative; height: 220px;">
+                                <canvas id="chartArea3"></canvas>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -1192,13 +1229,16 @@
         }
     </script>
 
-    <!-- LÓGICA DE RENDERIZAÇÃO DE TODOS OS GRÁFICOS (PRINCIPAL DE CP + 3 DE ÁREA) -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DE TODOS OS GRÁFICOS E FILTROS -->
     <script>
     let meuGraficoCP = null;
+    let chartArea1Obj = null;
+    let chartArea2Obj = null;
+    let chartArea3Obj = null;
 
     document.addEventListener("DOMContentLoaded", function () {
         
-        // --- 1. GRÁFICO PRINCIPAL DE CP (Com as 16 linhas + Outros + Média) ---
+        // --- 1. GRÁFICO PRINCIPAL DE CP ---
         const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
         
         const labelsLinhas = [
@@ -1225,15 +1265,11 @@
                     backgroundColor: function(context) {
                         const index = context.dataIndex;
                         const dataset = context.dataset.data;
-                        
-                        if (index === dataset.length - 1) return '#059669'; // Média Fábrica (Verde)
-                        
+                        if (index === dataset.length - 1) return '#059669'; // Média Fábrica
                         const apenasLinhas = dataset.slice(0, dataset.length - 1);
                         const maiorValor = Math.max(...apenasLinhas);
-                        
-                        if (dataset[index] === maiorValor) return '#dc2626'; // Maior CP (Vermelho)
-                        
-                        return '#0cb7f2'; // Padrão (Azul)
+                        if (dataset[index] === maiorValor) return '#dc2626'; // Maior CP
+                        return '#0cb7f2'; // Padrão
                     },
                     borderRadius: 6,
                     borderSkipped: false
@@ -1274,7 +1310,7 @@
         });
 
 
-        // --- 2. OS 3 GRÁFICOS DE ÁREA (Logo abaixo) ---
+        // --- 2. OS 3 GRÁFICOS DE ÁREA DENTRO DO CARD ---
         const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'];
 
         const configArea = (labelNome, corBase, dadosValores) => ({
@@ -1310,12 +1346,12 @@
             }
         });
 
-        new Chart(document.getElementById('chartArea1').getContext('2d'), configArea('CP Médio', 'rgba(12, 183, 242, 1)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
-        new Chart(document.getElementById('chartArea2').getContext('2d'), configArea('Consumo', 'rgba(220, 38, 38, 1)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
-        new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
+        chartArea1Obj = new Chart(document.getElementById('chartArea1').getContext('2d'), configArea('CP Médio', 'rgba(12, 183, 242, 1)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
+        chartArea2Obj = new Chart(document.getElementById('chartArea2').getContext('2d'), configArea('Consumo', 'rgba(220, 38, 38, 1)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
+        chartArea3Obj = new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
     });
 
-    // Função de atualização dinâmica do gráfico principal via filtros
+    // Função de atualização dinâmica do gráfico principal via filtros de período/ano
     function atualizarDadosGrafico() {
         const anoSelecionado = document.getElementById('filtroAno').value;
         const periodoSelecionado = document.getElementById('filtroPeriodo').value;
@@ -1341,6 +1377,30 @@
 
         meuGraficoCP.data.datasets[0].data = novosDados;
         meuGraficoCP.update();
+    }
+
+    // Função de atualização dinâmica dos 3 gráficos de área com base no Filtro de Linha
+    function atualizarGraficosArea() {
+        const linhaSelecionada = document.getElementById('filtroLinhaArea').value;
+
+        // Simulação de variação de dados baseada na linha escolhida para fins visuais
+        let multiplicador = 1.0;
+        if (linhaSelecionada !== 'todas') {
+            multiplicador = 0.7 + (Math.abs(linhaSelecionada.charCodeAt(0)) % 60) / 100;
+        }
+
+        const novosCp = [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440].map(v => Number((v * multiplicador).toFixed(3)));
+        const novoConsumo = [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190].map(v => Math.round(v * multiplicador));
+        const novaProducao = [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000].map(v => Math.round(v * multiplicador));
+
+        chartArea1Obj.data.datasets[0].data = novosCp;
+        chartArea1Obj.update();
+
+        chartArea2Obj.data.datasets[0].data = novoConsumo;
+        chartArea2Obj.update();
+
+        chartArea3Obj.data.datasets[0].data = novaProducao;
+        chartArea3Obj.update();
     }
     </script>
 </body>
