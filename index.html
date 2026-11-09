@@ -1140,10 +1140,10 @@
     </script>
 
     <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS (16 LINHAS + "OUTROS") -->
+    <!-- LÓGICA DE RENDERIZAÇÃO DO GRÁFICO DE CP (CUSTO X PEÇA) POR LINHA -->
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         
-        // --- GRÁFICO 1: BARRAS (Incluindo as 16 Linhas + Linha "Outros") ---
         const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
         new Chart(ctxLinha, {
             type: 'bar',
@@ -1155,9 +1155,10 @@
                     'BV - MOD 1', 'BV - MOD 2', 'OUTROS'
                 ],
                 datasets: [{
-                    label: 'Custo Total por Linha (R$)',
-                    data: [150000, 220000, 180000, 310000, 890000, 190000, 240000, 260000, 1415254, 210000, 195000, 230000, 175000, 160000, 205000, 280000, 295000, 95000],
-                    backgroundColor: '#0979b0',
+                    label: 'CP (Custo x Peça)',
+                    // Valores fictícios de CP por peça (R$/pç) para testes visuais
+                    data: [0.45, 0.52, 0.48, 0.61, 0.75, 0.42, 0.50, 0.55, 0.82, 0.49, 0.46, 0.53, 0.44, 0.41, 0.58, 0.65, 0.68, 0.35],
+                    backgroundColor: '#0cb7f2',
                     borderRadius: 6,
                     borderSkipped: false
                 }]
@@ -1170,7 +1171,7 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return ' Custo: R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                                return ' CP: R$ ' + context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' / pç';
                             }
                         }
                     }
@@ -1180,64 +1181,13 @@
                         beginAtZero: true,
                         grid: { color: '#f1f5f9' },
                         ticks: {
-                            callback: function(value) { return 'R$ ' + (value/1000) + 'k'; }
+                            callback: function(value) { return 'R$ ' + value.toFixed(2); }
                         }
                     },
                     x: { 
                         grid: { display: false },
                         ticks: { font: { size: 9 } }
                     }
-                }
-            }
-        });
-
-        // --- GRÁFICO 2: LINHA (Evolução Mensal Consolidada) ---
-        const ctxEvolucao = document.getElementById('chartEvolucaoMensal').getContext('2d');
-        new Chart(ctxEvolucao, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
-                datasets: [
-                    {
-                        label: 'Custo Abrasivos (R$)',
-                        data: [180000, 195000, 210000, 175000, 220000, 240000, 215000, 230000, 250000, 210000],
-                        borderColor: '#dc2626',
-                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
-                        fill: true,
-                        tension: 0.4,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: 'Produção (Peças)',
-                        data: [220000, 235000, 250000, 210000, 260000, 280000, 270000, 290000, 300000, 280000],
-                        borderColor: '#059669',
-                        backgroundColor: 'transparent',
-                        borderDash: [5, 5],
-                        tension: 0.4,
-                        yAxisID: 'y1'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                scales: {
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        grid: { color: '#f1f5f9' },
-                        ticks: { callback: function(value) { return 'R$ ' + (value/1000) + 'k'; } }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        grid: { drawOnChartArea: false },
-                        ticks: { callback: function(value) { return (value/1000) + 'k pçs'; } }
-                    },
-                    x: { grid: { display: false } }
                 }
             }
         });
