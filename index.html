@@ -1062,11 +1062,9 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
+                
                 <!-- SUB-ABA: GESTÃO DE ESTOQUE DE ABRASIVOS -->
                 <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
                 
@@ -1115,8 +1113,8 @@
                 
                     </div>
                 
-                    <!-- 2. TABELA DETALHADA DE ESTOQUE COM BOTÃO DE ANÁLISE -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                    <!-- 2. TABELA DETALHADA DE ESTOQUE -->
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
                             <div>
                                 <h3 style="margin: 0; font-size: 1.05rem; color: #004173; font-weight: 700;">Controle Analítico de Estoque</h3>
@@ -1151,7 +1149,7 @@
                                         <td style="font-weight: 700; color: #0979b0;">R$ 6.900,00</td>
                                         <td>45 dias</td>
                                         <td style="text-align: center;">
-                                            <button onclick="abrirAnaliseItem('CBN-IMP-80')" title="Mais opções e análise" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
+                                            <button onclick="togglePainelAnalise('CBN-IMP-80')" title="Abrir análise detalhada" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1163,7 +1161,7 @@
                                         <td style="font-weight: 700; color: #0979b0;">R$ 17.507,00</td>
                                         <td>12 dias</td>
                                         <td style="text-align: center;">
-                                            <button onclick="abrirAnaliseItem('RT 609.6')" title="Mais opções e análise" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
+                                            <button onclick="togglePainelAnalise('RT 609.6')" title="Abrir análise detalhada" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1175,23 +1173,64 @@
                                         <td style="font-weight: 700; color: #0979b0;">R$ 5.880,00</td>
                                         <td>68 dias</td>
                                         <td style="text-align: center;">
-                                            <button onclick="abrirAnaliseItem('2SA/AA')" title="Mais opções e análise" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight: 700; color: #004173;">LX-GR-120</td>
-                                        <td>Lixa Cinta Óxido de Alumínio</td>
-                                        <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">Alcar</span></td>
-                                        <td>R$ 32,80</td>
-                                        <td style="font-weight: 700;">120 pçs</td>
-                                        <td style="font-weight: 700; color: #0979b0;">R$ 3.936,00</td>
-                                        <td>08 dias</td>
-                                        <td style="text-align: center;">
-                                            <button onclick="abrirAnaliseItem('LX-GR-120')" title="Mais opções e análise" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
+                                            <button onclick="togglePainelAnalise('2SA/AA')" title="Abrir análise detalhada" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                
+                    <!-- 3. PAINEL DE ANÁLISE DETALHADA DO ITEM SELECIONADO (RAIO-X) -->
+                    <div id="painelAnaliseItem" style="background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 16px;">
+                            <div>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #0cb7f2; text-transform: uppercase; letter-spacing: 0.5px;">Raio-X do Item Selecionado</span>
+                                <h3 id="tituloAnaliseItem" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">CBN-IMP-80 — Rebolo CBN Importado</h3>
+                            </div>
+                            <button onclick="fecharPainelAnalise()" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
+                        </div>
+                
+                        <!-- Grid com os 3 Blocos de Análise -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                            
+                            <!-- BLOCO 1: HISTÓRICO DE CONSUMO E TROCAS -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📊 Histórico & Consumo</div>
+                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Requisições (3 meses):</strong> 12 vezes</div>
+                                    <div>• <strong>Linhas Principais:</strong> Martensítico & Austenítico</div>
+                                    <div>• <strong>Vida útil média:</strong> 03 dias por peça</div>
+                                </div>
+                            </div>
+                
+                            <!-- BLOCO 2: REPOSIÇÃO E CUSTO -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Reposição & Lead Time</div>
+                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Ponto de Pedido:</strong> Atingido (Estoque baixo)</div>
+                                    <div>• <strong>Lead Time (Alcar):</strong> 15 dias úteis</div>
+                                    <div>• <strong>Variação de Custo:</strong> Estável no período</div>
+                                </div>
+                            </div>
+                
+                            <!-- BLOCO 3: INDICADORES E SALDO -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status de Permanência</div>
+                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Tempo em Estoque:</strong> 45 dias</div>
+                                    <div>• <strong>Classificação ABC:</strong> Classe A (Alto Valor)</div>
+                                    <div>• <strong>Giro de Estoque:</strong> Moderado/Alto</div>
+                                </div>
+                            </div>
+                
+                        </div>
+                
+                        <!-- Botões de Ação Rápida -->
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                            <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📄 Ver Ficha Técnica</button>
+                            <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📊 Histórico Completo</button>
+                            <button style="background: #004173; border: none; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">🛒 Solicitar Reposição</button>
                         </div>
                     </div>
                 
