@@ -1511,18 +1511,32 @@
 
 
         // --- 2. OS 3 GRÁFICOS DE ÁREA (CARD 1) ---
+        // --- 2. OS 3 GRÁFICOS DE ÁREA COM DEGRADÊ (CARD 1) ---
         const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'];
-        const configArea = (labelNome, corBase, dadosValores) => ({
+
+        // Função auxiliar para gerar o degradê vertical no Canvas
+        function criarGradiente(ctx, corHexInicio, corHexFim) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 220); // 220px é a altura do container
+            gradient.addColorStop(0, corHexInicio); // Cor no topo (mais opaca)
+            gradient.addColorStop(1, corHexFim);    // Cor na base (transparente)
+            return gradient;
+        }
+
+        // Função de configuração dos gráficos de linha
+        const configArea = (ctx, labelNome, corLinha, corTopoDegrade, dadosValores) => ({
             type: 'line',
             data: {
                 labels: mesesLabels,
                 datasets: [{
                     label: labelNome,
                     data: dadosValores,
-                    borderColor: corBase,
-                    backgroundColor: corBase.replace('1)', '0.15)').replace('0.8)', '0.15)'),
+                    borderColor: corLinha,
+                    borderWidth: 2,
+                    backgroundColor: criarGradiente(ctx, corTopoDegrade, 'rgba(255, 255, 255, 0.0)'),
                     fill: true,
-                    tension: 0.4
+                    tension: 0.35,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
                 }]
             },
             options: {
@@ -1536,9 +1550,15 @@
             }
         });
 
-        chartArea1Obj = new Chart(document.getElementById('chartArea1').getContext('2d'), configArea('CP Médio', 'rgba(12, 183, 242, 1)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
-        chartArea2Obj = new Chart(document.getElementById('chartArea2').getContext('2d'), configArea('Consumo', 'rgba(220, 38, 38, 1)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
-        chartArea3Obj = new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
+        // Seleção dos contextos Canvas
+        const ctx1 = document.getElementById('chartArea1').getContext('2d');
+        const ctx2 = document.getElementById('chartArea2').getContext('2d');
+        const ctx3 = document.getElementById('chartArea3').getContext('2d');
+
+        // Criação dos gráficos com degradê personalizado
+        chartArea1Obj = new Chart(ctx1, configArea(ctx1, 'CP Médio', '#0cb7f2', 'rgba(12, 183, 242, 0.45)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
+        chartArea2Obj = new Chart(ctx2, configArea(ctx2, 'Consumo', '#dc2626', 'rgba(220, 38, 38, 0.40)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
+        chartArea3Obj = new Chart(ctx3, configArea(ctx3, 'Produção', '#059669', 'rgba(5, 150, 105, 0.40)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
 
 
         // --- 3. GRÁFICO DE BARRAS VERTICAIS APENAS COM AS 4 FAMÍLIAS ---
