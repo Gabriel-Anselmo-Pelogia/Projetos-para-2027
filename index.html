@@ -1013,6 +1013,12 @@
                                         <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">VALOR UNIT.</div>
                                         <div style="font-size: 0.95rem; font-weight: 700; color: #0979b0;" id="infoVal">R$ 3.450,00</div>
                                     </div>
+                        
+                                    <!-- NOVO CARD: PERÍODO EM MÁQUINA (PENÚLTIMA TROCA) -->
+                                    <div style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; border-left: 3px solid #0cb7f2; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">PERÍODO EM MÁQUINA</div>
+                                        <div style="font-size: 0.9rem; font-weight: 700; color: #004173;" id="infoPeriodoMaquina">02 dias (última troca)</div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -1674,11 +1680,11 @@
         const situacoes = ['Consumo', 'Ocorrência'];
         
         const itensMock = [
-            { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar' },
-            { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar' },
-            { cod: 'RPM-2507', desc: 'Ponta Montada Industrial', val: 145.20, img: 'imagens/pontas.png', fornecedor: 'Alcar' },
-            { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80, img: 'imagens/lixas.png', fornecedor: 'Alcar' },
-            { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00, img: 'imagens/CBN.png', fornecedor: 'Alcar' }
+            { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar', periodo: '03 dias em uso' },
+            { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar', periodo: '05 dias em uso' },
+            { cod: 'RPM-2507', desc: 'Ponta Montada Industrial', val: 145.20, img: 'imagens/pontas.png', fornecedor: 'Alcar', periodo: '01 dia em uso' },
+            { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80, img: 'imagens/lixas.png', fornecedor: 'Alcar', periodo: '02 dias em uso' },
+            { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00, img: 'imagens/CBN.png', fornecedor: 'Alcar', periodo: '04 dias em uso' }
         ];
 
         const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
@@ -1687,6 +1693,7 @@
         document.getElementById('infoDesc').innerText = ultimoItem.desc;
         document.getElementById('infoForn').innerText = ultimoItem.fornecedor;
         document.getElementById('infoVal').innerText = 'R$ ' + ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        document.getElementById('infoPeriodoMaquina').innerText = ultimoItem.periodo;
 
         const cardContainer = document.getElementById('cardItemHomologado');
         const imgContainer = cardContainer.querySelector('img');
