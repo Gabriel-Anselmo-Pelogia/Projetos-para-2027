@@ -1066,181 +1066,414 @@
             </div>
                 
                 <!-- SUB-ABA: GESTÃO DE ESTOQUE DE ABRASIVOS -->
-                <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
-                
-                    <!-- 1. GRID DE 04 CARDS DE ESTOQUE (KPIS) -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                        
-                        <!-- CARD 1: VALOR TOTAL EM ESTOQUE -->
-                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">VALOR TOTAL EM ESTOQUE</span>
-                                <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-weight: 700;">💰</div>
-                            </div>
-                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Imobilizado no Almoxarifado</div>
-                            <div style="font-size: 1.25rem; font-weight: 700; color: #004173;">R$ 845.210,00</div>
-                        </div>
-                
-                        <!-- CARD 2: DIVERSIDADE DE ITENS -->
-                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">DIVERSIDADE DE ITENS</span>
-                                <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🏷️</div>
-                            </div>
-                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Total de SKUs Ativos</div>
-                            <div style="font-size: 1.25rem; font-weight: 700; color: #0cb7f2;">128 Itens</div>
-                        </div>
-                
-                        <!-- CARD 3: ITEM DE MAIOR CONSUMO -->
-                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CONSUMO</span>
-                                <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🔥</div>
-                            </div>
-                            <div style="font-size: 0.95rem; font-weight: 700; color: #004173; margin-bottom: 2px;">RT 609.6 X 17.5...</div>
-                            <div style="font-size: 1.15rem; font-weight: 700; color: #059669;">450 pçs <span style="font-size: 0.75rem; font-weight: 500; color: #64748b;">(no período)</span></div>
-                        </div>
-                
-                        <!-- CARD 4: ITENS SEM SAÍDA (ÚLTIMOS 3 MESES) -->
-                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">SEM SAÍDA (3 MESES)</span>
-                                <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-weight: 800;">⏳</div>
-                            </div>
-                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Itens parados no estoque</div>
-                            <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">14 SKUs</div>
-                        </div>
-                
-                    </div>
-                
-                    <!-- 2. TABELA DETALHADA DE ESTOQUE -->
-                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                            <div>
-                                <h3 style="margin: 0; font-size: 1.05rem; color: #004173; font-weight: 700;">Controle Analítico de Estoque</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento de saldos, valores e tempo de permanência em almoxarifado</p>
-                            </div>
-                            <div style="display: flex; gap: 10px;">
-                                <!-- É EXATAMENTE AQUI QUE VOCÊ COLOCA O INPUT COM O OMINPUT -->
-                                <input type="text" id="inputBuscaEstoque" oninput="filtrarTabelaEstoque(this.value)" placeholder="🔍 Buscar código ou descrição..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; width: 240px;">
-                            </div>
-                        </div>
-
-                
-                        <div class="table-req-container">
-                            <table class="table-req">
-                                <thead>
-                                    <tr>
-                                        <th>Código</th>
-                                        <th>Descrição</th>
-                                        <th>Fornecedor</th>
-                                        <th>Valor Unit.</th>
-                                        <th>Quantidade</th>
-                                        <th>Valor Total</th>
-                                        <th>Tempo de Estoque</th>
-                                        <th style="text-align: center;">Análise</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="font-weight: 700; color: #004173;">CBN-IMP-80</td>
-                                        <td>Rebolo CBN Importado</td>
-                                        <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">Alcar</span></td>
-                                        <td>R$ 3.450,00</td>
-                                        <td style="font-weight: 700;">02 pçs</td>
-                                        <td style="font-weight: 700; color: #0979b0;">R$ 6.900,00</td>
-                                        <td>45 dias</td>
-                                        <td style="text-align: center;">
-                                            <button onclick="togglePainelAnalise('CBN-IMP-80')" title="Abrir análise detalhada" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight: 700; color: #004173;">RT 609.6 X 17.5</td>
-                                        <td>Rebolo Vitrificado Retífica</td>
-                                        <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">Alcar</span></td>
-                                        <td>R$ 1.250,50</td>
-                                        <td style="font-weight: 700;">14 pçs</td>
-                                        <td style="font-weight: 700; color: #0979b0;">R$ 17.507,00</td>
-                                        <td>12 dias</td>
-                                        <td style="text-align: center;">
-                                            <button onclick="togglePainelAnalise('RT 609.6')" title="Abrir análise detalhada" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight: 700; color: #004173;">2SA/AA 100.1</td>
-                                        <td>Disco de Desbaste Especial</td>
-                                        <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">Alcar</span></td>
-                                        <td>R$ 840,00</td>
-                                        <td style="font-weight: 700;">07 pçs</td>
-                                        <td style="font-weight: 700; color: #0979b0;">R$ 5.880,00</td>
-                                        <td>68 dias</td>
-                                        <td style="text-align: center;">
-                                            <button onclick="togglePainelAnalise('2SA/AA')" title="Abrir análise detalhada" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173; transition: background 0.2s;">[...]</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Rodapé da Tabela: Data da Última Conferência -->
-                        <div style="margin-top: 12px; font-size: 0.75rem; color: #94a3b8; font-style: italic; text-align: right;">
-                            Última atualização: Dia 10/11/2026 | terça-feira
-                        </div>
-                    </div>
-                
-                    <!-- 3. PAINEL DE ANÁLISE DETALHADA DO ITEM SELECIONADO (RAIO-X) -->
-                    <div id="painelAnaliseItem" style="background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 16px;">
-                            <div>
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #0cb7f2; text-transform: uppercase; letter-spacing: 0.5px;">Raio-X do Item Selecionado</span>
-                                <h3 id="tituloAnaliseItem" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">CBN-IMP-80 — Rebolo CBN Importado</h3>
-                            </div>
-                            <button onclick="fecharPainelAnalise()" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
-                        </div>
-                
-                        <!-- Grid com os 3 Blocos de Análise -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                    <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
+                    
+                        <!-- 1. GRID DE 04 CARDS DE ESTOQUE (KPIS REAIS) -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
                             
-                            <!-- BLOCO 1: HISTÓRICO DE CONSUMO E TROCAS -->
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📊 Histórico & Consumo</div>
-                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                    <div>• <strong>Requisições (3 meses):</strong> 12 vezes</div>
-                                    <div>• <strong>Linhas Principais:</strong> Martensítico & Austenítico</div>
-                                    <div>• <strong>Vida útil média:</strong> 03 dias por peça</div>
+                            <!-- CARD 1: VALOR TOTAL EM ESTOQUE -->
+                            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">VALOR TOTAL EM ESTOQUE</span>
+                                    <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-weight: 700;">💰</div>
                                 </div>
+                                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Imobilizado no Almoxarifado</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #004173;">R$ 56.402,68</div>
                             </div>
-                
-                            <!-- BLOCO 2: REPOSIÇÃO E CUSTO -->
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Reposição & Lead Time</div>
-                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                    <div>• <strong>Ponto de Pedido:</strong> Atingido (Estoque baixo)</div>
-                                    <div>• <strong>Lead Time (Alcar):</strong> 15 dias úteis</div>
-                                    <div>• <strong>Variação de Custo:</strong> Estável no período</div>
+                    
+                            <!-- CARD 2: DIVERSIDADE DE ITENS -->
+                            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">DIVERSIDADE DE ITENS</span>
+                                    <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🏷️</div>
                                 </div>
+                                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Total de SKUs Ativos</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #0cb7f2;">24 Itens</div>
                             </div>
-                
-                            <!-- BLOCO 3: INDICADORES E SALDO -->
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status de Permanência</div>
-                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                    <div>• <strong>Tempo em Estoque:</strong> 45 dias</div>
-                                    <div>• <strong>Classificação ABC:</strong> Classe A (Alto Valor)</div>
-                                    <div>• <strong>Giro de Estoque:</strong> Moderado/Alto</div>
+                    
+                            <!-- CARD 3: ITEM DE MAIOR CONSUMO / VALOR -->
+                            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR VALOR / LOTE</span>
+                                    <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🔥</div>
                                 </div>
+                                <div style="font-size: 0.85rem; font-weight: 700; color: #004173; margin-bottom: 2px;">DL 304.8 X 178.0</div>
+                                <div style="font-size: 1.15rem; font-weight: 700; color: #059669;">R$ 20.902,20</div>
                             </div>
-                
+                    
+                            <!-- CARD 4: ITENS SEM SALDO EM ESTOQUE -->
+                            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                    <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">ITENS ZERADOS</span>
+                                    <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-weight: 800;">⏳</div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Com saldo zero</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">06 SKUs</div>
+                            </div>
+                    
                         </div>
-                
-                        <!-- Botões de Ação Rápida -->
-                        <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-                            <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📄 Ver Ficha Técnica</button>
-                            <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📊 Histórico Completo</button>
-                            <button style="background: #004173; border: none; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">🛒 Solicitar Reposição</button>
+                    
+                        <!-- 2. TABELA ANALÍTICA COM OS DADOS REAIS DA PLANILHA -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                                <div>
+                                    <h3 style="margin: 0; font-size: 1.05rem; color: #004173; font-weight: 700;">Controle Analítico de Estoque</h3>
+                                    <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento de saldos, fornecedores e valores baseados na auditoria</p>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="inputBuscaEstoque" oninput="filtrarTabelaEstoque(this.value)" placeholder="🔍 Buscar código ou descrição..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; width: 260px;">
+                                </div>
+                            </div>
+                    
+                            <div class="table-req-container" style="max-height: 420px; overflow-y: auto;">
+                                <table class="table-req">
+                                    <thead>
+                                        <tr>
+                                            <th>Código Eaton</th>
+                                            <th>Fornecedor</th>
+                                            <th>Descrição</th>
+                                            <th>Valor Unit.</th>
+                                            <th>Quantidade</th>
+                                            <th>Valor Total</th>
+                                            <th>Tempo / Lead Time</th>
+                                            <th style="text-align: center;">Análise</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515100003</td>
+                                            <td>ALCAR</td>
+                                            <td>RL 50 X 45.000 | GR 50 K246</td>
+                                            <td>R$ 6,93</td>
+                                            <td style="font-weight: 700; color: #dc2626;">0</td>
+                                            <td>R$ 0,00</td>
+                                            <td>60 Dias</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515100003')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515101004</td>
+                                            <td>ALCAR</td>
+                                            <td>RL 100 X 2120 | GR 320 (Resinite)</td>
+                                            <td>R$ 15,56</td>
+                                            <td style="font-weight: 700; color: #dc2626;">0</td>
+                                            <td>R$ 0,00</td>
+                                            <td>70 Dias</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515101004')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515101008</td>
+                                            <td>ALCAR</td>
+                                            <td>RL 150 X 20.000 | RZ-862 GR-050</td>
+                                            <td>R$ 388,37</td>
+                                            <td style="font-weight: 700;">3</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 1.165,11</td>
+                                            <td>15 Dias</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515101008')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200001</td>
+                                            <td>ALCAR</td>
+                                            <td>RL 50 X 45.000 | K-240 GR-050</td>
+                                            <td>R$ 60,44</td>
+                                            <td style="font-weight: 700;">4</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 241,76</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200001')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200002</td>
+                                            <td>ALCAR</td>
+                                            <td>RL 50 X 45.000 | K-240 GR-080</td>
+                                            <td>R$ 60,44</td>
+                                            <td style="font-weight: 700;">4</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 241,76</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200002')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200003</td>
+                                            <td>ALCAR</td>
+                                            <td>RL 50 X 45.000 | K-240 GR-100</td>
+                                            <td>R$ 54,05</td>
+                                            <td style="font-weight: 700;">4</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 216,20</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200003')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200004</td>
+                                            <td>NORTON</td>
+                                            <td>RL 50 X 45.000 | K-240 GR-120</td>
+                                            <td>R$ 55,66</td>
+                                            <td style="font-weight: 700;">5</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 278,30</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200004')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200014</td>
+                                            <td>ALCAR</td>
+                                            <td>CTL 150 X 2.530 | Surface Azul</td>
+                                            <td>R$ 511,60</td>
+                                            <td style="font-weight: 700; color: #dc2626;">0</td>
+                                            <td>R$ 0,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200014')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200015</td>
+                                            <td>ALCAR</td>
+                                            <td>CTL 95 X 2.120 | Surface Azul</td>
+                                            <td>R$ 271,53</td>
+                                            <td style="font-weight: 700;">38</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 10.318,14</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200015')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515200016</td>
+                                            <td>NORTON</td>
+                                            <td>CTL 100 X 2.530 | Surface Azul</td>
+                                            <td>R$ 341,06</td>
+                                            <td style="font-weight: 700;">5</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 1.705,30</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515200016')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515400002</td>
+                                            <td>ALCAR</td>
+                                            <td>DLX 200.0 | AC768 GR-220 (Adesivada)</td>
+                                            <td>R$ 3,98</td>
+                                            <td style="font-weight: 700;">600</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 2.388,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515400002')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515400003</td>
+                                            <td>ALCAR</td>
+                                            <td>DLX 200.0 | AC768 GR-400 (Adesivada)</td>
+                                            <td>R$ 3,40</td>
+                                            <td style="font-weight: 700;">900</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 3.060,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515400003')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">515400004</td>
+                                            <td>NORTON</td>
+                                            <td>DLX 200.0 | AC768 GR-600 (Adesivada)</td>
+                                            <td>R$ 3,98</td>
+                                            <td style="font-weight: 700;">600</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 2.388,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('515400004')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">519000002</td>
+                                            <td>ALCAR</td>
+                                            <td>LI 152.4 X 9.52 | Tipo AA-Fina</td>
+                                            <td>R$ 6,76</td>
+                                            <td style="font-weight: 700;">100</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 676,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('519000002')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">519000005</td>
+                                            <td>ALCAR</td>
+                                            <td>OS 100.0 X 24.0 X 13.0 | AA220 J8V4</td>
+                                            <td>R$ 8,79</td>
+                                            <td style="font-weight: 700;">266</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 2.338,14</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('519000005')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1779600283</td>
+                                            <td>ALCAR</td>
+                                            <td>DC 115 X 1.0 X 22.2 | ABF-4</td>
+                                            <td>R$ 5,84</td>
+                                            <td style="font-weight: 700; color: #dc2626;">0</td>
+                                            <td>R$ 0,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600283')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1779600362</td>
+                                            <td>ALCAR</td>
+                                            <td>DISCO DE DESBASTE - DD 115 X 6.4 X 22.2 | PHF46</td>
+                                            <td>R$ 3,81</td>
+                                            <td style="font-weight: 700; color: #dc2626;">0</td>
+                                            <td>R$ 0,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600362')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1779600374</td>
+                                            <td>WURTH</td>
+                                            <td>DISCO DE CORTE PARA PRODUCAO 1 X 14,3 X 1,6 X 22,2</td>
+                                            <td>R$ 3,09</td>
+                                            <td style="font-weight: 700; color: #dc2626;">0</td>
+                                            <td>R$ 0,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600374')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1779600386</td>
+                                            <td>ALCAR</td>
+                                            <td>DLX 178.0 | XZ677 GR-060</td>
+                                            <td>R$ 5,91</td>
+                                            <td style="font-weight: 700;">300</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 1.773,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600386')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1779600398</td>
+                                            <td>ALCAR</td>
+                                            <td>FL 110 X 270 | Manta Abrasiva (Scotch Brite)</td>
+                                            <td>R$ 3,89</td>
+                                            <td style="font-weight: 700;">117</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 455,13</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600398')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1784000125</td>
+                                            <td>ALCAR</td>
+                                            <td>DL 304.8 X 178.0 X 127.0 | A80 RR</td>
+                                            <td>R$ 2.090,22</td>
+                                            <td style="font-weight: 700;">10</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 20.902,20</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1784000125')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">1792800356</td>
+                                            <td>ALCAR</td>
+                                            <td>RBD 125.0 | Rebolo Eletrolítico Rediamantado</td>
+                                            <td>R$ 441,04</td>
+                                            <td style="font-weight: 700;">1</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 441,04</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('1792800356')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">2505440000</td>
+                                            <td>ALCAR</td>
+                                            <td>DC 406.4 X 3.2 X 25.4 | 2NZ36 T5BDHT</td>
+                                            <td>R$ 56,50</td>
+                                            <td style="font-weight: 700;">193</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 10.904,50</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('2505440000')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">4300583041</td>
+                                            <td>ALCAR</td>
+                                            <td>DLX 200.0 | R-262 GR-060 (Adesivada)</td>
+                                            <td>R$ 7,65</td>
+                                            <td style="font-weight: 700;">80</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 612,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('4300583041')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">5350009398</td>
+                                            <td>ALCAR</td>
+                                            <td>Pasta Diamantada com 3/6µ - 5g</td>
+                                            <td>R$ 39,93</td>
+                                            <td style="font-weight: 700;">26</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 1.038,18</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('5350009398')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">5350009662</td>
+                                            <td>ALCAR</td>
+                                            <td>ESC 75.0 | SiC 320 A.12 R13</td>
+                                            <td>R$ 257,24</td>
+                                            <td style="font-weight: 700;">7</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 1.800,68</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('5350009662')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: 700; color: #004173;">5350009663</td>
+                                            <td>ALCAR</td>
+                                            <td>ESC 65.0 | A.13 R13</td>
+                                            <td>R$ 228,40</td>
+                                            <td style="font-weight: 700;">25</td>
+                                            <td style="font-weight: 700; color: #0979b0;">R$ 5.710,00</td>
+                                            <td>-</td>
+                                            <td style="text-align: center;"><button onclick="togglePainelAnalise('5350009663')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    
+                            <!-- Rodapé com Data de Conferência Fixa -->
+                            <div style="margin-top: 14px; font-size: 0.75rem; color: #94a3b8; font-style: italic; text-align: right;">
+                                Última atualização: Dia 10/11/2026 | terça-feira
+                            </div>
                         </div>
+                    
+                        <!-- 3. PAINEL DE ANÁLISE DETALHADA DO ITEM SELECIONADO (RAIO-X) -->
+                        <div id="painelAnaliseItem" style="display: none; background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 16px;">
+                                <div>
+                                    <span style="font-size: 0.7rem; font-weight: 700; color: #0cb7f2; text-transform: uppercase; letter-spacing: 0.5px;">Raio-X do Item Selecionado</span>
+                                    <h3 id="tituloAnaliseItem" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Código Eaton — Análise Detalhada</h3>
+                                </div>
+                                <button onclick="fecharPainelAnalise()" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
+                            </div>
+                    
+                            <!-- Grid com os 3 Blocos de Análise -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                                
+                                <!-- BLOCO 1: HISTÓRICO DE CONSUMO -->
+                                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                    <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📊 Histórico & Consumo</div>
+                                    <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                        <div>• <strong>Status do Saldo:</strong> Em conformidade</div>
+                                        <div>• <strong>Linha de Aplicação:</strong> Produção / Retífica</div>
+                                        <div>• <strong>Giro Recente:</strong> Monitorado via ERP</div>
+                                    </div>
+                                </div>
+                    
+                                <!-- BLOCO 2: REPOSIÇÃO E CUSTO -->
+                                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                    <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Reposição & Lead Time</div>
+                                    <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                        <div>• <strong>Fornecedor:</strong> Alcar / Norton / Wurth</div>
+                                        <div>• <strong>Lead Time Médio:</strong> Até 70 dias (conforme item)</div>
+                                        <div>• <strong>Controle de Custo:</strong> Unidade rigorosa</div>
+                                    </div>
+                                </div>
+                    
+                                <!-- BLOCO 3: INDICADORES E SALDO -->
+                                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                    <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status de Permanência</div>
+                                    <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                        <div>• <strong>Auditoria Física:</strong> Conferido em Almoxarifado</div>
+                                        <div>• <strong>Classificação:</strong> Crítico / Operacional</div>
+                                        <div>• <strong>Alerta de Reposição:</strong> Automático</div>
+                                    </div>
+                                </div>
+                    
+                            </div>
+                    
+                            <!-- Botões de Ação Rápida -->
+                            <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                                <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📄 Ver Ficha Técnica</button>
+                                <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📊 Histórico Completo</button>
+                                <button style="background: #004173; border: none; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">🛒 Solicitar Reposição</button>
+                            </div>
+                        </div>
+                    
                     </div>
-                
-                </div>
 
                 <!-- SUB-ABA: MATERIAIS DE ABRASIVOS -->
                 <div id="abrasivos-subtab-materiais" class="abrasivos-subtab" style="display: none;">
