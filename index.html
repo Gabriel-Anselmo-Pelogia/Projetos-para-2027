@@ -1997,6 +1997,24 @@
         chartBarrasOperacoesObj.data.datasets[0].data = dadosFiltrados.map(i => i.custo);
         chartBarrasOperacoesObj.update();
     }
+        // Função para alternar ou exibir o painel de análise do item
+        function togglePainelAnalise(codigoItem) {
+            const painel = document.getElementById('painelAnaliseItem');
+            const titulo = document.getElementById('tituloAnaliseItem');
+            
+            // Aqui você pode atualizar o título com o código clicado futuramente
+            titulo.innerText = codigoItem + ' — Análise Detalhada de Estoque e Consumo';
+            
+            // Exibe o painel suavemente
+            painel.style.display = 'block';
+            
+            // Opcional: rola a tela levemente para o painel de análise
+            painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function fecharPainelAnalise() {
+            document.getElementById('painelAnaliseItem').style.display = 'none';
+        }
     </script>
 </body>
 </html>
