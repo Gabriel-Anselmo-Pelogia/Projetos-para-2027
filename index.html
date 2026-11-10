@@ -865,6 +865,7 @@
                             <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
                                 <select id="filtroPeriodoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="total_anual" selected>Total Anual (Acumulado)</option>
                                     <option value="Jan">Janeiro</option>
                                     <option value="Fev">Fevereiro</option>
                                     <option value="Mar">Março</option>
@@ -1746,37 +1747,48 @@
         const linha = document.getElementById('filtroLinhaCard2').value;
         const limiteTop = document.getElementById('filtroTopOperacoes').value;
 
-        let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
-        let mult = 0.8 + (seed / 100);
+        // Multiplicador com base nos filtros (se for Total Anual, o volume é maior/consolidado do ano)
+        let mult = 1.0;
+        if (periodo === 'total_anual') {
+            mult = 3.5; // Fator multiplicador para refletir o acumulado do ano inteiro
+        } else {
+            let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
+            mult = 0.8 + (seed / 100);
+        }
 
-        // Atualiza os dados das 4 famílias nas barras e nos cards, mais o card de média anual no fim
+        // Quantidade individual de cada família baseada no filtro
         const val1 = Math.round(42 * mult);
-        const val2 = Math.round(35 * (2 - mult));
+        const val2 = Math.round(35 * mult);
         const val3 = Math.round(15 * mult);
         const val4 = Math.round(8 * mult);
-        const totalFam = val1 + val2 + val3 + val4;
-        const mediaAnual = Math.round(totalFam / 4);
+        
+        // SOMA GERAL DAS VÁLVULAS (Soma acumulada de acordo com o filtro)
+        const totalGeralValvulas = val1 + val2 + val3 + val4;
 
+        // 1. ATUALIZA O GRÁFICO COM EXATAMENTE 4 BARRAS
         chartBarraFamiliasObj.data.datasets[0].data = [val1, val2, val3, val4];
         chartBarraFamiliasObj.update();
 
-        document.getElementById('qtdFam1').innerText = val1 + ' pçs';
-        document.getElementById('pctFam1').innerText = ((val1 / totalFam) * 100).toFixed(1) + '%';
+        // 2. ATUALIZA OS 4 CARDS DAS FAMÍLIAS
+        document.getElementById('qtdFam1').innerText = val1.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam1').innerText = ((val1 / totalGeralValvulas) * 100).toFixed(1) + '%';
 
-        document.getElementById('qtdFam2').innerText = val2 + ' pçs';
-        document.getElementById('pctFam2').innerText = ((val2 / totalFam) * 100).toFixed(1) + '%';
+        document.getElementById('qtdFam2').innerText = val2.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam2').innerText = ((val2 / totalGeralValvulas) * 100).toFixed(1) + '%';
 
-        document.getElementById('qtdFam3').innerText = val3 + ' pçs';
-        document.getElementById('pctFam3').innerText = ((val3 / totalFam) * 100).toFixed(1) + '%';
+        document.getElementById('qtdFam3').innerText = val3.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam3').innerText = ((val3 / totalGeralValvulas) * 100).toFixed(1) + '%';
 
-        document.getElementById('qtdFam4').innerText = val4 + ' pçs';
-        document.getElementById('pctFam4').innerText = ((val4 / totalFam) * 100).toFixed(1) + '%';
+        document.getElementById('qtdFam4').innerText = val4.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam4').innerText = ((val4 / totalGeralValvulas) * 100).toFixed(1) + '%';
 
-        document.getElementById('mediaAnualVal').innerText = mediaAnual + ' pçs';
+        // 3. ATUALIZA O 5º CARD COM A SOMA TOTAL GERAL
+        document.getElementById('totalGeralVal').innerText = totalGeralValvulas.toLocaleString('pt-BR') + ' pçs';
 
+        // Atualiza as operações do gráfico de barras horizontais abaixo
         const listaAtualizada = [
             { op: '15G', custo: Math.round(145000 * mult) },
-            { op: '15S', custo: Math.round(132000 * (1.8 - mult)) },
+            { op: '15S', custo: Math.round(132000 * mult) },
             { op: '15A', custo: Math.round(118000 * mult) },
             { op: '15PC/OM2', custo: Math.round(105000 * mult) },
             { op: 'OP25', custo: Math.round(98000 * mult) },
