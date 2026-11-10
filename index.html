@@ -846,7 +846,7 @@
                     </div>
                 </div>
 
-                <!-- CARD 2: FAMÍLIAS (GRÁFICO DE BARRA VERTICAL COM MÉDIA ANUAL + 4 CARDS) E OPERAÇÕES -->
+                <!-- CARD 2: FAMÍLIAS (GRÁFICO COM 4 BARRAS + 4 CARDS + CARD DE MÉDIA ANUAL NO FIM) -->
                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
                         <div>
@@ -905,10 +905,10 @@
                         </div>
                     </div>
 
-                    <!-- LINHA 1: FAMÍLIAS (GRÁFICO DE BARRA VERTICAL COM MÉDIA ANUAL À ESQUERDA + 4 CARDS À DIREITA) -->
+                    <!-- LINHA 1: FAMÍLIAS (GRÁFICO DE BARRAS VERTICAIS APENAS COM AS 4 FAMÍLIAS + 4 CARDS + CARD TOTAL/MÉDIA NO FIM) -->
                     <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: stretch; margin-bottom: 24px;">
                         
-                        <!-- ESQUERDA: GRÁFICO DE BARRAS VERTICAIS DAS FAMÍLIAS + MÉDIA ANUAL -->
+                        <!-- ESQUERDA: GRÁFICO DE BARRAS VERTICAIS EXCLUSIVAMENTE COM AS 4 FAMÍLIAS -->
                         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
                             <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Famílias de Válvulas Produzidas</h4>
                             <div style="position: relative; height: 210px;">
@@ -916,27 +916,39 @@
                             </div>
                         </div>
 
-                        <!-- DIREITA: 4 CARDS PEQUENOS COM QUANTIDADE E PORCENTAGEM -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-content: center;">
-                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 10px; padding: 14px;">
-                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Martensítico</div>
-                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam1">42 pçs</div>
-                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam1">42.0% do total</div>
+                        <!-- DIREITA: 4 CARDS DE FAMÍLIAS + 1 CARD DE MÉDIA ANUAL NO FIM -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; justify-content: center;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Martensítico</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam1">42 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam1">42.0%</div>
+                                </div>
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Austenítico</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam2">35 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam2">35.0%</div>
+                                </div>
                             </div>
-                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 10px; padding: 14px;">
-                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Austenítico</div>
-                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam2">35 pçs</div>
-                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam2">35.0% do total</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Super Liga</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam3">15 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam3">15.0%</div>
+                                </div>
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Intermediária</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam4">8 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam4">8.0%</div>
+                                </div>
                             </div>
-                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 10px; padding: 14px;">
-                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Super Liga</div>
-                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam3">15 pçs</div>
-                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam3">15.0% do total</div>
-                            </div>
-                            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 10px; padding: 14px;">
-                                <div style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Intermediária</div>
-                                <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin: 4px 0;" id="qtdFam4">8 pçs</div>
-                                <div style="font-size: 0.78rem; font-weight: 600; color: #0979b0;" id="pctFam4">8.0% do total</div>
+                            <!-- CARD DE MÉDIA ANUAL NO FIM -->
+                            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #059669; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.68rem; font-weight: 700; color: #065f46; text-transform: uppercase;">Média Anual / Consolidado</div>
+                                    <div style="font-size: 0.75rem; color: #047857;">Média geral entre as famílias</div>
+                                </div>
+                                <div style="font-size: 1.1rem; font-weight: 800; color: #059669;" id="mediaAnualVal">25 pçs</div>
                             </div>
                         </div>
 
@@ -1528,21 +1540,16 @@
         chartArea3Obj = new Chart(document.getElementById('chartArea3').getContext('2d'), configArea('Produção', 'rgba(5, 150, 105, 1)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
 
 
-        // --- 3. GRÁFICO DE BARRAS VERTICAIS PARA AS FAMÍLIAS (COM MÉDIA ANUAL) ---
+        // --- 3. GRÁFICO DE BARRAS VERTICAIS APENAS COM AS 4 FAMÍLIAS ---
         const ctxBarraFamilias = document.getElementById('chartBarraFamilias').getContext('2d');
         chartBarraFamiliasObj = new Chart(ctxBarraFamilias, {
             type: 'bar',
             data: {
-                labels: ['Martensítico', 'Austenítico', 'Super Liga', 'Intermediária', 'MÉDIA ANUAL'],
+                labels: ['Martensítico', 'Austenítico', 'Super Liga', 'Intermediária'],
                 datasets: [{
                     label: 'Quantidade',
-                    data: [42, 35, 15, 8, 25],
-                    backgroundColor: function(context) {
-                        const index = context.dataIndex;
-                        if (index === 4) return '#059669'; // Cor diferenciada para a Média Anual
-                        const cores = ['#004173', '#0979b0', '#0cb7f2', '#64748b'];
-                        return cores[index];
-                    },
+                    data: [42, 35, 15, 8],
+                    backgroundColor: ['#004173', '#0979b0', '#0cb7f2', '#64748b'],
                     borderRadius: 6
                 }]
             },
@@ -1550,17 +1557,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.chart.data.labels[context.dataIndex];
-                                const valor = context.parsed.y;
-                                if (label === 'MÉDIA ANUAL') return ' Média Anual das Famílias: ' + valor + ' pçs';
-                                return ' ' + label + ': ' + valor + ' pçs';
-                            }
-                        }
-                    }
+                    legend: { display: false }
                 },
                 scales: {
                     y: {
@@ -1570,7 +1567,7 @@
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { font: { size: 8, weight: '600' } }
+                        ticks: { font: { size: 10, weight: '600' } }
                     }
                 }
             }
@@ -1752,28 +1749,30 @@
         let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
         let mult = 0.8 + (seed / 100);
 
-        // Atualiza os dados das 4 famílias e calcula a média anual dinamicamente
+        // Atualiza os dados das 4 famílias nas barras e nos cards, mais o card de média anual no fim
         const val1 = Math.round(42 * mult);
         const val2 = Math.round(35 * (2 - mult));
         const val3 = Math.round(15 * mult);
         const val4 = Math.round(8 * mult);
-        const mediaAnual = Math.round((val1 + val2 + val3 + val4) / 4);
         const totalFam = val1 + val2 + val3 + val4;
+        const mediaAnual = Math.round(totalFam / 4);
 
-        chartBarraFamiliasObj.data.datasets[0].data = [val1, val2, val3, val4, mediaAnual];
+        chartBarraFamiliasObj.data.datasets[0].data = [val1, val2, val3, val4];
         chartBarraFamiliasObj.update();
 
         document.getElementById('qtdFam1').innerText = val1 + ' pçs';
-        document.getElementById('pctFam1').innerText = ((val1 / totalFam) * 100).toFixed(1) + '% do total';
+        document.getElementById('pctFam1').innerText = ((val1 / totalFam) * 100).toFixed(1) + '%';
 
         document.getElementById('qtdFam2').innerText = val2 + ' pçs';
-        document.getElementById('pctFam2').innerText = ((val2 / totalFam) * 100).toFixed(1) + '% do total';
+        document.getElementById('pctFam2').innerText = ((val2 / totalFam) * 100).toFixed(1) + '%';
 
         document.getElementById('qtdFam3').innerText = val3 + ' pçs';
-        document.getElementById('pctFam3').innerText = ((val3 / totalFam) * 100).toFixed(1) + '% do total';
+        document.getElementById('pctFam3').innerText = ((val3 / totalFam) * 100).toFixed(1) + '%';
 
         document.getElementById('qtdFam4').innerText = val4 + ' pçs';
-        document.getElementById('pctFam4').innerText = ((val4 / totalFam) * 100).toFixed(1) + '% do total';
+        document.getElementById('pctFam4').innerText = ((val4 / totalFam) * 100).toFixed(1) + '%';
+
+        document.getElementById('mediaAnualVal').innerText = mediaAnual + ' pçs';
 
         const listaAtualizada = [
             { op: '15G', custo: Math.round(145000 * mult) },
