@@ -1070,7 +1070,50 @@
                 <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
                     <div class="section-placeholder">
                         <h3>📦 Gestão de Estoque de Abrasivos</h3>
-                        <p>Controle de quantidade disponível, reposições e almoxarifado de rebolos e lixas.</p>
+                        <<!-- GRID DE 04 CARDS DE ESTOQUE -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                                
+                                <!-- CARD 1: VALOR TOTAL EM ESTOQUE -->
+                                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">VALOR TOTAL EM ESTOQUE</span>
+                                        <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-weight: 700;">💰</div>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Imobilizado no Almoxarifado</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #004173;">R$ 845.210,00</div>
+                                </div>
+                            
+                                <!-- CARD 2: DIVERSIDADE DE ITENS -->
+                                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">DIVERSIDADE DE ITENS</span>
+                                        <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🏷️</div>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Total de SKUs Ativos</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #0cb7f2;">128 Itens</div>
+                                </div>
+                            
+                                <!-- CARD 3: ITEM DE MAIOR CONSUMO -->
+                                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CONSUMO</span>
+                                        <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🔥</div>
+                                    </div>
+                                    <div style="font-size: 0.95rem; font-weight: 700; color: #004173; margin-bottom: 2px;">RT 609.6 X 17.5...</div>
+                                    <div style="font-size: 1.15rem; font-weight: 700; color: #059669;">450 pçs <span style="font-size: 0.75rem; font-weight: 500; color: #64748b;">(no período)</span></div>
+                                </div>
+                            
+                                <!-- CARD 4: ITENS SEM SAÍDA (ÚLTIMOS 3 MESES) -->
+                                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">SEM SAÍDA (3 MESES)</span>
+                                        <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-weight: 800;">⏳</div>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Itens parados no estoque</div>
+                                    <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">14 SKUs</div>
+                                </div>
+                            
+                            </div>
                     </div>
                 </div>
 
