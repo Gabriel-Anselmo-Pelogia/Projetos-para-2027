@@ -1121,9 +1121,11 @@
                                 <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento de saldos, valores e tempo de permanência em almoxarifado</p>
                             </div>
                             <div style="display: flex; gap: 10px;">
-                                <input type="text" placeholder="🔍 Buscar código ou descrição..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; width: 240px;">
+                                <!-- É EXATAMENTE AQUI QUE VOCÊ COLOCA O INPUT COM O OMINPUT -->
+                                <input type="text" id="inputBuscaEstoque" oninput="filtrarTabelaEstoque(this.value)" placeholder="🔍 Buscar código ou descrição..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; width: 240px;">
                             </div>
                         </div>
+
                 
                         <div class="table-req-container">
                             <table class="table-req">
@@ -2014,6 +2016,22 @@
 
         function fecharPainelAnalise() {
             document.getElementById('painelAnaliseItem').style.display = 'none';
+        }
+
+        // Função para filtrar dinamicamente a tabela de estoque
+        function filtrarTabelaEstoque(termo) {
+            const filtro = termo.toLowerCase();
+            const linhas = document.querySelectorAll('#abrasivos-subtab-estoque .table-req tbody tr');
+
+            linhas.forEach(linha => {
+                const textoLinha = linha.innerText.toLowerCase();
+                // Se o texto da linha incluir o que foi digitado, exibe; senão, oculta
+                if (textoLinha.includes(filtro)) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>
