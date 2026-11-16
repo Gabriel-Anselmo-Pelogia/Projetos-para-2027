@@ -2397,6 +2397,57 @@
                 }
             });
         }
+
+        // Função para carregar as ocorrências reais direto do Supabase
+    async function carregarOcorrenciasDoSupabase() {
+        const tbody = document.getElementById('tabelaOcorrenciasBody'); // Certifique-se de dar esse ID no <tbody> da sua tabela de ocorrências
+        if (!tbody) return;
+
+        try {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Carregando ocorrências do banco de dados...</td></tr>';
+
+            const { data, error } = await supabaseClient
+                .from('ocorrencias_abrasivos')
+                .select('*')
+                .order('created_at', { ascending: false }); // Ordena pelas mais recentes
+
+            if (error) throw error;
+
+            tbody.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Nenhuma ocorrência registrada até o momento.</td></tr>';
+                return;
+            }
+
+            data.forEach((item) => {
+                const badgeCor = item.status === 'Resolvido' ? 'background: #dcfce7; color: #166534;' : 'background: #fee2e2; color: #991b1b;';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.data || '—'}</td>
+                    <td style="font-weight: 600; color: #004173;">${item.codigo || '—'}</td>
+                    <td>${item.descricao || '—'}</td>
+                    <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">${item.fornecedor || '—'}</span></td>
+                    <td>R$ ${(item.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    <td style="font-weight: 700;">${item.quantidade || 1}</td>
+                    <td style="font-weight: 700; color: #0979b0;">R$ ${(item.valor_total || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    <td><span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 500;">${item.linha || '—'}</span></td>
+                    <td><span style="background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${item.operacao || '—'}</span></td>
+                    <td>
+                        <button onclick="alterarStatusOcorrencia('${item.id}', '${item.status === 'Resolvido' ? 'Pendente' : 'Resolvido'}')" style="padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; ${badgeCor}">
+                            ${item.status || 'Pendente'} 🔄
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } catch (err) {
+            console.error('Erro ao buscar ocorrências:', err.message);
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px; color: #dc2626;">Erro ao carregar dados: ${err.message}</td></tr>`;
+        }
+    }
     </script>
 </body>
 </html>
