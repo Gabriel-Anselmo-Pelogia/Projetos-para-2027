@@ -1666,7 +1666,7 @@
                                         <th style="padding: 12px; text-align: center;">Ações do Gestor</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tabelaOcorrenciasBody">
+                                <tbody id="tabelaOcorrenciasBody"></tbody>tbody>
                             </table>
                         </div>
                     </div>
@@ -1828,13 +1828,18 @@
 
         function switchSubTab(category, subTabId, element) {
             const container = document.getElementById('section-' + category);
-            if(container) {
+            if (container) {
                 container.querySelectorAll('.top-tab').forEach(tab => tab.classList.remove('active'));
-                if(element) element.classList.add('active');
-
+                if (element) element.classList.add('active');
+        
                 container.querySelectorAll('.' + category + '-subtab').forEach(sub => sub.style.display = 'none');
                 const targetSub = document.getElementById(category + '-subtab-' + subTabId);
-                if(targetSub) targetSub.style.display = 'block';
+                if (targetSub) targetSub.style.display = 'block';
+        
+                // Carrega as ocorrências do Supabase ao abrir a aba
+                if (category === 'abrasivos' && subTabId === 'ocorrencias') {
+                    carregarOcorrenciasDoSupabase();
+                }
             }
         }
 
