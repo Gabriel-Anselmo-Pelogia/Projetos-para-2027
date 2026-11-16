@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- DEPENDÊNCIA DO CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -673,10 +674,14 @@
                     </div>
                 </div>
 
-                <div class="upload-card" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-card" id="uploadCard"
+                     onclick="document.getElementById('fileInput').click()"
+                     ondragover="event.preventDefault(); this.style.backgroundColor='#f0f9ff';"
+                     ondragleave="this.style.backgroundColor='';"
+                     ondrop="handleFileDrop(event)">
                     <h3>📂 Clique ou arraste os ficheiros de dados aqui</h3>
                     <p>Suporta planilhas de pedidos, relatórios e controle de estoque (.xlsx, .csv)</p>
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
+                    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileSelect(event)" onclick="event.stopPropagation()">
                 </div>
 
                 <div id="file-status" style="color: #004173; font-size: 0.95rem; text-align: center; font-weight: 600;"></div>
@@ -1874,33 +1879,32 @@
     let chartArea3Obj = null;
     let chartBarraFamiliasObj = null;
     let chartBarrasOperacoesObj = null;
-
+ 
     document.addEventListener("DOMContentLoaded", function () {
-        
-        // --- 1. GRÁFICO PRINCIPAL DE CP ---
+ 
         // --- 1. GRÁFICO PRINCIPAL DE CP (COMPARATIVO CJ 01 vs CJ 02 SEM 'OUTROS') ---
         const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
         const labelsLinhas = [
-            'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
-            'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
-            'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
+            'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05',
+            'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10',
+            'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM',
             'BV - MOD 1', 'BV - MOD 2', 'MÉDIA FÁBRICA'
         ];
-
+ 
         const dadosIniciaisCJ01 = [
-            0.450, 0.520, 0.480, 0.610, 0.750, 
-            0.420, 0.500, 0.550, 0.820, 0.490, 
-            0.460, 0.530, 0.440, 0.410, 0.580, 
+            0.450, 0.520, 0.480, 0.610, 0.750,
+            0.420, 0.500, 0.550, 0.820, 0.490,
+            0.460, 0.530, 0.440, 0.410, 0.580,
             0.650, 0.680, 0.550
         ];
-
+ 
         const dadosIniciaisCJ02 = [
-            0.420, 0.490, 0.450, 0.570, 0.690, 
-            0.400, 0.470, 0.510, 0.740, 0.460, 
-            0.430, 0.495, 0.415, 0.390, 0.540, 
+            0.420, 0.490, 0.450, 0.570, 0.690,
+            0.400, 0.470, 0.510, 0.740, 0.460,
+            0.430, 0.495, 0.415, 0.390, 0.540,
             0.600, 0.630, 0.511
         ];
-
+ 
         meuGraficoCP = new Chart(ctxLinha, {
             type: 'bar',
             data: {
@@ -1939,7 +1943,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { 
+                    legend: {
                         display: true,
                         position: 'top',
                         labels: { usePointStyle: true, font: { size: 11, weight: '600' } }
@@ -1964,21 +1968,18 @@
                 }
             }
         });
-
-
-        // --- 2. OS 3 GRÁFICOS DE ÁREA (CARD 1) ---
+ 
+ 
         // --- 2. OS 3 GRÁFICOS DE ÁREA COM DEGRADÊ (CARD 1) ---
         const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'];
-
-        // Função auxiliar para gerar o degradê vertical no Canvas
+ 
         function criarGradiente(ctx, corHexInicio, corHexFim) {
-            const gradient = ctx.createLinearGradient(0, 0, 0, 220); // 220px é a altura do container
-            gradient.addColorStop(0, corHexInicio); // Cor no topo (mais opaca)
-            gradient.addColorStop(1, corHexFim);    // Cor na base (transparente)
+            const gradient = ctx.createLinearGradient(0, 0, 0, 220);
+            gradient.addColorStop(0, corHexInicio);
+            gradient.addColorStop(1, corHexFim);
             return gradient;
         }
-
-        // Função de configuração dos gráficos de linha
+ 
         const configArea = (ctx, labelNome, corLinha, corTopoDegrade, dadosValores) => ({
             type: 'line',
             data: {
@@ -2005,18 +2006,16 @@
                 }
             }
         });
-
-        // Seleção dos contextos Canvas
+ 
         const ctx1 = document.getElementById('chartArea1').getContext('2d');
         const ctx2 = document.getElementById('chartArea2').getContext('2d');
         const ctx3 = document.getElementById('chartArea3').getContext('2d');
-
-        // Criação dos gráficos com degradê personalizado
+ 
         chartArea1Obj = new Chart(ctx1, configArea(ctx1, 'CP Médio', '#0cb7f2', 'rgba(12, 183, 242, 0.45)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
         chartArea2Obj = new Chart(ctx2, configArea(ctx2, 'Consumo', '#dc2626', 'rgba(220, 38, 38, 0.40)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
         chartArea3Obj = new Chart(ctx3, configArea(ctx3, 'Produção', '#059669', 'rgba(5, 150, 105, 0.40)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
-
-
+ 
+ 
         // --- 3. GRÁFICO DE BARRAS VERTICAIS APENAS COM AS 4 FAMÍLIAS ---
         const ctxBarraFamilias = document.getElementById('chartBarraFamilias').getContext('2d');
         chartBarraFamiliasObj = new Chart(ctxBarraFamilias, {
@@ -2049,8 +2048,8 @@
                 }
             }
         });
-
-
+ 
+ 
         // --- 4. GRÁFICO DE BARRAS HORIZONTAIS DE OPERAÇÕES ---
         const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
         const operacoesCompletas = [
@@ -2068,10 +2067,10 @@
             { op: 'HSF', custo: 21000 },
             { op: 'Lixadeira', custo: 15000 }
         ].sort((a, b) => b.custo - a.custo);
-
+ 
         const topFiltro = document.getElementById('filtroTopOperacoes').value;
         const dadosIniciaisOp = topFiltro === 'todas' ? operacoesCompletas : operacoesCompletas.slice(0, parseInt(topFiltro));
-
+ 
         chartBarrasOperacoesObj = new Chart(ctxBarrasHoriz, {
             type: 'bar',
             data: {
@@ -2092,7 +2091,7 @@
                         const index = activeElements[0].index;
                         const operacaoSelecionada = chartBarrasOperacoesObj.data.labels[index];
                         const linhaSelecionada = document.getElementById('filtroLinhaCard2').value;
-                        
+ 
                         carregarDadosOperacaoSelecionada(linhaSelecionada, operacaoSelecionada);
                     }
                 },
@@ -2100,8 +2099,8 @@
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: function(context) { 
-                                return ' Custo: R$ ' + context.parsed.x.toLocaleString('pt-BR', {minimumFractionDigits: 2}); 
+                            label: function(context) {
+                                return ' Custo: R$ ' + context.parsed.x.toLocaleString('pt-BR', {minimumFractionDigits: 2});
                             }
                         }
                     }
@@ -2123,12 +2122,12 @@
             }
         });
     });
-
+ 
     // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O PAINEL LATERAL DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
     function carregarDadosOperacaoSelecionada(linha, operacao) {
         const turnos = ['1º Turno', '2º Turno', '3º Turno'];
         const situacoes = ['Consumo', 'Ocorrência'];
-        
+ 
         const itensMock = [
             { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar', periodo: '03 dias em uso' },
             { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar', periodo: '05 dias em uso' },
@@ -2136,26 +2135,26 @@
             { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80, img: 'imagens/lixas.png', fornecedor: 'Alcar', periodo: '02 dias em uso' },
             { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00, img: 'imagens/CBN.png', fornecedor: 'Alcar', periodo: '04 dias em uso' }
         ];
-
+ 
         const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
-
+ 
         document.getElementById('infoCod').innerText = ultimoItem.cod;
         document.getElementById('infoDesc').innerText = ultimoItem.desc;
         document.getElementById('infoForn').innerText = ultimoItem.fornecedor;
         document.getElementById('infoVal').innerText = 'R$ ' + ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2});
         document.getElementById('infoPeriodoMaquina').innerText = ultimoItem.periodo;
-
+ 
         const cardContainer = document.getElementById('cardItemHomologado');
         const imgContainer = cardContainer.querySelector('img');
         imgContainer.src = ultimoItem.img;
         imgContainer.alt = ultimoItem.cod;
-
+ 
         document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
         document.getElementById('subtituloTabelaRequisicoes').innerText = `Histórico recente filtrado por ${linha} e ${operacao}`;
-
+ 
         const tbody = document.getElementById('tabelaRequisicoesBody');
-        tbody.innerHTML = ''; 
-
+        tbody.innerHTML = '';
+ 
         for (let i = 1; i <= 15; i++) {
             const item = itensMock[(i + operacao.charCodeAt(0)) % itensMock.length];
             const qtd = Math.floor(Math.random() * 6) + 1;
@@ -2163,9 +2162,9 @@
             const dia = String(16 - i).padStart(2, '0');
             const dataFmt = `${dia}/10/2026`;
             const turno = turnos[i % 3];
-            const situacao = situacoes[i % situacoes.length]; 
+            const situacao = situacoes[i % situacoes.length];
             const badgeCor = situacao === 'Consumo' ? 'background: #e0f2fe; color: #0369a1;' : 'background: #fee2e2; color: #991b1b;';
-
+ 
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${dataFmt}</td>
@@ -2183,58 +2182,57 @@
             tbody.appendChild(tr);
         }
     }
-
-    // Funções de atualização dinâmica dos filtros
+ 
     // Funções de atualização dinâmica dos filtros (CJ 01 vs CJ 02)
     function atualizarDadosGrafico() {
         const ano = document.getElementById('filtroAno').value;
         const periodo = document.getElementById('filtroPeriodo').value;
         const cenario1 = document.getElementById('filtroCJ01').value;
         const cenario2 = document.getElementById('filtroCJ02').value;
-
+ 
         let fatorTempo = 1.0;
         if (periodo !== 'media') fatorTempo = 0.85 + (Math.abs(periodo.charCodeAt(0)) % 30) / 100;
         if (ano === '2025') fatorTempo *= 0.92;
         if (ano === '2027') fatorTempo *= 1.08;
-
+ 
         // 17 linhas ativas (sem 'OUTROS')
         const baseReal = [
-            0.450, 0.520, 0.480, 0.610, 0.750, 
-            0.420, 0.500, 0.550, 0.820, 0.490, 
-            0.460, 0.530, 0.440, 0.410, 0.580, 
+            0.450, 0.520, 0.480, 0.610, 0.750,
+            0.420, 0.500, 0.550, 0.820, 0.490,
+            0.460, 0.530, 0.440, 0.410, 0.580,
             0.650, 0.680
         ];
-
+ 
         const nomesCenarios = {
             real: 'Real',
             sem_ocorrencias: 'Sem Ocorrências',
             projetado: 'Projetado'
         };
-
+ 
         function calcularSerieCenario(tipoCenario) {
             let multCenario = 1.0;
-            if (tipoCenario === 'sem_ocorrencias') multCenario = 0.94; // Desconta impacto médio das ocorrências
-            if (tipoCenario === 'projetado') multCenario = 0.90;       // Meta / Projeção otimizada
-
+            if (tipoCenario === 'sem_ocorrencias') multCenario = 0.94;
+            if (tipoCenario === 'projetado') multCenario = 0.90;
+ 
             const valoresLinhas = baseReal.map(val => Number((val * fatorTempo * multCenario).toFixed(3)));
             const soma = valoresLinhas.reduce((acc, curr) => acc + curr, 0);
             const mediaFabrica = Number((soma / valoresLinhas.length).toFixed(3));
             return [...valoresLinhas, mediaFabrica];
         }
-
+ 
         meuGraficoCP.data.datasets[0].label = 'CJ 01: ' + nomesCenarios[cenario1];
         meuGraficoCP.data.datasets[0].data = calcularSerieCenario(cenario1);
-
+ 
         meuGraficoCP.data.datasets[1].label = 'CJ 02: ' + nomesCenarios[cenario2];
         meuGraficoCP.data.datasets[1].data = calcularSerieCenario(cenario2);
-
+ 
         meuGraficoCP.update();
     }
-
+ 
     function atualizarGraficosArea() {
         const linha = document.getElementById('filtroLinhaArea').value;
         let mult = linha !== 'todas' ? 0.7 + (Math.abs(linha.charCodeAt(0)) % 60) / 100 : 1.0;
-
+ 
         chartArea1Obj.data.datasets[0].data = [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440].map(v => Number((v * mult).toFixed(3)));
         chartArea1Obj.update();
         chartArea2Obj.data.datasets[0].data = [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190].map(v => Math.round(v * mult));
@@ -2242,52 +2240,45 @@
         chartArea3Obj.data.datasets[0].data = [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000].map(v => Math.round(v * mult));
         chartArea3Obj.update();
     }
-
+ 
     function atualizarCard2() {
         const ano = document.getElementById('filtroAnoCard2').value;
         const periodo = document.getElementById('filtroPeriodoCard2').value;
         const linha = document.getElementById('filtroLinhaCard2').value;
         const limiteTop = document.getElementById('filtroTopOperacoes').value;
-
-        // Multiplicador com base nos filtros (se for Total Anual, o volume é maior/consolidado do ano)
+ 
         let mult = 1.0;
         if (periodo === 'total_anual') {
-            mult = 3.5; // Fator multiplicador para refletir o acumulado do ano inteiro
+            mult = 3.5;
         } else {
             let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
             mult = 0.8 + (seed / 100);
         }
-
-        // Quantidade individual de cada família baseada no filtro
+ 
         const val1 = Math.round(42 * mult);
         const val2 = Math.round(35 * mult);
         const val3 = Math.round(15 * mult);
         const val4 = Math.round(8 * mult);
-        
-        // SOMA GERAL DAS VÁLVULAS (Soma acumulada de acordo com o filtro)
+ 
         const totalGeralValvulas = val1 + val2 + val3 + val4;
-
-        // 1. ATUALIZA O GRÁFICO COM EXATAMENTE 4 BARRAS
+ 
         chartBarraFamiliasObj.data.datasets[0].data = [val1, val2, val3, val4];
         chartBarraFamiliasObj.update();
-
-        // 2. ATUALIZA OS 4 CARDS DAS FAMÍLIAS
+ 
         document.getElementById('qtdFam1').innerText = val1.toLocaleString('pt-BR') + ' pçs';
         document.getElementById('pctFam1').innerText = ((val1 / totalGeralValvulas) * 100).toFixed(1) + '%';
-
+ 
         document.getElementById('qtdFam2').innerText = val2.toLocaleString('pt-BR') + ' pçs';
         document.getElementById('pctFam2').innerText = ((val2 / totalGeralValvulas) * 100).toFixed(1) + '%';
-
+ 
         document.getElementById('qtdFam3').innerText = val3.toLocaleString('pt-BR') + ' pçs';
         document.getElementById('pctFam3').innerText = ((val3 / totalGeralValvulas) * 100).toFixed(1) + '%';
-
+ 
         document.getElementById('qtdFam4').innerText = val4.toLocaleString('pt-BR') + ' pçs';
         document.getElementById('pctFam4').innerText = ((val4 / totalGeralValvulas) * 100).toFixed(1) + '%';
-
-        // 3. ATUALIZA O 5º CARD COM A SOMA TOTAL GERAL
+ 
         document.getElementById('totalGeralVal').innerText = totalGeralValvulas.toLocaleString('pt-BR') + ' pçs';
-
-        // Atualiza as operações do gráfico de barras horizontais abaixo
+ 
         const listaAtualizada = [
             { op: '15G', custo: Math.round(145000 * mult) },
             { op: '15S', custo: Math.round(132000 * mult) },
@@ -2303,38 +2294,20 @@
             { op: 'HSF', custo: Math.round(21000 * mult) },
             { op: 'Lixadeira', custo: Math.round(15000 * mult) }
         ].sort((a, b) => b.custo - a.custo);
-
+ 
         const dadosFiltrados = limiteTop === 'todas' ? listaAtualizada : listaAtualizada.slice(0, parseInt(limiteTop));
-
+ 
         chartBarrasOperacoesObj.data.labels = dadosFiltrados.map(i => i.op);
         chartBarrasOperacoesObj.data.datasets[0].data = dadosFiltrados.map(i => i.custo);
         chartBarrasOperacoesObj.update();
     }
-        // Função para alternar ou exibir o painel de análise do item
-        function togglePainelAnalise(codigoItem) {
-            const painel = document.getElementById('painelAnaliseItem');
-            const titulo = document.getElementById('tituloAnaliseItem');
-            
-            // Aqui você pode atualizar o título com o código clicado futuramente
-            titulo.innerText = codigoItem + ' — Análise Detalhada de Estoque e Consumo';
-            
-            // Exibe o painel suavemente
-            painel.style.display = 'block';
-            
-            // Opcional: rola a tela levemente para o painel de análise
-            painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        function fecharPainelAnalise() {
-            document.getElementById('painelAnaliseItem').style.display = 'none';
-        }
-
-        // Função para capturar os dados da tabela e exibir o Raio-X dinâmico
+ 
+    // Função para capturar os dados da tabela e exibir o Raio-X dinâmico
     function togglePainelAnalise(codigoItem) {
         const painel = document.getElementById('painelAnaliseItem');
         const linhas = document.querySelectorAll('#abrasivos-subtab-estoque .table-req tbody tr');
         let dadosItem = null;
-
+ 
         linhas.forEach(linha => {
             const cols = linha.querySelectorAll('td');
             if (cols.length > 0 && cols[0].innerText.trim() === String(codigoItem)) {
@@ -2349,10 +2322,9 @@
                 };
             }
         });
-
+ 
         if (!dadosItem) return;
-
-        // Preenche os campos do painel com os dados extraídos
+ 
         document.getElementById('raioTituloCodigo').innerText = `Código Eaton: ${dadosItem.codigo} — Análise Detalhada`;
         document.getElementById('raioDescricao').innerText = dadosItem.descricao;
         document.getElementById('raioFornecedor').innerText = dadosItem.fornecedor;
@@ -2360,8 +2332,7 @@
         document.getElementById('raioValorUnit').innerText = dadosItem.valorUnit;
         document.getElementById('raioQtd').innerText = dadosItem.quantidade + ' un';
         document.getElementById('raioValorTotal').innerText = dadosItem.valorTotal;
-
-        // Avalia dinamicamente o status do estoque com base na quantidade
+ 
         const qtdNum = parseInt(dadosItem.quantidade.replace(/\D/g, '')) || 0;
         const statusEl = document.getElementById('raioStatusEstoque');
         if (qtdNum === 0) {
@@ -2371,58 +2342,56 @@
         } else {
             statusEl.innerHTML = '<span style="color: #059669; font-weight: 700;">🟢 Saudável / Em Conformidade</span>';
         }
-
-        // Exibe o painel de forma suave
+ 
         painel.style.display = 'block';
         painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-
+ 
     function fecharPainelAnalise() {
         document.getElementById('painelAnaliseItem').style.display = 'none';
     }
-
-        // Função para filtrar dinamicamente a tabela de estoque (Suporta qualquer sub-aba ativa)
-        function filtrarTabelaEstoque(termo) {
-            const filtro = termo ? termo.toLowerCase() : '';
-            // Procura as linhas da tabela dentro da sub-aba de estoque de forma ampla
-            const containerEstoque = document.getElementById('abrasivos-subtab-estoque') || document;
-            const linhas = containerEstoque.querySelectorAll('table tbody tr');
-
-            linhas.forEach(linha => {
-                const textoLinha = linha.innerText.toLowerCase();
-                if (textoLinha.includes(filtro)) {
-                    linha.style.display = '';
-                } else {
-                    linha.style.display = 'none';
-                }
-            });
-        }
-
-        // Função para carregar as ocorrências reais direto do Supabase
+ 
+    // Função para filtrar dinamicamente a tabela de estoque
+    function filtrarTabelaEstoque(termo) {
+        const filtro = termo ? termo.toLowerCase() : '';
+        const containerEstoque = document.getElementById('abrasivos-subtab-estoque') || document;
+        const linhas = containerEstoque.querySelectorAll('table tbody tr');
+ 
+        linhas.forEach(linha => {
+            const textoLinha = linha.innerText.toLowerCase();
+            if (textoLinha.includes(filtro)) {
+                linha.style.display = '';
+            } else {
+                linha.style.display = 'none';
+            }
+        });
+    }
+ 
+    // Função para carregar as ocorrências reais direto do Supabase
     async function carregarOcorrenciasDoSupabase() {
-        const tbody = document.getElementById('tabelaOcorrenciasBody'); // Certifique-se de dar esse ID no <tbody> da sua tabela de ocorrências
+        const tbody = document.getElementById('tabelaOcorrenciasBody');
         if (!tbody) return;
-
+ 
         try {
             tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Carregando ocorrências do banco de dados...</td></tr>';
-
+ 
             const { data, error } = await supabaseClient
                 .from('ocorrencias_abrasivos')
                 .select('*')
-                .order('created_at', { ascending: false }); // Ordena pelas mais recentes
-
+                .order('created_at', { ascending: false });
+ 
             if (error) throw error;
-
+ 
             tbody.innerHTML = '';
-
+ 
             if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Nenhuma ocorrência registrada até o momento.</td></tr>';
                 return;
             }
-
+ 
             data.forEach((item) => {
                 const badgeCor = item.status === 'Resolvido' ? 'background: #dcfce7; color: #166534;' : 'background: #fee2e2; color: #991b1b;';
-                
+ 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${item.data || '—'}</td>
@@ -2442,11 +2411,82 @@
                 `;
                 tbody.appendChild(tr);
             });
-
+ 
         } catch (err) {
             console.error('Erro ao buscar ocorrências:', err.message);
             tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px; color: #dc2626;">Erro ao carregar dados: ${err.message}</td></tr>`;
         }
+    }
+ 
+    // =========================================================
+    // ITEM 1 (NOVO): UPLOAD E LEITURA DE PLANILHAS (.xlsx / .csv)
+    // =========================================================
+    let dadosPlanilha = { nomeArquivo: '', abas: {} };
+ 
+    function handleFileDrop(event) {
+        event.preventDefault();
+        event.currentTarget.style.backgroundColor = '';
+        const file = event.dataTransfer.files[0];
+        if (file) processarArquivo(file);
+    }
+ 
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) processarArquivo(file);
+        event.target.value = '';
+    }
+ 
+    function processarArquivo(file) {
+        const status = document.getElementById('file-status');
+        const extensao = file.name.split('.').pop().toLowerCase();
+ 
+        if (!['xlsx', 'xls', 'csv'].includes(extensao)) {
+            status.style.color = '#dc2626';
+            status.innerText = '❌ Formato não suportado. Use .xlsx, .xls ou .csv';
+            return;
+        }
+ 
+        status.style.color = '#004173';
+        status.innerText = '⏳ Lendo ' + file.name + '...';
+ 
+        const reader = new FileReader();
+ 
+        reader.onload = function (e) {
+            try {
+                const workbook = extensao === 'csv'
+                    ? XLSX.read(e.target.result, { type: 'string' })
+                    : XLSX.read(e.target.result, { type: 'array' });
+ 
+                const abas = {};
+                let totalLinhas = 0;
+ 
+                workbook.SheetNames.forEach(nome => {
+                    const linhas = XLSX.utils.sheet_to_json(workbook.Sheets[nome], { defval: '' });
+                    abas[nome] = linhas;
+                    totalLinhas += linhas.length;
+                });
+ 
+                dadosPlanilha = { nomeArquivo: file.name, abas };
+                console.log('Planilha carregada:', dadosPlanilha);
+ 
+                status.innerText = `✅ ${file.name} carregado: ${workbook.SheetNames.length} aba(s), ${totalLinhas} linha(s).`;
+ 
+                // Próximo passo: aplicarDadosPlanilha(dadosPlanilha);
+ 
+            } catch (err) {
+                console.error(err);
+                status.style.color = '#dc2626';
+                status.innerText = '❌ Erro ao ler o arquivo: ' + err.message;
+            }
+        };
+ 
+        reader.onerror = () => {
+            status.style.color = '#dc2626';
+            status.innerText = '❌ Não foi possível abrir o arquivo.';
+        };
+ 
+        if (extensao === 'csv') reader.readAsText(file, 'UTF-8');
+        else reader.readAsArrayBuffer(file);
     }
     </script>
 </body>
