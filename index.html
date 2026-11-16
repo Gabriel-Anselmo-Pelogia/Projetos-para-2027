@@ -1438,45 +1438,51 @@
                     </div>
                 
                     <!-- 3. PAINEL DE ANÁLISE DETALHADA DO ITEM SELECIONADO (RAIO-X) -->
-                    <div id="painelAnaliseItem" style="display: none; background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                    <div id="painelAnaliseItem" style="display: none; background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-top: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 16px;">
                             <div>
                                 <span style="font-size: 0.7rem; font-weight: 700; color: #0cb7f2; text-transform: uppercase; letter-spacing: 0.5px;">Raio-X do Item Selecionado</span>
-                                <h3 id="tituloAnaliseItem" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Código Eaton — Análise Detalhada</h3>
+                                <h3 id="raioTituloCodigo" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Código Eaton — Análise Detalhada</h3>
                             </div>
                             <button onclick="fecharPainelAnalise()" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
                         </div>
                 
+                        <!-- Descrição Destacada -->
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Descrição Técnica do Item</div>
+                            <div id="raioDescricao" style="font-size: 0.95rem; font-weight: 600; color: #004173;">—</div>
+                        </div>
+                
                         <!-- Grid com os 3 Blocos de Análise -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px;">
                             
-                            <!-- BLOCO 1: HISTÓRICO DE CONSUMO -->
+                            <!-- BLOCO 1: SALDO E VALORES -->
                             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📊 Histórico & Consumo</div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📦 Saldo & Custos</div>
                                 <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                    <div>• <strong>Status do Saldo:</strong> Em conformidade</div>
-                                    <div>• <strong>Linha de Aplicação:</strong> Produção / Retífica</div>
-                                    <div>• <strong>Giro Recente:</strong> Monitorado via ERP</div>
+                                    <div>• <strong>Quantidade em Estoque:</strong> <span id="raioQtd" style="font-weight: 700; color: #004173;">—</span></div>
+                                    <div>• <strong>Valor Unitário:</strong> <span id="raioValorUnit" style="font-weight: 700;">—</span></div>
+                                    <div>• <strong>Valor Total Imobilizado:</strong> <span id="raioValorTotal" style="font-weight: 700; color: #0979b0;">—</span></div>
                                 </div>
                             </div>
                 
-                            <!-- BLOCO 2: REPOSIÇÃO E CUSTO -->
+                            <!-- BLOCO 2: REPOSIÇÃO E FORNECEDOR -->
                             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Reposição & Lead Time</div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Fornecedor & Lead Time</div>
                                 <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                    <div>• <strong>Fornecedor:</strong> Alcar (60d) / Norton (70d) / Wurth (15d)</div>
-                                    <div>• <strong>Lead Time Vinculado:</strong> Conforme cadastro</div>
-                                    <div>• <strong>Controle de Custo:</strong> Unidade rigorosa</div>
+                                    <div>• <strong>Fornecedor Homologado:</strong> <span id="raioFornecedor" style="font-weight: 700;">—</span></div>
+                                    <div>• <strong>Prazo de Entrega:</strong> <span id="raioLeadTime" style="font-weight: 700; color: #059669;">—</span></div>
+                                    <div>• <strong>Canal de Suprimentos:</strong> Contrato Ativo</div>
                                 </div>
                             </div>
                 
-                            <!-- BLOCO 3: INDICADORES E SALDO -->
+                            <!-- BLOCO 3: STATUS OPERACIONAL -->
                             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status de Permanência</div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status Operacional</div>
                                 <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Condição do Saldo:</strong> <span id="raioStatusEstoque">—</span></div>
                                     <div>• <strong>Auditoria Física:</strong> Conferido em Almoxarifado</div>
-                                    <div>• <strong>Classificação:</strong> Crítico / Operacional</div>
-                                    <div>• <strong>Alerta de Reposição:</strong> Automático</div>
+                                    <div>• <strong>Reposição Automática:</strong> Habilitada</div>
                                 </div>
                             </div>
                 
@@ -1484,9 +1490,9 @@
                 
                         <!-- Botões de Ação Rápida -->
                         <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-                            <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📄 Ver Ficha Técnica</button>
-                            <button style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📊 Histórico Completo</button>
-                            <button style="background: #004173; border: none; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">🛒 Solicitar Reposição</button>
+                            <button onclick="alert('Gerando ficha técnica do item selecionado...')" style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📄 Ver Ficha Técnica</button>
+                            <button onclick="alert('Consultando histórico de requisições no ERP...')" style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📊 Histórico Completo</button>
+                            <button onclick="alert('Solicitação de reposição enviada ao setor de compras.')" style="background: #004173; border: none; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">🛒 Solicitar Reposição</button>
                         </div>
                     </div>
                 
