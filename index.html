@@ -2329,21 +2329,57 @@
             document.getElementById('painelAnaliseItem').style.display = 'none';
         }
 
-        // Função para filtrar dinamicamente a tabela de estoque
-        function filtrarTabelaEstoque(termo) {
-            const filtro = termo.toLowerCase();
-            const linhas = document.querySelectorAll('#abrasivos-subtab-estoque .table-req tbody tr');
+        // Função para capturar os dados da tabela e exibir o Raio-X dinâmico
+    function togglePainelAnalise(codigoItem) {
+        const painel = document.getElementById('painelAnaliseItem');
+        const linhas = document.querySelectorAll('#abrasivos-subtab-estoque .table-req tbody tr');
+        let dadosItem = null;
 
-            linhas.forEach(linha => {
-                const textoLinha = linha.innerText.toLowerCase();
-                // Se o texto da linha incluir o que foi digitado, exibe; senão, oculta
-                if (textoLinha.includes(filtro)) {
-                    linha.style.display = '';
-                } else {
-                    linha.style.display = 'none';
-                }
-            });
+        linhas.forEach(linha => {
+            const cols = linha.querySelectorAll('td');
+            if (cols.length > 0 && cols[0].innerText.trim() === String(codigoItem)) {
+                dadosItem = {
+                    codigo: cols[0].innerText.trim(),
+                    fornecedor: cols[1].innerText.trim(),
+                    descricao: cols[2].innerText.trim(),
+                    valorUnit: cols[3].innerText.trim(),
+                    quantidade: cols[4].innerText.trim(),
+                    valorTotal: cols[5].innerText.trim(),
+                    leadTime: cols[6].innerText.trim()
+                };
+            }
+        });
+
+        if (!dadosItem) return;
+
+        // Preenche os campos do painel com os dados extraídos
+        document.getElementById('raioTituloCodigo').innerText = `Código Eaton: ${dadosItem.codigo} — Análise Detalhada`;
+        document.getElementById('raioDescricao').innerText = dadosItem.descricao;
+        document.getElementById('raioFornecedor').innerText = dadosItem.fornecedor;
+        document.getElementById('raioLeadTime').innerText = dadosItem.leadTime;
+        document.getElementById('raioValorUnit').innerText = dadosItem.valorUnit;
+        document.getElementById('raioQtd').innerText = dadosItem.quantidade + ' un';
+        document.getElementById('raioValorTotal').innerText = dadosItem.valorTotal;
+
+        // Avalia dinamicamente o status do estoque com base na quantidade
+        const qtdNum = parseInt(dadosItem.quantidade.replace(/\D/g, '')) || 0;
+        const statusEl = document.getElementById('raioStatusEstoque');
+        if (qtdNum === 0) {
+            statusEl.innerHTML = '<span style="color: #dc2626; font-weight: 700;">🔴 Crítico / Zerado (Requer Reposição)</span>';
+        } else if (qtdNum <= 5) {
+            statusEl.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Baixo Estoque (Atenção)</span>';
+        } else {
+            statusEl.innerHTML = '<span style="color: #059669; font-weight: 700;">🟢 Saudável / Em Conformidade</span>';
         }
+
+        // Exibe o painel de forma suave
+        painel.style.display = 'block';
+        painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function fecharPainelAnalise() {
+        document.getElementById('painelAnaliseItem').style.display = 'none';
+    }
     </script>
 </body>
 </html>
