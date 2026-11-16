@@ -2380,6 +2380,23 @@
     function fecharPainelAnalise() {
         document.getElementById('painelAnaliseItem').style.display = 'none';
     }
+
+        // Função para filtrar dinamicamente a tabela de estoque (Suporta qualquer sub-aba ativa)
+        function filtrarTabelaEstoque(termo) {
+            const filtro = termo ? termo.toLowerCase() : '';
+            // Procura as linhas da tabela dentro da sub-aba de estoque de forma ampla
+            const containerEstoque = document.getElementById('abrasivos-subtab-estoque') || document;
+            const linhas = containerEstoque.querySelectorAll('table tbody tr');
+
+            linhas.forEach(linha => {
+                const textoLinha = linha.innerText.toLowerCase();
+                if (textoLinha.includes(filtro)) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
 </html>
