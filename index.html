@@ -761,6 +761,22 @@
                         </div>
                         <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                             <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 700; color: #004173;">CJ 01:</label>
+                                <select id="filtroCJ01" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #0cb7f2; border-radius: 6px; background: #f0f9ff; color: #004173; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+                                    <option value="real" selected>Real</option>
+                                    <option value="sem_ocorrencias">Sem Ocorrências</option>
+                                    <option value="projetado">Projetado</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 700; color: #0979b0;">CJ 02:</label>
+                                <select id="filtroCJ02" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #004173; border-radius: 6px; background: #f8fafc; color: #004173; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+                                    <option value="real">Real</option>
+                                    <option value="sem_ocorrencias">Sem Ocorrências</option>
+                                    <option value="projetado" selected>Projetado</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
                                 <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
                                 <select id="filtroAno" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
                                     <option value="2026">2026</option>
@@ -1856,52 +1872,78 @@
     document.addEventListener("DOMContentLoaded", function () {
         
         // --- 1. GRÁFICO PRINCIPAL DE CP ---
+        // --- 1. GRÁFICO PRINCIPAL DE CP (COMPARATIVO CJ 01 vs CJ 02 SEM 'OUTROS') ---
         const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
         const labelsLinhas = [
             'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
             'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
             'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
-            'BV - MOD 1', 'BV - MOD 2', 'OUTROS', 'MÉDIA FÁBRICA'
+            'BV - MOD 1', 'BV - MOD 2', 'MÉDIA FÁBRICA'
         ];
-        const dadosIniciais = [
+
+        const dadosIniciaisCJ01 = [
             0.450, 0.520, 0.480, 0.610, 0.750, 
             0.420, 0.500, 0.550, 0.820, 0.490, 
             0.460, 0.530, 0.440, 0.410, 0.580, 
-            0.650, 0.680, 0.350, 0.539
+            0.650, 0.680, 0.550
+        ];
+
+        const dadosIniciaisCJ02 = [
+            0.420, 0.490, 0.450, 0.570, 0.690, 
+            0.400, 0.470, 0.510, 0.740, 0.460, 
+            0.430, 0.495, 0.415, 0.390, 0.540, 
+            0.600, 0.630, 0.511
         ];
 
         meuGraficoCP = new Chart(ctxLinha, {
             type: 'bar',
             data: {
                 labels: labelsLinhas,
-                datasets: [{
-                    label: 'CP (Custo x Peça)',
-                    data: dadosIniciais,
-                    backgroundColor: function(context) {
-                        const index = context.dataIndex;
-                        const dataset = context.dataset.data;
-                        if (index === dataset.length - 1) return '#059669'; 
-                        const apenasLinhas = dataset.slice(0, dataset.length - 1);
-                        const maiorValor = Math.max(...apenasLinhas);
-                        if (dataset[index] === maiorValor) return '#dc2626'; 
-                        return '#0cb7f2'; 
+                datasets: [
+                    {
+                        label: 'CJ 01: Real',
+                        data: dadosIniciaisCJ01,
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            const dataset = context.dataset.data;
+                            if (index === dataset.length - 1) return '#059669';
+                            const apenasLinhas = dataset.slice(0, dataset.length - 1);
+                            const maiorValor = Math.max(...apenasLinhas);
+                            if (dataset[index] === maiorValor) return '#dc2626';
+                            return '#0cb7f2';
+                        },
+                        borderRadius: 4,
+                        borderSkipped: false
                     },
-                    borderRadius: 6,
-                    borderSkipped: false
-                }]
+                    {
+                        label: 'CJ 02: Projetado',
+                        data: dadosIniciaisCJ02,
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            const dataset = context.dataset.data;
+                            if (index === dataset.length - 1) return '#047857';
+                            return '#004173';
+                        },
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
+                    legend: { 
+                        display: true,
+                        position: 'top',
+                        labels: { usePointStyle: true, font: { size: 11, weight: '600' } }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                const label = context.chart.data.labels[context.dataIndex];
-                                const valor = context.parsed.y.toFixed(3);
-                                if (label === 'MÉDIA FÁBRICA') return ' Média Geral da Fábrica: R$ ' + valor + ' / pç';
-                                return ' CP (' + label + '): R$ ' + valor + ' / pç';
+                                const serie = context.dataset.label;
+                                const valor = context.parsed.y.toFixed(3).replace('.', ',');
+                                return ` ${serie}: R$ ${valor} / pç`;
                             }
                         }
                     }
@@ -1910,7 +1952,7 @@
                     y: {
                         beginAtZero: true,
                         grid: { color: '#f1f5f9' },
-                        ticks: { callback: function(value) { return 'R$ ' + value.toFixed(3); } }
+                        ticks: { callback: function(value) { return 'R$ ' + value.toFixed(3).replace('.', ','); } }
                     },
                     x: { grid: { display: false }, ticks: { font: { size: 8 } } }
                 }
@@ -2137,24 +2179,49 @@
     }
 
     // Funções de atualização dinâmica dos filtros
+    // Funções de atualização dinâmica dos filtros (CJ 01 vs CJ 02)
     function atualizarDadosGrafico() {
         const ano = document.getElementById('filtroAno').value;
         const periodo = document.getElementById('filtroPeriodo').value;
-        let fator = 1.0;
-        if (periodo !== 'media') fator = 0.85 + (Math.abs(periodo.charCodeAt(0)) % 30) / 100;
-        if (ano === '2025') fator *= 0.92;
-        if (ano === '2027') fator *= 1.08;
+        const cenario1 = document.getElementById('filtroCJ01').value;
+        const cenario2 = document.getElementById('filtroCJ02').value;
 
-        const baseValores = [
+        let fatorTempo = 1.0;
+        if (periodo !== 'media') fatorTempo = 0.85 + (Math.abs(periodo.charCodeAt(0)) % 30) / 100;
+        if (ano === '2025') fatorTempo *= 0.92;
+        if (ano === '2027') fatorTempo *= 1.08;
+
+        // 17 linhas ativas (sem 'OUTROS')
+        const baseReal = [
             0.450, 0.520, 0.480, 0.610, 0.750, 
             0.420, 0.500, 0.550, 0.820, 0.490, 
             0.460, 0.530, 0.440, 0.410, 0.580, 
-            0.650, 0.680, 0.350
-        ].map(val => Number((val * fator).toFixed(3)));
+            0.650, 0.680
+        ];
 
-        const soma = baseValores.reduce((acc, curr) => acc + curr, 0);
-        const mediaGeral = Number((soma / baseValores.length).toFixed(3));
-        meuGraficoCP.data.datasets[0].data = [...baseValores, mediaGeral];
+        const nomesCenarios = {
+            real: 'Real',
+            sem_ocorrencias: 'Sem Ocorrências',
+            projetado: 'Projetado'
+        };
+
+        function calcularSerieCenario(tipoCenario) {
+            let multCenario = 1.0;
+            if (tipoCenario === 'sem_ocorrencias') multCenario = 0.94; // Desconta impacto médio das ocorrências
+            if (tipoCenario === 'projetado') multCenario = 0.90;       // Meta / Projeção otimizada
+
+            const valoresLinhas = baseReal.map(val => Number((val * fatorTempo * multCenario).toFixed(3)));
+            const soma = valoresLinhas.reduce((acc, curr) => acc + curr, 0);
+            const mediaFabrica = Number((soma / valoresLinhas.length).toFixed(3));
+            return [...valoresLinhas, mediaFabrica];
+        }
+
+        meuGraficoCP.data.datasets[0].label = 'CJ 01: ' + nomesCenarios[cenario1];
+        meuGraficoCP.data.datasets[0].data = calcularSerieCenario(cenario1);
+
+        meuGraficoCP.data.datasets[1].label = 'CJ 02: ' + nomesCenarios[cenario2];
+        meuGraficoCP.data.datasets[1].data = calcularSerieCenario(cenario2);
+
         meuGraficoCP.update();
     }
 
