@@ -3,505 +3,2325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToolManager - Gestão Industrial de Abrasivos</title>
-    <!-- Supabase JS Client -->
+    <title>Controle de Performance | Gestão de Ferramental</title>
+    <!-- Google Fonts: Inter -->
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase JS Client via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- DEPENDÊNCIA DO CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: #f4f6f9;
-            color: #334155;
+            background-color: #004173;
+            color: #c9d1d9;
+            min-height: 100vh;
             display: flex;
-            height: 100vh;
-            overflow: hidden;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Menu Lateral Fixo */
-        aside {
-            width: 260px;
+        /* =========================================================
+           TELA DE LOGIN / REGISTRO
+           ========================================================= */
+        .login-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
             background-color: #004173;
-            color: #ffffff;
+        }
+
+        .login-form-side {
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            flex-shrink: 0;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+            padding: 40px 60px;
+            background: linear-gradient(135deg, #004173 0%, #0979b0 100%);
+            z-index: 10;
+            color: #ffffff;
+            overflow-y: auto;
         }
 
-        .sidebar-header {
-            padding: 24px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .sidebar-header h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .back-btn {
+            background: none;
+            border: none;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+
+        .back-btn:hover {
             color: #0cb7f2;
         }
 
-        .sidebar-header p {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 4px;
+        .form-content {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
         }
 
-        .sidebar-nav {
-            padding: 20px 0;
+        .brand-logo-container {
+            margin-bottom: 24px;
             display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex-grow: 1;
+            align-items: center;
         }
 
-        .nav-item {
-            padding: 12px 24px;
-            color: #cbd5e1;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border-left: 4px solid transparent;
+        .brand-logo {
+            max-height: 52px;
+            width: auto;
+            object-fit: contain;
         }
 
-        .nav-item:hover, .nav-item.active {
-            background-color: rgba(255, 255, 255, 0.08);
+        .form-content h1 {
+            font-size: 1.8rem;
             color: #ffffff;
-            border-left-color: #0cb7f2;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        .sidebar-footer {
-            padding: 16px 20px;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        .form-content p {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            margin-bottom: 32px;
         }
 
-        /* Conteúdo Principal Dinâmico */
-        main {
-            flex-grow: 1;
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
             display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            background-color: #f8fafc;
+            align-items: center;
         }
 
-        header.main-header {
+        .input-wrapper span {
+            position: absolute;
+            left: 14px;
+            color: #64748b;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
             background-color: #ffffff;
-            padding: 20px 32px;
-            border-bottom: 1px solid #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            color: #1e293b;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #0cb7f2;
+            box-shadow: 0 0 0 3px rgba(12, 183, 242, 0.25);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
         }
 
-        header.main-header h1 {
-            font-size: 1.35rem;
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #f8fafc;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: #0cb7f2;
+        }
+
+        .forgot-pass {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .forgot-pass:hover {
+            color: #0cb7f2;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #0cb7f2;
             color: #004173;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-submit:hover {
+            background-color: #38bdf8;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .form-footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .form-footer a {
+            color: #ffffff;
+            text-decoration: underline;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .message-box {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .message-box.success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #4ade80;
+        }
+
+        .login-banner-side {
+            flex: 1.2;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-left: 1px solid #e2e8f0;
+        }
+
+        .banner-content {
+            text-align: center;
+            padding: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .banner-illustration {
+            max-width: 650px;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        /* =========================================================
+           PAINEL DASHBOARD
+           ========================================================= */
+        .dash-layout {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f8fafc;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 260px;
+            min-width: 260px;
+            height: 100vh;
+            background-color: #004173;
+            border-right: 1px solid #0979b0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 16px;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(0);
+        }
+
+        .sidebar-brand {
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #0979b0;
+            display: flex;
+            align-items: center;
+            padding-left: 4px;
+        }
+
+        .menu-toggle-btn {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #004173;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .menu-toggle-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            background-color: #0979b0;
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background-color: #0cb7f2;
+            color: #004173;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #0979b0;
+            padding-top: 12px;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+            margin-right: -260px;
+        }
+
+        .main-content {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 40px;
+            background-color: #f8fafc;
+            transition: margin 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+
+        .dash-title h2 {
+            color: #004173;
+            font-size: 1.6rem;
             font-weight: 700;
         }
 
-        .user-greeting {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #004173;
-            background: #e0f2fe;
-            padding: 6px 14px;
-            border-radius: 20px;
-        }
-
-        .content-body {
-            padding: 32px;
-            flex-grow: 1;
-        }
-
-        /* Sub-abas e Abas */
-        .subtab-container {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 12px;
-        }
-
-        .subtab-btn {
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
+        .dash-title p {
             color: #64748b;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
+            font-size: 0.9rem;
         }
 
-        .subtab-btn.active {
-            background: #004173;
+        .btn-logout {
+            background-color: #004173;
+            border: none;
             color: #ffffff;
-            border-color: #004173;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: background 0.2s;
         }
 
-        /* Tabelas */
-        .table-req-container {
-            background: #ffffff;
+        .btn-logout:hover {
+            background-color: #0979b0;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-            overflow-x: auto;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        table.table-req {
+        .top-nav-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .top-tab {
+            padding: 10px 20px;
+            border: none;
+            background-color: transparent;
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .top-tab:hover {
+            background-color: #f1f5f9;
+            color: #004173;
+        }
+
+        .top-tab.active {
+            background-color: #004173;
+            color: #ffffff;
+        }
+
+        .upload-card {
+            background-color: #ffffff;
+            border: 2px dashed #004173;
+            border-radius: 12px;
+            padding: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .upload-card:hover {
+            background-color: #f0f9ff;
+            border-color: #0979b0;
+        }
+
+        .upload-card h3 {
+            color: #004173;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .upload-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .section-placeholder {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .section-placeholder h3 {
+            color: #004173;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        /* Estilização para a Tabela de Requisições */
+        .table-req-container {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+        .table-req {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
         }
-
-        table.table-req th {
-            background-color: #f8fafc;
+        .table-req th {
+            background-color: #f1f5f9;
             color: #004173;
-            padding: 12px;
-            border-bottom: 2px solid #e2e8f0;
             font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
+            padding: 10px 12px;
+            border-bottom: 2px solid #cbd5e1;
+            white-space: nowrap;
         }
-
-        table.table-req td {
-            padding: 12px;
-            border-bottom: 1px solid #f1f5f9;
+        .table-req td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
             color: #334155;
+            white-space: nowrap;
         }
-
-        table.table-req tbody tr:hover {
+        .table-req tbody tr:hover {
             background-color: #f8fafc;
         }
 
-        /* Formulários e Inputs */
-        input[type="text"], input[type="number"], select {
-            padding: 8px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border 0.2s;
-        }
-
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            border-color: #0cb7f2;
-            box-shadow: 0 0 0 3px rgba(12, 183, 242, 0.1);
-        }
-
-        /* Modal Simples */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-card {
-            background: #ffffff;
-            padding: 24px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        @media(max-width: 900px) {
+            .login-banner-side {
+                display: none;
+            }
+            .sidebar {
+                position: absolute;
+                height: 100vh;
+            }
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+                margin-right: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Menu Lateral Fixo -->
-    <aside>
-        <div>
-            <div class="sidebar-header">
-                <h2>ToolManager</h2>
-                <p>Controle Industrial de Abrasivos</p>
+    <!-- TELA DE LOGIN / REGISTRO -->
+    <div id="login-view" class="login-container">
+        <div class="login-form-side">
+            <div class="form-header">
+                <button class="back-btn">← Voltar</button>
             </div>
-            <nav class="sidebar-nav">
-                <a class="nav-item active" onclick="switchMainTab('performance', this)">Performance</a>
-                <a class="nav-item" onclick="switchMainTab('estoque', this)">Estoque & Raio-X</a>
-                <a class="nav-item" onclick="switchMainTab('ocorrencias', this)">Ocorrências</a>
-            </nav>
-        </div>
-        <div class="sidebar-footer">
-            Eaton Indústria • Versão 2.6
-        </div>
-    </aside>
-
-    <!-- Conteúdo Principal -->
-    <main>
-        <header class="main-header">
-            <h1 id="pageTitle">Painel de Performance</h1>
-            <div class="user-greeting">Seja bem vindo, Gabriel!</div>
-        </header>
-
-        <div class="content-body">
-
-            <!-- MÓDULO 1: PERFORMANCE -->
-            <div id="module-performance" class="module-content">
-                <div class="subtab-container">
-                    <button class="subtab-btn active" onclick="switchPerfFilter('Real', this)">Real</button>
-                    <button class="subtab-btn" onclick="switchPerfFilter('Sem Ocorrências', this)">Sem Ocorrências</button>
-                    <button class="subtab-btn" onclick="switchPerfFilter('Projetado', this)">Projetado</button>
-                </div>
-                <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0;">
-                    <h3 style="color: #004173; margin-bottom: 12px;">Análise Comparativa (CJ 01 vs CJ 02)</h3>
-                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 16px;">Métricas consolidadas com formatação padrão (R$ 0,000).</p>
-                    <div id="perfContentDisplay" style="font-weight: 600; color: #0979b0;">Visualizando dados para o filtro: Real</div>
-                </div>
-            </div>
-
-            <!-- MÓDULO 2: ESTOQUE -->
-            <div id="module-estoque" class="module-content" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3 style="color: #004173;">Consulta de Estoque & Raio-X</h3>
-                    <input type="text" placeholder="Filtrar estoque por código, descrição..." oninput="filtrarTabelaEstoque(this.value)" style="width: 320px;">
+            
+            <div class="form-content">
+                <div class="brand-logo-container">
+                    <img src="logo.png" alt="Logotipo" class="brand-logo">
                 </div>
 
-                <div class="table-req-container">
-                    <table class="table-req" id="tabelaEstoqueElement">
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th>Fornecedor</th>
-                                <th>Descrição</th>
-                                <th>Valor Unit.</th>
-                                <th>Qtd</th>
-                                <th>Valor Total</th>
-                                <th>Lead Time</th>
-                                <th>Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>609.6</td>
-                                <td>Alcar</td>
-                                <td>Rebolo Reto 609.6 X 17.5 X 203.2</td>
-                                <td>R$ 145,200</td>
-                                <td>4 un</td>
-                                <td>R$ 580,800</td>
-                                <td>15 dias</td>
-                                <td><button onclick="togglePainelAnalise('609.6')" style="padding: 4px 10px; background: #0cb7f2; border: none; border-radius: 4px; font-weight: 700; color: #004173; cursor: pointer;">[...]</button></td>
-                            </tr>
-                            <tr>
-                                <td>100.1</td>
-                                <td>Norton</td>
-                                <td>Rebolo Cilíndrico 2SA/AA 100.1 R5V200</td>
-                                <td>R$ 89,500</td>
-                                <td>0 un</td>
-                                <td>R$ 0,000</td>
-                                <td>20 dias</td>
-                                <td><button onclick="togglePainelAnalise('100.1')" style="padding: 4px 10px; background: #0cb7f2; border: none; border-radius: 4px; font-weight: 700; color: #004173; cursor: pointer;">[...]</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <h1 id="form-title">Seja bem Vindo!</h1>
+                <p id="form-subtitle">Por favor, prossiga com o login para continuar</p>
 
-                <!-- PAINEL DE ANÁLISE DETALHADA DO ITEM SELECIONADO (RAIO-X) -->
-                <div id="painelAnaliseItem" style="display: none; background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-top: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 16px;">
-                        <div>
-                            <span style="font-size: 0.7rem; font-weight: 700; color: #0cb7f2; text-transform: uppercase; letter-spacing: 0.5px;">Raio-X do Item Selecionado</span>
-                            <h3 id="raioTituloCodigo" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Código Eaton — Análise Detalhada</h3>
-                        </div>
-                        <button onclick="fecharPainelAnalise()" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
-                    </div>
+                <div id="message-box" class="message-box"></div>
 
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
-                        <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Descrição Técnica do Item</div>
-                        <div id="raioDescricao" style="font-size: 0.95rem; font-weight: 600; color: #004173;">—</div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px;">
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📦 Saldo & Custos</div>
-                            <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                <div>• <strong>Quantidade em Estoque:</strong> <span id="raioQtd" style="font-weight: 700; color: #004173;">—</span></div>
-                                <div>• <strong>Valor Unitário:</strong> <span id="raioValorUnit" style="font-weight: 700;">—</span></div>
-                                <div>• <strong>Valor Total Imobilizado:</strong> <span id="raioValorTotal" style="font-weight: 700; color: #0979b0;">—</span></div>
+                <form id="authForm" onsubmit="handleAuth(event)">
+                    <div id="name-fields" style="display: none;">
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Nome</label>
+                                <div class="input-wrapper">
+                                    <span>👤</span>
+                                    <input type="text" id="first-name" placeholder="Gabriel">
+                                </div>
                             </div>
-                        </div>
-
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Fornecedor & Lead Time</div>
-                            <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                <div>• <strong>Fornecedor Homologado:</strong> <span id="raioFornecedor" style="font-weight: 700;">—</span></div>
-                                <div>• <strong>Prazo de Entrega:</strong> <span id="raioLeadTime" style="font-weight: 700; color: #059669;">—</span></div>
-                                <div>• <strong>Canal de Suprimentos:</strong> Contrato Ativo</div>
-                            </div>
-                        </div>
-
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status Operacional</div>
-                            <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                                <div>• <strong>Condição do Saldo:</strong> <span id="raioStatusEstoque">—</span></div>
-                                <div>• <strong>Auditoria Física:</strong> Conferido em Almoxarifado</div>
-                                <div>• <strong>Reposição Automática:</strong> Habilitada</div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Sobrenome</label>
+                                <div class="input-wrapper">
+                                    <span>👤</span>
+                                    <input type="text" id="last-name" placeholder="Pelogia">
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="input-group">
+                        <label>Email</label>
+                        <div class="input-wrapper">
+                            <span>✉</span>
+                            <input type="email" id="email" placeholder="exemplo@industrial.com" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <div class="input-wrapper">
+                            <span>🔒</span>
+                            <input type="password" id="password" placeholder="••••••••" required minlength="6">
+                        </div>
+                    </div>
+
+                    <div class="form-actions" id="login-options">
+                        <label class="remember-me">
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="#" class="forgot-pass">Forgot Password</a>
+                    </div>
+
+                    <button type="submit" id="btn-submit" class="btn-submit">Login</button>
+                </form>
+
+                <div class="form-footer" style="margin-top: 24px;">
+                    <span id="footer-text">Not a member?</span> 
+                    <a id="toggle-mode-btn" onclick="toggleAuthMode()">Register Now</a>
                 </div>
             </div>
 
-            <!-- MÓDULO 3: OCORRÊNCIAS -->
-            <div id="module-ocorrencias" class="module-content" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3 style="color: #004173;">Registro de Ocorrências (Supabase)</h3>
-                    <button onclick="document.getElementById('modalCadastroOcorrencia').style.display='flex'" style="background: #0cb7f2; color: #004173; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; cursor: pointer;">+ Nova Ocorrência</button>
-                </div>
-
-                <div class="table-req-container">
-                    <table class="table-req">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Código</th>
-                                <th>Descrição</th>
-                                <th>Fornecedor</th>
-                                <th>Valor Unit.</th>
-                                <th>Qtd</th>
-                                <th>Valor Total</th>
-                                <th>Linha</th>
-                                <th>Operação</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaOcorrenciasBody">
-                            <tr>
-                                <td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Clique na aba Ocorrências para carregar os dados do banco.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+            <div></div>
         </div>
-    </main>
 
-    <!-- Modal de Cadastro de Ocorrência -->
-    <div id="modalCadastroOcorrencia" class="modal-overlay">
-        <div class="modal-card">
-            <h3 style="color: #004173; margin-bottom: 16px;">Nova Ocorrência de Abrasivos</h3>
-            <form id="formOcorrencia" onsubmit="salvarNovaOcorrencia(event)" style="display: flex; flex-direction: column; gap: 12px;">
-                <input type="text" id="inputCodigoItem" placeholder="Código do Item (Ex: 609.6)" required>
-                <input type="text" id="inputDescricao" placeholder="Descrição Técnica" required>
-                <input type="text" id="inputFornecedor" placeholder="Fornecedor" required>
-                <input type="number" step="0.001" id="inputValorUnitario" placeholder="Valor Unitário" required>
-                <input type="number" id="inputQuantidade" placeholder="Quantidade" required>
-                <input type="number" step="0.001" id="inputValorTotal" placeholder="Valor Total" required>
-                <input type="text" id="inputLinhaProducao" placeholder="Linha de Produção (Ex: Martensítico)" required>
-                <input type="text" id="inputOperacao" placeholder="Operação" required>
-                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
-                    <button type="button" onclick="document.getElementById('modalCadastroOcorrencia').style.display='none'" style="padding: 8px 14px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;">Cancelar</button>
-                    <button type="submit" style="padding: 8px 16px; background: #004173; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Salvar Ocorrência</button>
-                </div>
-            </form>
+        <div class="login-banner-side">
+            <div class="banner-content">
+                <img src="login.gif" alt="Animação de Login" class="banner-illustration">
+            </div>
         </div>
     </div>
 
-    <!-- Script de Integração e Lógica -->
+    <!-- PAINEL DASHBOARD -->
+    <div id="dashboard-view" class="dash-layout">
+        <!-- Menu Lateral Limpo -->
+        <aside id="app-sidebar" class="sidebar">
+            <div class="sidebar-brand">
+                <img src="logo.png" alt="Logotipo" style="max-height: 40px; width: auto; object-fit: contain;">
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-item active" onclick="switchSidebarSection('geral', this)">
+                    <span>Geral</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('montagem-setup', this)">
+                    <span>Montagem de Setup</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('abrasivos', this)">
+                    <span>Abrasivos</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('quimicos', this)">
+                    <span>Químicos</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('diamantes', this)">
+                    <span>Diamantes</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('pastilhas', this)">
+                    <span>Pastilhas</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('incertos', this)">
+                    <span>Incertos</span>
+                </a>
+                <a class="nav-item" onclick="switchSidebarSection('impressao3d', this)">
+                    <span>Impressão 3D</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a class="nav-item" onclick="switchSidebarSection('configuracoes', this)">
+                    <span>Configurações</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Área de Conteúdo Principal -->
+        <main class="main-content">
+            <!-- TOPO: BOTÃO HAMBURGUER + SAUDAÇÃO + LOGOUT -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="menu-toggle-btn" onclick="toggleSidebar()" title="Recolher/Expandir Menu">☰</button>
+                    <span id="user-welcome" style="color: #64748b; font-size: 0.95rem; font-weight: 500;">Ambiente Industrial de Atualização de Dados</span>
+                </div>
+                <button class="btn-logout" onclick="handleLogout()">Terminar Sessão</button>
+            </div>
+
+            <!-- VIEW 1: GERAL (Padrão) -->
+            <div id="section-geral">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>ToolManager | Painel Geral</h2>
+                        <p>Visão geral de carregamento e gestão da fábrica</p>
+                    </div>
+                </div>
+
+                <div class="upload-card" onclick="document.getElementById('fileInput').click()">
+                    <h3>📂 Clique ou arraste os ficheiros de dados aqui</h3>
+                    <p>Suporta planilhas de pedidos, relatórios e controle de estoque (.xlsx, .csv)</p>
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
+                </div>
+
+                <div id="file-status" style="color: #004173; font-size: 0.95rem; text-align: center; font-weight: 600;"></div>
+            </div>
+
+            <!-- VIEW 2: MONTAGEM DE SETUP -->
+            <div id="section-montagem-setup" style="display: none;" class="section-placeholder">
+                <h3>🛠️ Montagem de Setup por Válvula</h3>
+                <p>Consulte a configuração de ferramentas, códigos e fotos reais de setup vinculadas a cada tipo de válvula em produção.</p>
+            </div>
+
+            <!-- VIEW 3: ABRASIVOS (Com Menu Superior) -->
+            <div id="section-abrasivos" style="display: none;">
+                <div class="category-header">
+                    <div class="top-nav-tabs">
+                        <button class="top-tab active" onclick="switchSubTab('abrasivos', 'performance', this)">Performance</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'estoque', this)">Estoque</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'materiais', this)">Materiais</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'desenvolvimento', this)">Desenvolvimento</button>
+                        <button class="top-tab" onclick="switchSubTab('abrasivos', 'ocorrencias', this)">Ocorrências</button>
+                    </div>
+                </div>
+                
+             <!-- SUB-ABA: PERFORMANCE DE ABRASIVOS -->
+            <div id="abrasivos-subtab-performance" class="abrasivos-subtab">
+                <!-- GRID DE 5 CARDS DE INDICADORES (KPIs) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                    
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CUSTO (MÁQ.)</span>
+                            <div style="width: 38px; height: 38px; background-color: #f3e8ff; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🏭</div>
+                        </div>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">OP25-2 (Linha 05)</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 415.759,25</div>
+                    </div>
+            
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR CUSTO (LINHA)</span>
+                            <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-weight: 700;">$</div>
+                        </div>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: #004173; margin-bottom: 4px;">LINE 09</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #0979b0;">R$ 1.415.254,39</div>
+                    </div>
+            
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">TOTAL OCORRÊNCIAS</span>
+                            <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-weight: 800;">✖</div>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Somente Abrasivos</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">R$ 18.147,98</div>
+                    </div>
+            
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">PRODUÇÃO ACABADA</span>
+                            <div style="width: 38px; height: 38px; background-color: #fef3c7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">📦</div>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Todas as Linhas / Famílias</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #059669;">2.487.254,18 <span style="font-size: 0.8rem; font-weight: 500;">pçs</span></div>
+                    </div>
+            
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MÉDIA CUSTO/PEÇA</span>
+                            <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #16a34a; font-weight: 700;">📈</div>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Custo Total / Produção</div>
+                        <div style="font-size: 1.25rem; font-weight: 700; color: #0cb7f2;">R$ 0,572 <span style="font-size: 0.8rem; font-weight: 500;">/ pç</span></div>
+                    </div>
+            
+                </div>
+            
+                <!-- PAINEL DO GRÁFICO PRINCIPAL DE CP COM FILTROS -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">CP (Custo x Peça) por Linha de Produção</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Eficiência de consumo de abrasivos por unidade produzida (R$/pç)</p>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 700; color: #004173;">CJ 01:</label>
+                                <select id="filtroCJ01" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #0cb7f2; border-radius: 6px; background: #f0f9ff; color: #004173; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+                                    <option value="real" selected>Real</option>
+                                    <option value="sem_ocorrencias">Sem Ocorrências</option>
+                                    <option value="projetado">Projetado</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 700; color: #0979b0;">CJ 02:</label>
+                                <select id="filtroCJ02" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #004173; border-radius: 6px; background: #f8fafc; color: #004173; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+                                    <option value="real">Real</option>
+                                    <option value="sem_ocorrencias">Sem Ocorrências</option>
+                                    <option value="projetado" selected>Projetado</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
+                                <select id="filtroAno" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
+                                <select id="filtroPeriodo" onchange="atualizarDadosGrafico()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="media">Média (Geral do Ano)</option>
+                                    <option value="Jan">Janeiro</option>
+                                    <option value="Fev">Fevereiro</option>
+                                    <option value="Mar">Março</option>
+                                    <option value="Abr">Abril</option>
+                                    <option value="Mai">Maio</option>
+                                    <option value="Jun">Junho</option>
+                                    <option value="Jul">Julho</option>
+                                    <option value="Ago">Agosto</option>
+                                    <option value="Set">Setembro</option>
+                                    <option value="Out">Outubro</option>
+                                    <option value="Nov">Novembro</option>
+                                    <option value="Dez">Dezembro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position: relative; height: 360px;">
+                        <canvas id="chartCustosLinha"></canvas>
+                    </div>
+                </div>
+
+                <!-- CARD 1 CONTENDO OS 3 GRÁFICOS DE ÁREA + FILTRO DE LINHA -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Evolução Detalhada por Linha</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento mensal de CP, Consumo e Produção</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="font-size: 0.85rem; font-weight: 600; color: #004173;">Linha:</label>
+                            <select id="filtroLinhaArea" onchange="atualizarGraficosArea()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                <option value="todas">Todas as Linhas (Geral)</option>
+                                <option value="LINE 01">LINE 01</option>
+                                <option value="LINE 02/HV">LINE 02/HV</option>
+                                <option value="LINE 03">LINE 03</option>
+                                <option value="LINE 04">LINE 04</option>
+                                <option value="LINE 05">LINE 05</option>
+                                <option value="LINE 06">LINE 06</option>
+                                <option value="LINE 07">LINE 07</option>
+                                <option value="LINE 08">LINE 08</option>
+                                <option value="LINE 09">LINE 09</option>
+                                <option value="LINE 10">LINE 10</option>
+                                <option value="LINE 11">LINE 11</option>
+                                <option value="LINE 12">LINE 12</option>
+                                <option value="LINE 13">LINE 13</option>
+                                <option value="LINE 14">LINE 14</option>
+                                <option value="AFTM">AFTM</option>
+                                <option value="BV - MOD 1">BV - MOD 1</option>
+                                <option value="BV - MOD 2">BV - MOD 2</option>
+                                <option value="OUTROS">OUTROS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Tendência de CP (R$/pç)</h4>
+                            <div style="position: relative; height: 220px;">
+                                <canvas id="chartArea1"></canvas>
+                            </div>
+                        </div>
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Consumo de Abrasivos</h4>
+                            <div style="position: relative; height: 220px;">
+                                <canvas id="chartArea2"></canvas>
+                            </div>
+                        </div>
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: #004173; font-weight: 600;">Volume de Produção (pçs)</h4>
+                            <div style="position: relative; height: 220px;">
+                                <canvas id="chartArea3"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: FAMÍLIAS (GRÁFICO COM 4 BARRAS + 4 CARDS + CARD DE MÉDIA ANUAL NO FIM) -->
+                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Análise de Famílias, Operações e Homologação</h3>
+                            <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #64748b;">Detalhamento específico da linha selecionada</p>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Ano:</label>
+                                <select id="filtroAnoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Período:</label>
+                                <select id="filtroPeriodoCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="total_anual" selected>Total Anual (Acumulado)</option>
+                                    <option value="Jan">Janeiro</option>
+                                    <option value="Fev">Fevereiro</option>
+                                    <option value="Mar">Março</option>
+                                    <option value="Abr">Abril</option>
+                                    <option value="Mai">Maio</option>
+                                    <option value="Jun">Junho</option>
+                                    <option value="Jul">Julho</option>
+                                    <option value="Ago">Agosto</option>
+                                    <option value="Set">Setembro</option>
+                                    <option value="Out">Outubro</option>
+                                    <option value="Nov">Novembro</option>
+                                    <option value="Dez">Dezembro</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: #004173;">Linha:</label>
+                                <select id="filtroLinhaCard2" onchange="atualizarCard2()" style="padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #1e293b; font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                                    <option value="LINE 01">LINE 01</option>
+                                    <option value="LINE 02/HV" selected>LINE 02/HV</option>
+                                    <option value="LINE 03">LINE 03</option>
+                                    <option value="LINE 04">LINE 04</option>
+                                    <option value="LINE 05">LINE 05</option>
+                                    <option value="LINE 06">LINE 06</option>
+                                    <option value="LINE 07">LINE 07</option>
+                                    <option value="LINE 08">LINE 08</option>
+                                    <option value="LINE 09">LINE 09</option>
+                                    <option value="LINE 10">LINE 10</option>
+                                    <option value="LINE 11">LINE 11</option>
+                                    <option value="LINE 12">LINE 12</option>
+                                    <option value="LINE 13">LINE 13</option>
+                                    <option value="LINE 14">LINE 14</option>
+                                    <option value="AFTM">AFTM</option>
+                                    <option value="BV - MOD 1">BV - MOD 1</option>
+                                    <option value="BV - MOD 2">BV - MOD 2</option>
+                                    <option value="OUTROS">OUTROS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LINHA 1: FAMÍLIAS (GRÁFICO DE BARRAS VERTICAIS APENAS COM AS 4 FAMÍLIAS + 4 CARDS + CARD TOTAL/MÉDIA NO FIM) -->
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: stretch; margin-bottom: 24px;">
+                        
+                        <!-- ESQUERDA: GRÁFICO DE BARRAS VERTICAIS EXCLUSIVAMENTE COM AS 4 FAMÍLIAS -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <h4 style="margin: 0 0 10px 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Famílias de Válvulas Produzidas</h4>
+                            <div style="position: relative; height: 210px;">
+                                <canvas id="chartBarraFamilias"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- DIREITA: 4 CARDS DE FAMÍLIAS + 1 CARD DE MÉDIA ANUAL NO FIM -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; justify-content: center;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Martensítico</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam1">42 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam1">42.0%</div>
+                                </div>
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0979b0; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Austenítico</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam2">35 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam2">35.0%</div>
+                                </div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Super Liga</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam3">15 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam3">15.0%</div>
+                                </div>
+                                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 8px; padding: 10px 12px;">
+                                    <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Intermediária</div>
+                                    <div style="font-size: 1rem; font-weight: 700; color: #004173;" id="qtdFam4">8 pçs</div>
+                                    <div style="font-size: 0.72rem; font-weight: 600; color: #0979b0;" id="pctFam4">8.0%</div>
+                                </div>
+                            </div>
+                            <!-- 5º CARD: SOMA TOTAL GERAL -->
+                            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #059669; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.68rem; font-weight: 700; color: #065f46; text-transform: uppercase;">Soma Total / Consolidado</div>
+                                    <div style="font-size: 0.75rem; color: #047857;">Soma geral das famílias no período</div>
+                                </div>
+                                <div style="font-size: 1.15rem; font-weight: 800; color: #059669;" id="totalGeralVal">100 pçs</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- LINHA 2: CUSTOS POR OPERAÇÃO E ITEM HOMOLOGADO (PERFEITAMENTE CENTRALIZADO) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 20px; align-items: stretch; margin-bottom: 24px;">
+                        
+                        <!-- ESQUERDA: GRÁFICO DE BARRAS HORIZONTAIS DE OPERAÇÕES -->
+                        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h4 style="margin: 0; font-size: 0.95rem; color: #004173; font-weight: 700;">Custos por Operação</h4>
+                                <select id="filtroTopOperacoes" onchange="atualizarCard2()" style="padding: 3px 8px; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; color: #1e293b; font-size: 0.75rem; cursor: pointer; font-weight: 600;">
+                                    <option value="5" selected>Top 5</option>
+                                    <option value="10">Top 10</option>
+                                    <option value="todas">Todas</option>
+                                </select>
+                            </div>
+                            <div style="position: relative; height: 260px;">
+                                <canvas id="chartBarrasOperacoes" style="cursor: pointer;"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- DIREITA: ITEM HOMOLOGADO / ÚLTIMO REQUISITADO (CENTRALIZADO) -->
+                        <div id="cardItemHomologado" style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                            
+                            <!-- TOPO DO CARD -->
+                            <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase; background: #dcfce7; padding: 4px 12px; border-radius: 6px;">ÚLTIMO REQUISITADO</span>
+                                <span style="font-size: 0.75rem; color: #64748b;">Clique numa barra →</span>
+                            </div>
+
+                            <!-- CONTEÚDO CENTRAL EM DUAS COLUNAS -->
+                            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: center;">
+                                
+                                <!-- COLUNA ESQUERDA: CAIXA BRANCA PARA A FOTO -->
+                                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                    <img src="imagens/CBN.png" alt="Ferramenta" style="max-width: 100%; max-height: 210px; object-fit: contain;" onerror="this.onerror=null; this.src='logo.png';">
+                                </div>
+
+                                <!-- COLUNA DIREITA: TEXTOS E CARDS EMPILHADOS -->
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <div>
+                                        <div style="font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">CÓDIGO DO ITEM:</div>
+                                        <div style="font-size: 1.05rem; font-weight: 700; color: #004173;" id="infoCod">CBN-IMP-80</div>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 2px;">
+                                        <div style="font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; margin-bottom: 2px;">DESCRIÇÃO:</div>
+                                        <div style="font-size: 0.85rem; color: #334155; font-weight: 500; line-height: 1.3;" id="infoDesc">Rebolo CBN Importado</div>
+                                    </div>
+
+                                    <!-- CARD FORNECEDOR -->
+                                    <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">FORNECEDOR</div>
+                                        <div style="font-size: 0.9rem; font-weight: 700; color: #004173;" id="infoForn">Alcar</div>
+                                    </div>
+
+                                    <!-- CARD VALOR UNITÁRIO -->
+                                    <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">VALOR UNIT.</div>
+                                        <div style="font-size: 0.95rem; font-weight: 700; color: #0979b0;" id="infoVal">R$ 3.450,00</div>
+                                    </div>
+                        
+                                    <!-- NOVO CARD: PERÍODO EM MÁQUINA (PENÚLTIMA TROCA) -->
+                                    <div style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; border-left: 3px solid #0cb7f2; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <div style="font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">PERÍODO EM MÁQUINA</div>
+                                        <div style="font-size: 0.9rem; font-weight: 700; color: #004173;" id="infoPeriodoMaquina">02 dias (última troca)</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- TABELA DAS ÚLTIMAS 15 REQUISIÇÕES -->
+                    <div style="border-top: 2px dashed #e2e8f0; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div>
+                                <h4 style="margin: 0; font-size: 1rem; color: #004173; font-weight: 700;" id="tituloTabelaRequisicoes">Últimas 15 Requisições de Material (Selecione uma operação no gráfico)</h4>
+                                <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #64748b;" id="subtituloTabelaRequisicoes">Exibindo histórico filtrado</p>
+                            </div>
+                        </div>
+
+                        <div class="table-req-container">
+                            <table class="table-req">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Código</th>
+                                        <th>Descrição</th>
+                                        <th>Fornecedor</th>
+                                        <th>Valor Unit. (R$)</th>
+                                        <th>Qtd</th>
+                                        <th>Valor Total (R$)</th>
+                                        <th>Linha</th>
+                                        <th>Operação</th>
+                                        <th>Turno</th>
+                                        <th>Situação</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaRequisicoesBody">
+                                    <tr>
+                                        <td colspan="11" style="text-align: center; color: #94a3b8; padding: 20px;">
+                                            Clique em uma das barras de operação acima (ex: OP25, 15G) para carregar as requisições.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+                <!-- SUB-ABA: GESTÃO DE ESTOQUE DE ABRASIVOS -->
+                <div id="abrasivos-subtab-estoque" class="abrasivos-subtab" style="display: none;">
+                
+                    <!-- 1. GRID DE 04 CARDS DE ESTOQUE (KPIS REAIS) -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        
+                        <!-- CARD 1: VALOR TOTAL EM ESTOQUE -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #004173; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">VALOR TOTAL EM ESTOQUE</span>
+                                <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-weight: 700;">💰</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Imobilizado no Almoxarifado</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #004173;">R$ 56.402,68</div>
+                        </div>
+                
+                        <!-- CARD 2: DIVERSIDADE DE ITENS -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #0cb7f2; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">DIVERSIDADE DE ITENS</span>
+                                <div style="width: 38px; height: 38px; background-color: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🏷️</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Total de SKUs Ativos</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #0cb7f2;">24 Itens</div>
+                        </div>
+                
+                        <!-- CARD 3: ITEM DE MAIOR VALOR / LOTE -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">MAIOR VALOR / LOTE</span>
+                                <div style="width: 38px; height: 38px; background-color: #dcfce7; border-radius: 10px; display: flex; align-items: center; justify-content: center;">🔥</div>
+                            </div>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #004173; margin-bottom: 2px;">DL 304.8 X 178.0</div>
+                            <div style="font-size: 1.15rem; font-weight: 700; color: #059669;">R$ 20.902,20</div>
+                        </div>
+                
+                        <!-- CARD 4: ITENS SEM SALDO EM ESTOQUE -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #dc2626; border-radius: 14px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                                <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">ITENS ZERADOS</span>
+                                <div style="width: 38px; height: 38px; background-color: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #dc2626; font-weight: 800;">⏳</div>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px;">Com saldo zero</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: #dc2626;">06 SKUs</div>
+                        </div>
+                
+                    </div>
+                
+                    <!-- 2. TABELA ANALÍTICA COM OS DADOS REAIS DA PLANILHA -->
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.05rem; color: #004173; font-weight: 700;">Controle Analítico de Estoque</h3>
+                                <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: #64748b;">Acompanhamento de saldos, fornecedores e valores baseados na auditoria</p>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="inputBuscaEstoque" oninput="filtrarTabelaEstoque(this.value)" placeholder="🔍 Buscar código ou descrição..." style="padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; width: 260px;">
+                            </div>
+                        </div>
+                
+                        <div class="table-req-container" style="max-height: 420px; overflow-y: auto;">
+                            <table class="table-req">
+                                <thead>
+                                    <tr>
+                                        <th>Código Eaton</th>
+                                        <th>Fornecedor</th>
+                                        <th>Descrição</th>
+                                        <th>Valor Unit.</th>
+                                        <th>Quantidade</th>
+                                        <th>Valor Total</th>
+                                        <th>Lead Time</th>
+                                        <th style="text-align: center;">Análise</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515100003</td>
+                                        <td>ALCAR</td>
+                                        <td>RL 50 X 45.000 | GR 50 K246</td>
+                                        <td>R$ 6,93</td>
+                                        <td style="font-weight: 700; color: #dc2626;">0</td>
+                                        <td>R$ 0,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515100003')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515101004</td>
+                                        <td>ALCAR</td>
+                                        <td>RL 100 X 2120 | GR 320 (Resinite)</td>
+                                        <td>R$ 15,56</td>
+                                        <td style="font-weight: 700; color: #dc2626;">0</td>
+                                        <td>R$ 0,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515101004')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515101008</td>
+                                        <td>ALCAR</td>
+                                        <td>RL 150 X 20.000 | RZ-862 GR-050</td>
+                                        <td>R$ 388,37</td>
+                                        <td style="font-weight: 700;">3</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 1.165,11</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515101008')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200001</td>
+                                        <td>ALCAR</td>
+                                        <td>RL 50 X 45.000 | K-240 GR-050</td>
+                                        <td>R$ 60,44</td>
+                                        <td style="font-weight: 700;">4</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 241,76</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200001')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200002</td>
+                                        <td>ALCAR</td>
+                                        <td>RL 50 X 45.000 | K-240 GR-080</td>
+                                        <td>R$ 60,44</td>
+                                        <td style="font-weight: 700;">4</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 241,76</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200002')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200003</td>
+                                        <td>ALCAR</td>
+                                        <td>RL 50 X 45.000 | K-240 GR-100</td>
+                                        <td>R$ 54,05</td>
+                                        <td style="font-weight: 700;">4</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 216,20</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200003')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200004</td>
+                                        <td>NORTON</td>
+                                        <td>RL 50 X 45.000 | K-240 GR-120</td>
+                                        <td>R$ 55,66</td>
+                                        <td style="font-weight: 700;">5</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 278,30</td>
+                                        <td>70 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200004')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200014</td>
+                                        <td>ALCAR</td>
+                                        <td>CTL 150 X 2.530 | Surface Azul</td>
+                                        <td>R$ 511,60</td>
+                                        <td style="font-weight: 700; color: #dc2626;">0</td>
+                                        <td>R$ 0,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200014')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200015</td>
+                                        <td>ALCAR</td>
+                                        <td>CTL 95 X 2.120 | Surface Azul</td>
+                                        <td>R$ 271,53</td>
+                                        <td style="font-weight: 700;">38</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 10.318,14</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200015')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515200016</td>
+                                        <td>NORTON</td>
+                                        <td>CTL 100 X 2.530 | Surface Azul</td>
+                                        <td>R$ 341,06</td>
+                                        <td style="font-weight: 700;">5</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 1.705,30</td>
+                                        <td>70 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515200016')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515400002</td>
+                                        <td>ALCAR</td>
+                                        <td>DLX 200.0 | AC768 GR-220 (Adesivada)</td>
+                                        <td>R$ 3,98</td>
+                                        <td style="font-weight: 700;">600</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 2.388,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515400002')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515400003</td>
+                                        <td>ALCAR</td>
+                                        <td>DLX 200.0 | AC768 GR-400 (Adesivada)</td>
+                                        <td>R$ 3,40</td>
+                                        <td style="font-weight: 700;">900</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 3.060,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515400003')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">515400004</td>
+                                        <td>NORTON</td>
+                                        <td>DLX 200.0 | AC768 GR-600 (Adesivada)</td>
+                                        <td>R$ 3,98</td>
+                                        <td style="font-weight: 700;">600</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 2.388,00</td>
+                                        <td>70 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('515400004')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">519000002</td>
+                                        <td>ALCAR</td>
+                                        <td>LI 152.4 X 9.52 | Tipo AA-Fina</td>
+                                        <td>R$ 6,76</td>
+                                        <td style="font-weight: 700;">100</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 676,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('519000002')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">519000005</td>
+                                        <td>ALCAR</td>
+                                        <td>OS 100.0 X 24.0 X 13.0 | AA220 J8V4</td>
+                                        <td>R$ 8,79</td>
+                                        <td style="font-weight: 700;">266</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 2.338,14</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('519000005')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1779600283</td>
+                                        <td>ALCAR</td>
+                                        <td>DC 115 X 1.0 X 22.2 | ABF-4</td>
+                                        <td>R$ 5,84</td>
+                                        <td style="font-weight: 700; color: #dc2626;">0</td>
+                                        <td>R$ 0,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600283')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1779600362</td>
+                                        <td>ALCAR</td>
+                                        <td>DISCO DE DESBASTE - DD 115 X 6.4 X 22.2 | PHF46</td>
+                                        <td>R$ 3,81</td>
+                                        <td style="font-weight: 700; color: #dc2626;">0</td>
+                                        <td>R$ 0,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600362')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1779600374</td>
+                                        <td>WURTH</td>
+                                        <td>DISCO DE CORTE PARA PRODUCAO 1 X 14,3 X 1,6 X 22,2</td>
+                                        <td>R$ 3,09</td>
+                                        <td style="font-weight: 700; color: #dc2626;">0</td>
+                                        <td>R$ 0,00</td>
+                                        <td>15 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600374')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1779600386</td>
+                                        <td>ALCAR</td>
+                                        <td>DLX 178.0 | XZ677 GR-060</td>
+                                        <td>R$ 5,91</td>
+                                        <td style="font-weight: 700;">300</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 1.773,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600386')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1779600398</td>
+                                        <td>ALCAR</td>
+                                        <td>FL 110 X 270 | Manta Abrasiva (Scotch Brite)</td>
+                                        <td>R$ 3,89</td>
+                                        <td style="font-weight: 700;">117</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 455,13</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1779600398')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1784000125</td>
+                                        <td>ALCAR</td>
+                                        <td>DL 304.8 X 178.0 X 127.0 | A80 RR</td>
+                                        <td>R$ 2.090,22</td>
+                                        <td style="font-weight: 700;">10</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 20.902,20</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1784000125')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">1792800356</td>
+                                        <td>ALCAR</td>
+                                        <td>RBD 125.0 | Rebolo Eletrolítico Rediamantado</td>
+                                        <td>R$ 441,04</td>
+                                        <td style="font-weight: 700;">1</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 441,04</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('1792800356')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">2505440000</td>
+                                        <td>ALCAR</td>
+                                        <td>DC 406.4 X 3.2 X 25.4 | 2NZ36 T5BDHT</td>
+                                        <td>R$ 56,50</td>
+                                        <td style="font-weight: 700;">193</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 10.904,50</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('2505440000')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">4300583041</td>
+                                        <td>ALCAR</td>
+                                        <td>DLX 200.0 | R-262 GR-060 (Adesivada)</td>
+                                        <td>R$ 7,65</td>
+                                        <td style="font-weight: 700;">80</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 612,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('4300583041')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">5350009398</td>
+                                        <td>ALCAR</td>
+                                        <td>Pasta Diamantada com 3/6µ - 5g</td>
+                                        <td>R$ 39,93</td>
+                                        <td style="font-weight: 700;">26</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 1.038,18</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('5350009398')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">5350009662</td>
+                                        <td>ALCAR</td>
+                                        <td>ESC 75.0 | SiC 320 A.12 R13</td>
+                                        <td>R$ 257,24</td>
+                                        <td style="font-weight: 700;">7</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 1.800,68</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('5350009662')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: 700; color: #004173;">5350009663</td>
+                                        <td>ALCAR</td>
+                                        <td>ESC 65.0 | A.13 R13</td>
+                                        <td>R$ 228,40</td>
+                                        <td style="font-weight: 700;">25</td>
+                                        <td style="font-weight: 700; color: #0979b0;">R$ 5.710,00</td>
+                                        <td>60 Dias</td>
+                                        <td style="text-align: center;"><button onclick="togglePainelAnalise('5350009663')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-weight: 700; color: #004173;">[...]</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                
+                        <!-- Rodapé com Data de Conferência Fixa -->
+                        <div style="margin-top: 14px; font-size: 0.75rem; color: #94a3b8; font-style: italic; text-align: right;">
+                            Última atualização: Dia 10/11/2026 | terça-feira
+                        </div>
+                    </div>
+                
+                    <!-- 3. PAINEL DE ANÁLISE DETALHADA DO ITEM SELECIONADO (RAIO-X) -->
+                    <div id="painelAnaliseItem" style="display: none; background-color: #ffffff; border: 1px solid #cbd5e1; border-left: 5px solid #0cb7f2; border-radius: 14px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-top: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; margin-bottom: 16px;">
+                            <div>
+                                <span style="font-size: 0.7rem; font-weight: 700; color: #0cb7f2; text-transform: uppercase; letter-spacing: 0.5px;">Raio-X do Item Selecionado</span>
+                                <h3 id="raioTituloCodigo" style="margin: 2px 0 0 0; font-size: 1.1rem; color: #004173; font-weight: 700;">Código Eaton — Análise Detalhada</h3>
+                            </div>
+                            <button onclick="fecharPainelAnalise()" style="background: #f1f5f9; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-weight: bold; color: #64748b;">✕</button>
+                        </div>
+                
+                        <!-- Descrição Destacada -->
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px;">Descrição Técnica do Item</div>
+                            <div id="raioDescricao" style="font-size: 0.95rem; font-weight: 600; color: #004173;">—</div>
+                        </div>
+                
+                        <!-- Grid com os 3 Blocos de Análise -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                            
+                            <!-- BLOCO 1: SALDO E VALORES -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">📦 Saldo & Custos</div>
+                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Quantidade em Estoque:</strong> <span id="raioQtd" style="font-weight: 700; color: #004173;">—</span></div>
+                                    <div>• <strong>Valor Unitário:</strong> <span id="raioValorUnit" style="font-weight: 700;">—</span></div>
+                                    <div>• <strong>Valor Total Imobilizado:</strong> <span id="raioValorTotal" style="font-weight: 700; color: #0979b0;">—</span></div>
+                                </div>
+                            </div>
+                
+                            <!-- BLOCO 2: REPOSIÇÃO E FORNECEDOR -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">⚙️ Fornecedor & Lead Time</div>
+                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Fornecedor Homologado:</strong> <span id="raioFornecedor" style="font-weight: 700;">—</span></div>
+                                    <div>• <strong>Prazo de Entrega:</strong> <span id="raioLeadTime" style="font-weight: 700; color: #059669;">—</span></div>
+                                    <div>• <strong>Canal de Suprimentos:</strong> Contrato Ativo</div>
+                                </div>
+                            </div>
+                
+                            <!-- BLOCO 3: STATUS OPERACIONAL -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #004173; text-transform: uppercase; margin-bottom: 10px;">🕒 Status Operacional</div>
+                                <div style="font-size: 0.85rem; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                                    <div>• <strong>Condição do Saldo:</strong> <span id="raioStatusEstoque">—</span></div>
+                                    <div>• <strong>Auditoria Física:</strong> Conferido em Almoxarifado</div>
+                                    <div>• <strong>Reposição Automática:</strong> Habilitada</div>
+                                </div>
+                            </div>
+                
+                        </div>
+                
+                        <!-- Botões de Ação Rápida -->
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                            <button onclick="alert('Gerando ficha técnica do item selecionado...')" style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📄 Ver Ficha Técnica</button>
+                            <button onclick="alert('Consultando histórico de requisições no ERP...')" style="background: #ffffff; border: 1px solid #cbd5e1; color: #004173; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">📊 Histórico Completo</button>
+                            <button onclick="alert('Solicitação de reposição enviada ao setor de compras.')" style="background: #004173; border: none; color: #ffffff; padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">🛒 Solicitar Reposição</button>
+                        </div>
+                    </div>
+                
+                </div>
+
+                <!-- SUB-ABA: MATERIAIS DE ABRASIVOS -->
+                <div id="abrasivos-subtab-materiais" class="abrasivos-subtab" style="display: none;">
+                    <style>
+                        .materials-grid {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+                            gap: 20px;
+                            margin-bottom: 30px;
+                        }
+                        .material-card {
+                            background-color: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 16px;
+                            overflow: hidden;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: space-between;
+                            padding: 20px 16px;
+                            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+                            cursor: pointer;
+                        }
+                        .material-card:hover {
+                            transform: translateY(-4px);
+                            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+                            border-color: #0cb7f2;
+                        }
+                        .material-img-container {
+                            width: 100%;
+                            height: 140px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin-bottom: 16px;
+                        }
+                        .material-img-container img {
+                            max-width: 100%;
+                            max-height: 130px;
+                            object-fit: contain;
+                        }
+                        .material-title {
+                            font-size: 0.85rem;
+                            font-weight: 700;
+                            color: #1e293b;
+                            text-transform: uppercase;
+                            text-align: center;
+                            letter-spacing: 0.3px;
+                            margin-bottom: 8px;
+                        }
+                        .material-divider {
+                            width: 24px;
+                            height: 2px;
+                            background-color: #e2e8f0;
+                            margin: 4px 0 10px 0;
+                            transition: width 0.2s ease, background-color 0.2s ease;
+                        }
+                        .material-card:hover .material-divider {
+                            width: 36px;
+                            background-color: #0cb7f2;
+                        }
+                        .material-action {
+                            font-size: 0.78rem;
+                            font-weight: 700;
+                            color: #004173;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            transition: color 0.2s ease;
+                        }
+                        .material-card:hover .material-action {
+                            color: #0cb7f2;
+                        }
+                    </style>
+                
+                    <div class="materials-grid">
+                        <div class="material-card" onclick="abrirDetalhesCategoria('discos-metalograficos')">
+                            <div class="material-img-container"><img src="imagens/metalográficos.png" alt="Discos Metalográficos"></div>
+                            <div class="material-title">Discos Metalográficos</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('discos-corte-desbaste')">
+                            <div class="material-img-container"><img src="imagens/discos_corte.png" alt="Discos de Corte/Desbaste"></div>
+                            <div class="material-title">Discos de Corte/Desbaste</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('lixas')">
+                            <div class="material-img-container"><img src="imagens/lixas.png" alt="Lixas"></div>
+                            <div class="material-title">Lixas</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('rebolos-vitrificados')">
+                            <div class="material-img-container"><img src="imagens/vitrificados.png" alt="Rebolos Vitrificados"></div>
+                            <div class="material-title">Rebolos Vitrificados</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('pontas-montadas')">
+                            <div class="material-img-container"><img src="imagens/pontas.png" alt="Pontas Montadas"></div>
+                            <div class="material-title">Pontas Montadas</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('escovas')">
+                            <div class="material-img-container"><img src="imagens/escovas.png" alt="Escovas"></div>
+                            <div class="material-title">Escovas</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('rebolos-arraste')">
+                            <div class="material-img-container"><img src="imagens/arraste.png" alt="Rebolos de Arraste"></div>
+                            <div class="material-title">Rebolos de Arraste</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('itens-cbn')">
+                            <div class="material-img-container"><img src="imagens/CBN.png" alt="Itens de CBN"></div>
+                            <div class="material-title">Itens de CBN (Importados)</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                        <div class="material-card" onclick="abrirDetalhesCategoria('manutencao')">
+                            <div class="material-img-container"><img src="imagens/manutenção.png" alt="Itens de Manutenção"></div>
+                            <div class="material-title">Itens de Manutenção (Desbaste e Limpeza)</div>
+                            <div class="material-divider"></div>
+                            <div class="material-action">Ver Detalhes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="abrasivos-subtab-desenvolvimento" class="abrasivos-subtab" style="display: none;">
+                    <div class="section-placeholder">
+                        <h3>🧪 Testes e Desenvolvimento</h3>
+                        <p>Histórico de novos produtos em teste na linha de produção e relatórios de homologação.</p>
+                    </div>
+                </div>
+
+                <!-- SUB-ABA OCORRÊNCIAS -->
+                <div id="abrasivos-subtab-ocorrencias" class="abrasivos-subtab" style="display: none;">
+                    <div class="dash-header">
+                        <div class="dash-title">
+                            <h2>Gestão e Validação de Ocorrências</h2>
+                            <p>Acompanhe todas as ocorrências abertas e atualize o status de validação</p>
+                        </div>
+                        <button class="btn-submit" onclick="window.open('https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=lVxS1ga5GkO5Jum1G6Q8xPNAnDL36axMqZNYAahOSnpUQTZYMDFCQUhPTlpZWk43Q0xRMTdYSTFZUS4u', '_blank')" style="width: auto; padding: 10px 16px; font-size: 0.85rem;">+ Simular Nova Abertura</button>
+                    </div>
+                
+                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                        <th style="padding: 12px;">ID / Data</th>
+                                        <th style="padding: 12px;">Máquina</th>
+                                        <th style="padding: 12px;">Tipo</th>
+                                        <th style="padding: 12px;">Item / Código</th>
+                                        <th style="padding: 12px;">Descrição</th>
+                                        <th style="padding: 12px; text-align: center;">Status</th>
+                                        <th style="padding: 12px; text-align: center;">Ações do Gestor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaOcorrenciasBody">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 4: INCERTOS -->
+            <div id="section-incertos" style="display: none;">
+                <div class="category-header">
+                    <div class="top-nav-tabs">
+                        <button class="top-tab active" onclick="switchSubTab('incertos', 'garrafa-vacuo', this)">Garrafa de vácuo</button>
+                        <button class="top-tab" onclick="switchSubTab('incertos', 'ring-gage', this)">Ring-Gage</button>
+                        <button class="top-tab" onclick="switchSubTab('incertos', 'incerto-vedacao', this)">Incerto de Vedação</button>
+                    </div>
+                </div>
+
+                <div id="incertos-subtab-garrafa-vacuo" class="incertos-subtab">
+                    <div class="section-placeholder">
+                        <h3>🧪 Garrafa de vácuo</h3>
+                        <p>Especificações técnicas, controle de uso e inspeção do sistema de garrafa de vácuo.</p>
+                    </div>
+                </div>
+                <div id="incertos-subtab-ring-gage" class="incertos-subtab" style="display: none;">
+                    <div class="section-placeholder">
+                        <h3>📏 Ring-Gage</h3>
+                        <p>Aferição, metrologia e calibração dos calibradores tipo anel (Ring-Gage).</p>
+                    </div>
+                </div>
+                <div id="incertos-subtab-incerto-vedacao" class="incertos-subtab" style="display: none;">
+                    <div class="section-placeholder">
+                        <h3>🛡️ Incerto de Vedação</h3>
+                        <p>Gestão de insertos para vedação, tolerâncias técnicas e histórico de substituição.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEWS SECUNDÁRIAS -->
+            <div id="section-quimicos" style="display: none;" class="section-placeholder">
+                <h3>🧪 Módulo Químicos</h3>
+                <p>Em breve: Gestão de óleos de corte, refrigerantes e produtos químicos industriais.</p>
+            </div>
+            <div id="section-diamantes" style="display: none;" class="section-placeholder">
+                <h3>💎 Módulo Diamantes</h3>
+                <p>Em breve: Controle de rebolos diamantados e dressadores.</p>
+            </div>
+            <div id="section-pastilhas" style="display: none;" class="section-placeholder">
+                <h3>🔲 Módulo Pastilhas</h3>
+                <p>Em breve: Gestão de insertos e ferramentas de usinagem.</p>
+            </div>
+            <div id="section-impressao3d" style="display: none;" class="section-placeholder">
+                <h3>🖨️ Módulo Impressão 3D</h3>
+                <p>Em breve: Filamentos, resinas e prototipagem interna.</p>
+            </div>
+            <div id="section-configuracoes" style="display: none;" class="section-placeholder">
+                <h3>🔧 Configurações do Sistema</h3>
+                <p>Preferências de conta, permissões e parâmetros gerais.</p>
+            </div>
+        </main>
+    </div>
+
     <script>
-        // Configuração do Cliente Supabase (Substitua pelas suas credenciais reais)
-        const SUPABASE_URL = 'SUA_SUPABASE_URL_AQUI';
-        const SUPABASE_ANON_KEY = ' SUA_SUPABASE_ANON_KEY_AQUI';
-        const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+        const SUPABASE_URL = 'https://qeymhnlyyippnrvesagw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFleW1obmx5eWlwcG5ydmVzYWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTE3MDcsImV4cCI6MjEwODc4NzcwN30.kkWqIkExGCeOF2H_2kA2h4xfGJpcE2uok7BSt--KuN0';
 
-        // Alternância de Módulos (Abas Principais)
-        function switchMainTab(tabName, element) {
-            document.querySelectorAll('.module-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.sidebar-nav .nav-item').forEach(el => el.classList.remove('active'));
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: { persistSession: true }
+        });
 
-            document.getElementById('module-' + tabName).style.display = 'block';
-            element.classList.add('active');
+        let isSignUpMode = false;
 
-            const titles = {
-                'performance': 'Painel de Performance',
-                'estoque': 'Consulta de Estoque & Raio-X',
-                'ocorrencias': 'Gestão de Ocorrências'
-            };
-            document.getElementById('pageTitle').innerText = titles[tabName] || 'ToolManager';
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            const title = document.getElementById('form-title');
+            const subtitle = document.getElementById('form-subtitle');
+            const submitBtn = document.getElementById('btn-submit');
+            const footerText = document.getElementById('footer-text');
+            const toggleBtn = document.getElementById('toggle-mode-btn');
+            const loginOptions = document.getElementById('login-options');
+            const nameFields = document.getElementById('name-fields');
+            const msgBox = document.getElementById('message-box');
 
-            // Carrega dados do Supabase ao entrar na aba de ocorrências
-            if (tabName === 'ocorrencias') {
-                carregarOcorrenciasDoSupabase();
+            if (msgBox) msgBox.style.display = 'none';
+
+            if (isSignUpMode) {
+                title.innerText = 'Create Account';
+                subtitle.innerText = 'Sign up to manage your tooling database';
+                submitBtn.innerText = 'Register';
+                footerText.innerText = 'Already have an account?';
+                toggleBtn.innerText = 'Sign In';
+                loginOptions.style.display = 'none';
+                nameFields.style.display = 'block';
+                document.getElementById('first-name').setAttribute('required', 'true');
+            } else {
+                title.innerText = 'Welcome Back!';
+                subtitle.innerText = 'Please sign in to continue to ToolManager';
+                submitBtn.innerText = 'Login';
+                footerText.innerText = 'Not a member?';
+                toggleBtn.innerText = 'Register Now';
+                loginOptions.style.display = 'flex';
+                nameFields.style.display = 'none';
+                document.getElementById('first-name').removeAttribute('required');
             }
         }
 
-        // Filtro de Performance
-        function switchPerfFilter(filtro, btn) {
-            document.querySelectorAll('#module-performance .subtab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('perfContentDisplay').innerText = `Visualizando dados para o filtro: ${filtro}`;
+        function showMessage(text, isSuccess) {
+            const msgBox = document.getElementById('message-box');
+            if (msgBox) {
+                msgBox.innerText = text;
+                msgBox.className = `message-box ${isSuccess ? 'success' : 'error'}`;
+                msgBox.style.display = 'block';
+            }
         }
 
-        // Filtro de digitação na tabela de estoque
-        function filtrarTabelaEstoque(termo) {
-            const filtro = termo ? termo.toLowerCase() : '';
-            const linhas = document.querySelectorAll('#tabelaEstoqueElement tbody tr');
+        async function handleAuth(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            linhas.forEach(linha => {
-                const textoLinha = linha.innerText.toLowerCase();
-                linha.style.display = textoLinha.includes(filtro) ? '' : 'none';
+            try {
+                if (isSignUpMode) {
+                    const firstName = document.getElementById('first-name').value;
+                    const lastName = document.getElementById('last-name').value;
+
+                    const { data, error } = await supabaseClient.auth.signUp({
+                        email, password,
+                        options: { data: { first_name: firstName, last_name: lastName } }
+                    });
+                    if (error) throw error;
+                    showMessage('Cadastro realizado com sucesso! Faça login para continuar.', true);
+                    setTimeout(() => toggleAuthMode(), 2000);
+                } else {
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                    if (error) throw error;
+                    document.getElementById('login-view').style.display = 'none';
+                    document.getElementById('dashboard-view').style.display = 'flex';
+                }
+            } catch (err) {
+                showMessage(err.message, false);
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('app-sidebar').classList.toggle('collapsed');
+        }
+
+        function switchSidebarSection(sectionId, element) {
+            document.querySelectorAll('.sidebar-nav .nav-item, .sidebar-footer .nav-item').forEach(item => item.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            const views = ['section-geral', 'section-montagem-setup', 'section-abrasivos', 'section-quimicos', 'section-diamantes', 'section-pastilhas', 'section-incertos', 'section-impressao3d', 'section-configuracoes'];
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if(el) el.style.display = 'none';
             });
+
+            const target = document.getElementById('section-' + sectionId);
+            if(target) target.style.display = 'block';
         }
 
-        // Raio-X Dinâmico da Tabela de Estoque
+        function switchSubTab(category, subTabId, element) {
+            const container = document.getElementById('section-' + category);
+            if(container) {
+                container.querySelectorAll('.top-tab').forEach(tab => tab.classList.remove('active'));
+                if(element) element.classList.add('active');
+
+                container.querySelectorAll('.' + category + '-subtab').forEach(sub => sub.style.display = 'none');
+                const targetSub = document.getElementById(category + '-subtab-' + subTabId);
+                if(targetSub) targetSub.style.display = 'block';
+            }
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('login-view').style.display = 'flex';
+        }
+
+        async function alterarStatusOcorrencia(idOcorrencia, novoStatus) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('ocorrencias_abrasivos')
+                    .update({ status: novoStatus })
+                    .eq('id', idOcorrencia)
+                    .select();
+
+                if (error) throw error;
+                if (!data || data.length === 0) {
+                    alert('Acesso negado: O seu utilizador não tem permissão de gestor para alterar este status.');
+                    return;
+                }
+                alert('Status alterado com sucesso!');
+                location.reload();
+            } catch (err) {
+                console.error('Erro na operação:', err.message);
+                alert('Erro ao atualizar: ' + err.message);
+            }
+        }
+
+        function abrirDetalhesCategoria(categoriaKey) {
+            console.log('Categoria selecionada:', categoriaKey);
+            alert('Abrindo catálogo técnico: ' + categoriaKey);
+        }
+    </script>
+
+    <!-- LÓGICA DE RENDERIZAÇÃO DOS GRÁFICOS, FILTROS E TABELA DE REQUISIÇÕES -->
+    <script>
+    let meuGraficoCP = null;
+    let chartArea1Obj = null;
+    let chartArea2Obj = null;
+    let chartArea3Obj = null;
+    let chartBarraFamiliasObj = null;
+    let chartBarrasOperacoesObj = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        
+        // --- 1. GRÁFICO PRINCIPAL DE CP ---
+        // --- 1. GRÁFICO PRINCIPAL DE CP (COMPARATIVO CJ 01 vs CJ 02 SEM 'OUTROS') ---
+        const ctxLinha = document.getElementById('chartCustosLinha').getContext('2d');
+        const labelsLinhas = [
+            'LINE 01', 'LINE 02/HV', 'LINE 03', 'LINE 04', 'LINE 05', 
+            'LINE 06', 'LINE 07', 'LINE 08', 'LINE 09', 'LINE 10', 
+            'LINE 11', 'LINE 12', 'LINE 13', 'LINE 14', 'AFTM', 
+            'BV - MOD 1', 'BV - MOD 2', 'MÉDIA FÁBRICA'
+        ];
+
+        const dadosIniciaisCJ01 = [
+            0.450, 0.520, 0.480, 0.610, 0.750, 
+            0.420, 0.500, 0.550, 0.820, 0.490, 
+            0.460, 0.530, 0.440, 0.410, 0.580, 
+            0.650, 0.680, 0.550
+        ];
+
+        const dadosIniciaisCJ02 = [
+            0.420, 0.490, 0.450, 0.570, 0.690, 
+            0.400, 0.470, 0.510, 0.740, 0.460, 
+            0.430, 0.495, 0.415, 0.390, 0.540, 
+            0.600, 0.630, 0.511
+        ];
+
+        meuGraficoCP = new Chart(ctxLinha, {
+            type: 'bar',
+            data: {
+                labels: labelsLinhas,
+                datasets: [
+                    {
+                        label: 'CJ 01: Real',
+                        data: dadosIniciaisCJ01,
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            const dataset = context.dataset.data;
+                            if (index === dataset.length - 1) return '#059669';
+                            const apenasLinhas = dataset.slice(0, dataset.length - 1);
+                            const maiorValor = Math.max(...apenasLinhas);
+                            if (dataset[index] === maiorValor) return '#dc2626';
+                            return '#0cb7f2';
+                        },
+                        borderRadius: 4,
+                        borderSkipped: false
+                    },
+                    {
+                        label: 'CJ 02: Projetado',
+                        data: dadosIniciaisCJ02,
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            const dataset = context.dataset.data;
+                            if (index === dataset.length - 1) return '#047857';
+                            return '#004173';
+                        },
+                        borderRadius: 4,
+                        borderSkipped: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: true,
+                        position: 'top',
+                        labels: { usePointStyle: true, font: { size: 11, weight: '600' } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const serie = context.dataset.label;
+                                const valor = context.parsed.y.toFixed(3).replace('.', ',');
+                                return ` ${serie}: R$ ${valor} / pç`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { callback: function(value) { return 'R$ ' + value.toFixed(3).replace('.', ','); } }
+                    },
+                    x: { grid: { display: false }, ticks: { font: { size: 8 } } }
+                }
+            }
+        });
+
+
+        // --- 2. OS 3 GRÁFICOS DE ÁREA (CARD 1) ---
+        // --- 2. OS 3 GRÁFICOS DE ÁREA COM DEGRADÊ (CARD 1) ---
+        const mesesLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'];
+
+        // Função auxiliar para gerar o degradê vertical no Canvas
+        function criarGradiente(ctx, corHexInicio, corHexFim) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 220); // 220px é a altura do container
+            gradient.addColorStop(0, corHexInicio); // Cor no topo (mais opaca)
+            gradient.addColorStop(1, corHexFim);    // Cor na base (transparente)
+            return gradient;
+        }
+
+        // Função de configuração dos gráficos de linha
+        const configArea = (ctx, labelNome, corLinha, corTopoDegrade, dadosValores) => ({
+            type: 'line',
+            data: {
+                labels: mesesLabels,
+                datasets: [{
+                    label: labelNome,
+                    data: dadosValores,
+                    borderColor: corLinha,
+                    borderWidth: 2,
+                    backgroundColor: criarGradiente(ctx, corTopoDegrade, 'rgba(255, 255, 255, 0.0)'),
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                }
+            }
+        });
+
+        // Seleção dos contextos Canvas
+        const ctx1 = document.getElementById('chartArea1').getContext('2d');
+        const ctx2 = document.getElementById('chartArea2').getContext('2d');
+        const ctx3 = document.getElementById('chartArea3').getContext('2d');
+
+        // Criação dos gráficos com degradê personalizado
+        chartArea1Obj = new Chart(ctx1, configArea(ctx1, 'CP Médio', '#0cb7f2', 'rgba(12, 183, 242, 0.45)', [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440]));
+        chartArea2Obj = new Chart(ctx2, configArea(ctx2, 'Consumo', '#dc2626', 'rgba(220, 38, 38, 0.40)', [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190]));
+        chartArea3Obj = new Chart(ctx3, configArea(ctx3, 'Produção', '#059669', 'rgba(5, 150, 105, 0.40)', [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000]));
+
+
+        // --- 3. GRÁFICO DE BARRAS VERTICAIS APENAS COM AS 4 FAMÍLIAS ---
+        const ctxBarraFamilias = document.getElementById('chartBarraFamilias').getContext('2d');
+        chartBarraFamiliasObj = new Chart(ctxBarraFamilias, {
+            type: 'bar',
+            data: {
+                labels: ['Martensítico', 'Austenítico', 'Super Liga', 'Intermediária'],
+                datasets: [{
+                    label: 'Quantidade',
+                    data: [42, 35, 15, 8],
+                    backgroundColor: ['#004173', '#0979b0', '#0cb7f2', '#64748b'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10, weight: '600' } }
+                    }
+                }
+            }
+        });
+
+
+        // --- 4. GRÁFICO DE BARRAS HORIZONTAIS DE OPERAÇÕES ---
+        const ctxBarrasHoriz = document.getElementById('chartBarrasOperacoes').getContext('2d');
+        const operacoesCompletas = [
+            { op: '15G', custo: 145000 },
+            { op: '15S', custo: 132000 },
+            { op: '15A', custo: 118000 },
+            { op: '15PC/OM2', custo: 105000 },
+            { op: 'OP25', custo: 98000 },
+            { op: 'Borazon', custo: 89000 },
+            { op: '21A', custo: 76000 },
+            { op: '15G Arraste', custo: 64000 },
+            { op: '15S Arraste', custo: 53000 },
+            { op: '15A Arraste', custo: 45000 },
+            { op: 'HSG/EMB', custo: 32000 },
+            { op: 'HSF', custo: 21000 },
+            { op: 'Lixadeira', custo: 15000 }
+        ].sort((a, b) => b.custo - a.custo);
+
+        const topFiltro = document.getElementById('filtroTopOperacoes').value;
+        const dadosIniciaisOp = topFiltro === 'todas' ? operacoesCompletas : operacoesCompletas.slice(0, parseInt(topFiltro));
+
+        chartBarrasOperacoesObj = new Chart(ctxBarrasHoriz, {
+            type: 'bar',
+            data: {
+                labels: dadosIniciaisOp.map(i => i.op),
+                datasets: [{
+                    label: 'Custo Total (R$)',
+                    data: dadosIniciaisOp.map(i => i.custo),
+                    backgroundColor: '#0979b0',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                onClick: (evt, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        const operacaoSelecionada = chartBarrasOperacoesObj.data.labels[index];
+                        const linhaSelecionada = document.getElementById('filtroLinhaCard2').value;
+                        
+                        carregarDadosOperacaoSelecionada(linhaSelecionada, operacaoSelecionada);
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) { 
+                                return ' Custo: R$ ' + context.parsed.x.toLocaleString('pt-BR', {minimumFractionDigits: 2}); 
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            font: { size: 9 },
+                            callback: function(v) { return 'R$ ' + (v/1000) + 'k'; }
+                        }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 9, weight: '600' } }
+                    }
+                }
+            }
+        });
+    });
+
+    // FUNÇÃO CENTRAL QUE ATUALIZA A TABELA E O PAINEL LATERAL DO ÚLTIMO ITEM REQUISITADO AO CLICAR NA BARRA
+    function carregarDadosOperacaoSelecionada(linha, operacao) {
+        const turnos = ['1º Turno', '2º Turno', '3º Turno'];
+        const situacoes = ['Consumo', 'Ocorrência'];
+        
+        const itensMock = [
+            { cod: 'RT 609.6 X 17.5 X 203.2', desc: 'Rebolo Vitrificado Retífica', val: 1250.50, img: 'imagens/vitrificados.png', fornecedor: 'Alcar', periodo: '03 dias em uso' },
+            { cod: '2SA/AA 100.1 R5V200', desc: 'Disco de Desbaste Especial', val: 840.00, img: 'imagens/discos_corte.png', fornecedor: 'Alcar', periodo: '05 dias em uso' },
+            { cod: 'RPM-2507', desc: 'Ponta Montada Industrial', val: 145.20, img: 'imagens/pontas.png', fornecedor: 'Alcar', periodo: '01 dia em uso' },
+            { cod: 'LX-GR-120', desc: 'Lixa Cinta Óxido de Alumínio', val: 32.80, img: 'imagens/lixas.png', fornecedor: 'Alcar', periodo: '02 dias em uso' },
+            { cod: 'CBN-IMP-80', desc: 'Rebolo CBN Importado', val: 3450.00, img: 'imagens/CBN.png', fornecedor: 'Alcar', periodo: '04 dias em uso' }
+        ];
+
+        const ultimoItem = itensMock[Math.abs(operacao.charCodeAt(0)) % itensMock.length];
+
+        document.getElementById('infoCod').innerText = ultimoItem.cod;
+        document.getElementById('infoDesc').innerText = ultimoItem.desc;
+        document.getElementById('infoForn').innerText = ultimoItem.fornecedor;
+        document.getElementById('infoVal').innerText = 'R$ ' + ultimoItem.val.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        document.getElementById('infoPeriodoMaquina').innerText = ultimoItem.periodo;
+
+        const cardContainer = document.getElementById('cardItemHomologado');
+        const imgContainer = cardContainer.querySelector('img');
+        imgContainer.src = ultimoItem.img;
+        imgContainer.alt = ultimoItem.cod;
+
+        document.getElementById('tituloTabelaRequisicoes').innerText = `Últimas 15 Requisições: ${linha} — Operação ${operacao}`;
+        document.getElementById('subtituloTabelaRequisicoes').innerText = `Histórico recente filtrado por ${linha} e ${operacao}`;
+
+        const tbody = document.getElementById('tabelaRequisicoesBody');
+        tbody.innerHTML = ''; 
+
+        for (let i = 1; i <= 15; i++) {
+            const item = itensMock[(i + operacao.charCodeAt(0)) % itensMock.length];
+            const qtd = Math.floor(Math.random() * 6) + 1;
+            const valorTotal = (qtd * item.val).toFixed(2);
+            const dia = String(16 - i).padStart(2, '0');
+            const dataFmt = `${dia}/10/2026`;
+            const turno = turnos[i % 3];
+            const situacao = situacoes[i % situacoes.length]; 
+            const badgeCor = situacao === 'Consumo' ? 'background: #e0f2fe; color: #0369a1;' : 'background: #fee2e2; color: #991b1b;';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${dataFmt}</td>
+                <td style="font-weight: 600; color: #004173;">${item.cod}</td>
+                <td>${item.desc}</td>
+                <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">${item.fornecedor}</span></td>
+                <td>R$ ${item.val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                <td style="font-weight: 700;">${qtd}</td>
+                <td style="font-weight: 700; color: #0979b0;">R$ ${Number(valorTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                <td><span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 500;">${linha}</span></td>
+                <td><span style="background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${operacao}</span></td>
+                <td>${turno}</td>
+                <td><span style="padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; ${badgeCor}">${situacao}</span></td>
+            `;
+            tbody.appendChild(tr);
+        }
+    }
+
+    // Funções de atualização dinâmica dos filtros
+    // Funções de atualização dinâmica dos filtros (CJ 01 vs CJ 02)
+    function atualizarDadosGrafico() {
+        const ano = document.getElementById('filtroAno').value;
+        const periodo = document.getElementById('filtroPeriodo').value;
+        const cenario1 = document.getElementById('filtroCJ01').value;
+        const cenario2 = document.getElementById('filtroCJ02').value;
+
+        let fatorTempo = 1.0;
+        if (periodo !== 'media') fatorTempo = 0.85 + (Math.abs(periodo.charCodeAt(0)) % 30) / 100;
+        if (ano === '2025') fatorTempo *= 0.92;
+        if (ano === '2027') fatorTempo *= 1.08;
+
+        // 17 linhas ativas (sem 'OUTROS')
+        const baseReal = [
+            0.450, 0.520, 0.480, 0.610, 0.750, 
+            0.420, 0.500, 0.550, 0.820, 0.490, 
+            0.460, 0.530, 0.440, 0.410, 0.580, 
+            0.650, 0.680
+        ];
+
+        const nomesCenarios = {
+            real: 'Real',
+            sem_ocorrencias: 'Sem Ocorrências',
+            projetado: 'Projetado'
+        };
+
+        function calcularSerieCenario(tipoCenario) {
+            let multCenario = 1.0;
+            if (tipoCenario === 'sem_ocorrencias') multCenario = 0.94; // Desconta impacto médio das ocorrências
+            if (tipoCenario === 'projetado') multCenario = 0.90;       // Meta / Projeção otimizada
+
+            const valoresLinhas = baseReal.map(val => Number((val * fatorTempo * multCenario).toFixed(3)));
+            const soma = valoresLinhas.reduce((acc, curr) => acc + curr, 0);
+            const mediaFabrica = Number((soma / valoresLinhas.length).toFixed(3));
+            return [...valoresLinhas, mediaFabrica];
+        }
+
+        meuGraficoCP.data.datasets[0].label = 'CJ 01: ' + nomesCenarios[cenario1];
+        meuGraficoCP.data.datasets[0].data = calcularSerieCenario(cenario1);
+
+        meuGraficoCP.data.datasets[1].label = 'CJ 02: ' + nomesCenarios[cenario2];
+        meuGraficoCP.data.datasets[1].data = calcularSerieCenario(cenario2);
+
+        meuGraficoCP.update();
+    }
+
+    function atualizarGraficosArea() {
+        const linha = document.getElementById('filtroLinhaArea').value;
+        let mult = linha !== 'todas' ? 0.7 + (Math.abs(linha.charCodeAt(0)) % 60) / 100 : 1.0;
+
+        chartArea1Obj.data.datasets[0].data = [0.520, 0.490, 0.550, 0.480, 0.510, 0.470, 0.460, 0.490, 0.450, 0.440].map(v => Number((v * mult).toFixed(3)));
+        chartArea1Obj.update();
+        chartArea2Obj.data.datasets[0].data = [1200, 1350, 1100, 1250, 1400, 1300, 1200, 1350, 1250, 1190].map(v => Math.round(v * mult));
+        chartArea2Obj.update();
+        chartArea3Obj.data.datasets[0].data = [25000, 27000, 26000, 28000, 29000, 28500, 30000, 31000, 30500, 32000].map(v => Math.round(v * mult));
+        chartArea3Obj.update();
+    }
+
+    function atualizarCard2() {
+        const ano = document.getElementById('filtroAnoCard2').value;
+        const periodo = document.getElementById('filtroPeriodoCard2').value;
+        const linha = document.getElementById('filtroLinhaCard2').value;
+        const limiteTop = document.getElementById('filtroTopOperacoes').value;
+
+        // Multiplicador com base nos filtros (se for Total Anual, o volume é maior/consolidado do ano)
+        let mult = 1.0;
+        if (periodo === 'total_anual') {
+            mult = 3.5; // Fator multiplicador para refletir o acumulado do ano inteiro
+        } else {
+            let seed = (ano.charCodeAt(3) + periodo.charCodeAt(0) + linha.charCodeAt(5)) % 50;
+            mult = 0.8 + (seed / 100);
+        }
+
+        // Quantidade individual de cada família baseada no filtro
+        const val1 = Math.round(42 * mult);
+        const val2 = Math.round(35 * mult);
+        const val3 = Math.round(15 * mult);
+        const val4 = Math.round(8 * mult);
+        
+        // SOMA GERAL DAS VÁLVULAS (Soma acumulada de acordo com o filtro)
+        const totalGeralValvulas = val1 + val2 + val3 + val4;
+
+        // 1. ATUALIZA O GRÁFICO COM EXATAMENTE 4 BARRAS
+        chartBarraFamiliasObj.data.datasets[0].data = [val1, val2, val3, val4];
+        chartBarraFamiliasObj.update();
+
+        // 2. ATUALIZA OS 4 CARDS DAS FAMÍLIAS
+        document.getElementById('qtdFam1').innerText = val1.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam1').innerText = ((val1 / totalGeralValvulas) * 100).toFixed(1) + '%';
+
+        document.getElementById('qtdFam2').innerText = val2.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam2').innerText = ((val2 / totalGeralValvulas) * 100).toFixed(1) + '%';
+
+        document.getElementById('qtdFam3').innerText = val3.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam3').innerText = ((val3 / totalGeralValvulas) * 100).toFixed(1) + '%';
+
+        document.getElementById('qtdFam4').innerText = val4.toLocaleString('pt-BR') + ' pçs';
+        document.getElementById('pctFam4').innerText = ((val4 / totalGeralValvulas) * 100).toFixed(1) + '%';
+
+        // 3. ATUALIZA O 5º CARD COM A SOMA TOTAL GERAL
+        document.getElementById('totalGeralVal').innerText = totalGeralValvulas.toLocaleString('pt-BR') + ' pçs';
+
+        // Atualiza as operações do gráfico de barras horizontais abaixo
+        const listaAtualizada = [
+            { op: '15G', custo: Math.round(145000 * mult) },
+            { op: '15S', custo: Math.round(132000 * mult) },
+            { op: '15A', custo: Math.round(118000 * mult) },
+            { op: '15PC/OM2', custo: Math.round(105000 * mult) },
+            { op: 'OP25', custo: Math.round(98000 * mult) },
+            { op: 'Borazon', custo: Math.round(89000 * mult) },
+            { op: '21A', custo: Math.round(76000 * mult) },
+            { op: '15G Arraste', custo: Math.round(64000 * mult) },
+            { op: '15S Arraste', custo: Math.round(53000 * mult) },
+            { op: '15A Arraste', custo: Math.round(45000 * mult) },
+            { op: 'HSG/EMB', custo: Math.round(32000 * mult) },
+            { op: 'HSF', custo: Math.round(21000 * mult) },
+            { op: 'Lixadeira', custo: Math.round(15000 * mult) }
+        ].sort((a, b) => b.custo - a.custo);
+
+        const dadosFiltrados = limiteTop === 'todas' ? listaAtualizada : listaAtualizada.slice(0, parseInt(limiteTop));
+
+        chartBarrasOperacoesObj.data.labels = dadosFiltrados.map(i => i.op);
+        chartBarrasOperacoesObj.data.datasets[0].data = dadosFiltrados.map(i => i.custo);
+        chartBarrasOperacoesObj.update();
+    }
+        // Função para alternar ou exibir o painel de análise do item
         function togglePainelAnalise(codigoItem) {
             const painel = document.getElementById('painelAnaliseItem');
-            const linhas = document.querySelectorAll('#tabelaEstoqueElement tbody tr');
-            let dadosItem = null;
-
-            linhas.forEach(linha => {
-                const cols = linha.querySelectorAll('td');
-                if (cols.length > 0 && cols[0].innerText.trim() === String(codigoItem)) {
-                    dadosItem = {
-                        codigo: cols[0].innerText.trim(),
-                        fornecedor: cols[1].innerText.trim(),
-                        descricao: cols[2].innerText.trim(),
-                        valorUnit: cols[3].innerText.trim(),
-                        quantidade: cols[4].innerText.trim(),
-                        valorTotal: cols[5].innerText.trim(),
-                        leadTime: cols[6].innerText.trim()
-                    };
-                }
-            });
-
-            if (!dadosItem) return;
-
-            document.getElementById('raioTituloCodigo').innerText = `Código Eaton: ${dadosItem.codigo} — Análise Detalhada`;
-            document.getElementById('raioDescricao').innerText = dadosItem.descricao;
-            document.getElementById('raioFornecedor').innerText = dadosItem.fornecedor;
-            document.getElementById('raioLeadTime').innerText = dadosItem.leadTime;
-            document.getElementById('raioValorUnit').innerText = dadosItem.valorUnit;
-            document.getElementById('raioQtd').innerText = dadosItem.quantidade;
-            document.getElementById('raioValorTotal').innerText = dadosItem.valorTotal;
-
-            const qtdNum = parseInt(dadosItem.quantidade.replace(/\D/g, '')) || 0;
-            const statusEl = document.getElementById('raioStatusEstoque');
-            if (qtdNum === 0) {
-                statusEl.innerHTML = '<span style="color: #dc2626; font-weight: 700;">🔴 Crítico / Zerado (Requer Reposição)</span>';
-            } else if (qtdNum <= 5) {
-                statusEl.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Baixo Estoque (Atenção)</span>';
-            } else {
-                statusEl.innerHTML = '<span style="color: #059669; font-weight: 700;">🟢 Saudável / Em Conformidade</span>';
-            }
-
+            const titulo = document.getElementById('tituloAnaliseItem');
+            
+            // Aqui você pode atualizar o título com o código clicado futuramente
+            titulo.innerText = codigoItem + ' — Análise Detalhada de Estoque e Consumo';
+            
+            // Exibe o painel suavemente
             painel.style.display = 'block';
+            
+            // Opcional: rola a tela levemente para o painel de análise
             painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
@@ -509,112 +2329,126 @@
             document.getElementById('painelAnaliseItem').style.display = 'none';
         }
 
-        // ==========================================
-        // MÓDULO DE OCORRÊNCIAS — SUPABASE
-        // ==========================================
-        async function carregarOcorrenciasDoSupabase() {
-            const tbody = document.getElementById('tabelaOcorrenciasBody');
-            if (!tbody || !supabaseClient) return;
+        // Função para capturar os dados da tabela e exibir o Raio-X dinâmico
+    function togglePainelAnalise(codigoItem) {
+        const painel = document.getElementById('painelAnaliseItem');
+        const linhas = document.querySelectorAll('#abrasivos-subtab-estoque .table-req tbody tr');
+        let dadosItem = null;
 
-            try {
-                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Carregando ocorrências do banco de dados...</td></tr>';
+        linhas.forEach(linha => {
+            const cols = linha.querySelectorAll('td');
+            if (cols.length > 0 && cols[0].innerText.trim() === String(codigoItem)) {
+                dadosItem = {
+                    codigo: cols[0].innerText.trim(),
+                    fornecedor: cols[1].innerText.trim(),
+                    descricao: cols[2].innerText.trim(),
+                    valorUnit: cols[3].innerText.trim(),
+                    quantidade: cols[4].innerText.trim(),
+                    valorTotal: cols[5].innerText.trim(),
+                    leadTime: cols[6].innerText.trim()
+                };
+            }
+        });
 
-                const { data, error } = await supabaseClient
-                    .from('ocorrencias_abrasivos')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+        if (!dadosItem) return;
 
-                if (error) throw error;
+        // Preenche os campos do painel com os dados extraídos
+        document.getElementById('raioTituloCodigo').innerText = `Código Eaton: ${dadosItem.codigo} — Análise Detalhada`;
+        document.getElementById('raioDescricao').innerText = dadosItem.descricao;
+        document.getElementById('raioFornecedor').innerText = dadosItem.fornecedor;
+        document.getElementById('raioLeadTime').innerText = dadosItem.leadTime;
+        document.getElementById('raioValorUnit').innerText = dadosItem.valorUnit;
+        document.getElementById('raioQtd').innerText = dadosItem.quantidade + ' un';
+        document.getElementById('raioValorTotal').innerText = dadosItem.valorTotal;
 
-                tbody.innerHTML = '';
+        // Avalia dinamicamente o status do estoque com base na quantidade
+        const qtdNum = parseInt(dadosItem.quantidade.replace(/\D/g, '')) || 0;
+        const statusEl = document.getElementById('raioStatusEstoque');
+        if (qtdNum === 0) {
+            statusEl.innerHTML = '<span style="color: #dc2626; font-weight: 700;">🔴 Crítico / Zerado (Requer Reposição)</span>';
+        } else if (qtdNum <= 5) {
+            statusEl.innerHTML = '<span style="color: #d97706; font-weight: 700;">🟡 Baixo Estoque (Atenção)</span>';
+        } else {
+            statusEl.innerHTML = '<span style="color: #059669; font-weight: 700;">🟢 Saudável / Em Conformidade</span>';
+        }
 
-                if (!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Nenhuma ocorrência registrada até o momento.</td></tr>';
-                    return;
+        // Exibe o painel de forma suave
+        painel.style.display = 'block';
+        painel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function fecharPainelAnalise() {
+        document.getElementById('painelAnaliseItem').style.display = 'none';
+    }
+
+        // Função para filtrar dinamicamente a tabela de estoque (Suporta qualquer sub-aba ativa)
+        function filtrarTabelaEstoque(termo) {
+            const filtro = termo ? termo.toLowerCase() : '';
+            // Procura as linhas da tabela dentro da sub-aba de estoque de forma ampla
+            const containerEstoque = document.getElementById('abrasivos-subtab-estoque') || document;
+            const linhas = containerEstoque.querySelectorAll('table tbody tr');
+
+            linhas.forEach(linha => {
+                const textoLinha = linha.innerText.toLowerCase();
+                if (textoLinha.includes(filtro)) {
+                    linha.style.display = '';
+                } else {
+                    linha.style.display = 'none';
                 }
-
-                data.forEach((item) => {
-                    const isResolvido = item.status === 'Resolvido';
-                    const badgeCor = isResolvido 
-                        ? 'background: #dcfce7; color: #166534;' 
-                        : 'background: #fee2e2; color: #991b1b;';
-                    
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${item.data || '—'}</td>
-                        <td style="font-weight: 600; color: #004173;">${item.codigo || '—'}</td>
-                        <td>${item.descricao || '—'}</td>
-                        <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">${item.fornecedor || '—'}</span></td>
-                        <td>R$ ${(item.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 3})}</td>
-                        <td style="font-weight: 700;">${item.quantidade || 1}</td>
-                        <td style="font-weight: 700; color: #0979b0;">R$ ${(item.valor_total || 0).toLocaleString('pt-BR', {minimumFractionDigits: 3})}</td>
-                        <td><span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 500;">${item.linha || '—'}</span></td>
-                        <td><span style="background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${item.operacao || '—'}</span></td>
-                        <td>
-                            <button onclick="alterarStatusOcorrencia('${item.id}', '${isResolvido ? 'Pendente' : 'Resolvido'}')" style="padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; ${badgeCor}">
-                                ${item.status || 'Pendente'} 🔄
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-            } catch (err) {
-                console.error('Erro ao buscar ocorrências:', err.message);
-                tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px; color: #dc2626;">Erro ao carregar dados: ${err.message}</td></tr>`;
-            }
+            });
         }
 
-        async function alterarStatusOcorrencia(id, novoStatus) {
-            if (!supabaseClient) return;
-            try {
-                const { error } = await supabaseClient
-                    .from('ocorrencias_abrasivos')
-                    .update({ status: novoStatus })
-                    .eq('id', id);
+        // Função para carregar as ocorrências reais direto do Supabase
+    async function carregarOcorrenciasDoSupabase() {
+        const tbody = document.getElementById('tabelaOcorrenciasBody'); // Certifique-se de dar esse ID no <tbody> da sua tabela de ocorrências
+        if (!tbody) return;
 
-                if (error) throw error;
-                carregarOcorrenciasDoSupabase();
-            } catch (err) {
-                console.error('Erro ao alterar status:', err.message);
-                alert('Não foi possível alterar o status: ' + err.message);
+        try {
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Carregando ocorrências do banco de dados...</td></tr>';
+
+            const { data, error } = await supabaseClient
+                .from('ocorrencias_abrasivos')
+                .select('*')
+                .order('created_at', { ascending: false }); // Ordena pelas mais recentes
+
+            if (error) throw error;
+
+            tbody.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">Nenhuma ocorrência registrada até o momento.</td></tr>';
+                return;
             }
+
+            data.forEach((item) => {
+                const badgeCor = item.status === 'Resolvido' ? 'background: #dcfce7; color: #166534;' : 'background: #fee2e2; color: #991b1b;';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.data || '—'}</td>
+                    <td style="font-weight: 600; color: #004173;">${item.codigo || '—'}</td>
+                    <td>${item.descricao || '—'}</td>
+                    <td><span style="background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem;">${item.fornecedor || '—'}</span></td>
+                    <td>R$ ${(item.valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    <td style="font-weight: 700;">${item.quantidade || 1}</td>
+                    <td style="font-weight: 700; color: #0979b0;">R$ ${(item.valor_total || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
+                    <td><span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 500;">${item.linha || '—'}</span></td>
+                    <td><span style="background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${item.operacao || '—'}</span></td>
+                    <td>
+                        <button onclick="alterarStatusOcorrencia('${item.id}', '${item.status === 'Resolvido' ? 'Pendente' : 'Resolvido'}')" style="padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; border: none; cursor: pointer; ${badgeCor}">
+                            ${item.status || 'Pendente'} 🔄
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } catch (err) {
+            console.error('Erro ao buscar ocorrências:', err.message);
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px; color: #dc2626;">Erro ao carregar dados: ${err.message}</td></tr>`;
         }
-
-        async function salvarNovaOcorrencia(event) {
-            event.preventDefault();
-            if (!supabaseClient) return;
-
-            const novaOcorrencia = {
-                codigo: document.getElementById('inputCodigoItem').value,
-                descricao: document.getElementById('inputDescricao').value,
-                fornecedor: document.getElementById('inputFornecedor').value,
-                valor: parseFloat(document.getElementById('inputValorUnitario').value) || 0,
-                quantidade: parseInt(document.getElementById('inputQuantidade').value) || 1,
-                valor_total: parseFloat(document.getElementById('inputValorTotal').value) || 0,
-                linha: document.getElementById('inputLinhaProducao').value,
-                operacao: document.getElementById('inputOperacao').value,
-                status: 'Pendente',
-                data: new Date().toLocaleDateString('pt-BR')
-            };
-
-            try {
-                const { error } = await supabaseClient
-                    .from('ocorrencias_abrasivos')
-                    .insert([novaOcorrencia]);
-
-                if (error) throw error;
-
-                alert('Ocorrência cadastrada com sucesso!');
-                document.getElementById('formOcorrencia').reset();
-                document.getElementById('modalCadastroOcorrencia').style.display = 'none';
-                carregarOcorrenciasDoSupabase();
-
-            } catch (err) {
-                console.error('Erro ao salvar ocorrência:', err.message);
-                alert('Erro ao salvar no banco: ' + err.message);
-            }
-        }
+    }
     </script>
 </body>
 </html>
+
